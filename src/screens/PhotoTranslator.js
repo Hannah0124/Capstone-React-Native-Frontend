@@ -1,29 +1,78 @@
-import React from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { useDispatch } from 'react-redux'; // TEST
+
+import Colors from '../constants/Colors';
+import * as imagesActions from '../store/images-actions';
+import ImagePicker from '../components/ImagePicker';
 
 const PhotoTranslator = (props) => {
+
+  const [titleValue, setTitleValue] = useState('');
+  const [selectedImage, setSelectedImage] = useState();
+
   const { route, navigation } = props;
   const { item } = route.params;
   const { name, home, species } = item;
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Photo Translator Content</Text>
+  const dispatch = useDispatch(); // TEST
 
-      {/* dummy data */}
-      <View style={styles.card}>
-        <Text style={styles.cardText}>Name: {name}</Text>
-        <Text style={styles.cardText}>Home Planet: {home}</Text>
-        <Text style={styles.cardText}>Species: {species}</Text>
+  // TEST
+  const titleChangeHandler = text => {
+    // You could add validation 
+    setTitleValue(text);
+  };
+
+  // TEST
+  const imageTakenHandler = imagePath => {
+    setSelectedImage(imagePath);
+  };
+
+  // TEST
+  const saveImageHandler = () => {
+    dispatch(imagesActions.addImage(titleValue, selectedImage));
+    navigation.goBack();
+  };
+
+
+
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.text}>Photo Translator Content</Text>
+
+        {/* dummy data */}
+        {/* <View style={styles.card}>
+          <Text style={styles.cardText}>Name: {name}</Text>
+          <Text style={styles.cardText}>Home Planet: {home}</Text>
+          <Text style={styles.cardText}>Species: {species}</Text>
+        </View> */}
+
+        {/* TEST */}
+        <TextInput 
+          style={styles.textInput} 
+          onChangeText={titleChangeHandler} 
+          value={titleValue}
+        />
+
+        <ImagePicker 
+          onImageTaken={imageTakenHandler} 
+        />
+        <Button 
+          title="Save Image" 
+          color={Colors.primary} 
+          onPress={saveImageHandler}
+        />
+
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => navigation.navigate('Settings')}
+        >
+          <Text style={styles.buttonText}>Go to Settings</Text>
+        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Settings')}
-      >
-        <Text style={styles.buttonText}>Go to Settings</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -34,6 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: '#747EFD',
     backgroundColor: '#fff',
+    margin: 30
 
   },
   text: {

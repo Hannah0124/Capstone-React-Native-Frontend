@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import WordTranslator from '../screens/WordTranslator';
 import PhotoTranslator from '../screens/PhotoTranslator';
+// import ImageList from '../screens/ImageList';
 import Settings from '../screens/Settings';
 
 const Stack = createStackNavigator();
@@ -51,6 +52,12 @@ const MainStackNavigator = () => {
             title: route.params.item.name // custom title
           })}
         />
+
+        {/* <Stack.Screen 
+          name='ImageList'
+          component={ImageList}
+          options={{ title: 'Image List' }}
+        /> */}
 
         <Stack.Screen 
           name='Settings'
