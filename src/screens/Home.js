@@ -2,12 +2,6 @@ import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
 const Home = (props) => {
-  // dummy data
-  const character = {
-    name: 'Luke Skywalker',
-    home: 'Tatooine',
-    species: 'Human'
-  };
 
   const { navigation } = props;
 
@@ -17,7 +11,7 @@ const Home = (props) => {
 
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('WordTranslator', {item: character})}
+        onPress={() => navigation.navigate('WordTranslator')}
       >
         <Text style={styles.buttonText}>Translating Words</Text>
         {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
@@ -25,7 +19,7 @@ const Home = (props) => {
 
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('PhotoTranslator', {item: character})}
+        onPress={() => navigation.navigate('PhotoTranslator')}
       >
         <Text style={styles.buttonText}>Translating Photo</Text>
       </TouchableOpacity>
