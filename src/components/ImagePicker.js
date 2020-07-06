@@ -10,7 +10,7 @@ const ImgPicker = props => {
 
   // Ask permission for IOS (Android doesnt need this!)
   const verifyPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
     // ask for Camera permission
     // Permissions.askAsync(Permissions.CAMERA_ROLL) // Galllery permission
 
