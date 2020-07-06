@@ -38,18 +38,14 @@ const MainStackNavigator = () => {
           name='WordTranslator' 
           component={WordTranslator} 
           // options={{ title: 'Detail Screen' }} 
-          options={({ route }) => ({
-            title: route.params.item.name // custom title
-          })}
+          // custom title
         />
 
         <Stack.Screen 
           name='PhotoTranslator' 
           component={PhotoTranslator} 
           // options={{ title: 'Detail Screen' }} 
-          options={({ route }) => ({
-            title: route.params.item.name // custom title
-          })}
+          // custom title
         />
 
         <Stack.Screen 
