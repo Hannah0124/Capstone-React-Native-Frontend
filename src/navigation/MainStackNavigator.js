@@ -4,7 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../screens/Home';
-import Detail from '../screens/Detail';
+import WordTranslator from '../screens/WordTranslator';
+import PhotoTranslator from '../screens/PhotoTranslator';
 import Settings from '../screens/Settings';
 
 const Stack = createStackNavigator();
@@ -34,8 +35,17 @@ const MainStackNavigator = () => {
         />
 
         <Stack.Screen 
-          name='Detail' 
-          component={Detail} 
+          name='WordTranslator' 
+          component={WordTranslator} 
+          // options={{ title: 'Detail Screen' }} 
+          options={({ route }) => ({
+            title: route.params.item.name // custom title
+          })}
+        />
+
+        <Stack.Screen 
+          name='PhotoTranslator' 
+          component={PhotoTranslator} 
           // options={{ title: 'Detail Screen' }} 
           options={({ route }) => ({
             title: route.params.item.name // custom title

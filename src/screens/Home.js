@@ -17,10 +17,17 @@ const Home = (props) => {
 
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Detail', {item: character})}
+        onPress={() => navigation.navigate('WordTranslator', {item: character})}
       >
-        {/* <Text style={styles.buttonText}>Go to Detail Screen</Text> */}
-        <Text style={styles.buttonText}>Who is {character.name}?</Text>
+        <Text style={styles.buttonText}>Translating Words</Text>
+        {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => navigation.navigate('PhotoTranslator', {item: character})}
+      >
+        <Text style={styles.buttonText}>Translating Photo</Text>
       </TouchableOpacity>
     </View>
   )

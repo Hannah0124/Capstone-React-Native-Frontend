@@ -1,14 +1,14 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 
-const Detail = (props) => {
+const PhotoTranslator = (props) => {
   const { route, navigation } = props;
   const { item } = route.params;
   const { name, home, species } = item;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Detail Contents</Text>
+      <Text style={styles.text}>Photo Translator Content</Text>
 
       {/* dummy data */}
       <View style={styles.card}>
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Detail;
+export default PhotoTranslator;
