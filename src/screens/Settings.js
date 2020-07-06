@@ -1,13 +1,26 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
 const Settings = (props) => {
   const { navigation } = props;
+  const LANGUAGES = [ 
+    'Spanish', 
+    'Korean', 
+    'Chinese', 
+    'Japanese', 
+    'French',
+    'German', 
+    'Vietnamese'
+    ]
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Settings</Text>
-
+      <View >
+        {LANGUAGES.map(
+          lang => <Text key={lang}>{lang}</Text>
+        )}
+      </View>
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.popToTop()}
