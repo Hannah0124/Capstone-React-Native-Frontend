@@ -37,7 +37,7 @@ const WordTranslator = (props) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Photo Translator Content</Text>
+        <Text style={styles.text}>Word Translator Content</Text>
 
         {/* TEST */}
         <TextInput 
