@@ -10,7 +10,7 @@ const Home = props =>  {
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('WordTranslator')}>
-        <Text style={styles.buttonText}>Translating words</Text>
+        <Text style={styles.buttonText}>Translating Words</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonContainer}
