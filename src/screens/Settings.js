@@ -3,11 +3,10 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 
 const Settings = (props) => {
   const { navigation } = props;
-  const languages = [ 
+  const LANGUAGES = [ 
     'Spanish', 
     'Korean', 
     'Chinese', 
-    'Spanish', 
     'Japanese', 
     'French',
     'German', 
@@ -18,8 +17,8 @@ const Settings = (props) => {
     <View style={styles.container}>
       <Text style={styles.text}>Settings</Text>
       <View >
-        {languages.map(
-          lang => <Text>{lang}</Text>
+        {LANGUAGES.map(
+          lang => <Text key={lang}>{lang}</Text>
         )}
       </View>
       <TouchableOpacity
