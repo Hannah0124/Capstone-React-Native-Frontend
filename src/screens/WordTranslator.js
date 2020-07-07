@@ -25,8 +25,15 @@ const WordTranslator = (props) => {
   // TEST
   const imageTakenHandler = imagePath => {
     setSelectedImage(imagePath);
-    let resizePhoto = await 
     console.log(imagePath);
+    let photo = ImageManipulator.manipulateAsync(
+      imagePath,
+      [{ resize: { width: 420 } }],
+      {
+        base64: true
+      }
+    );
+    console.log(photo);
   };
 
   // TEST
