@@ -5,15 +5,15 @@ const Settings = (props) => {
   const [currLanguage, setCurrLanguage] = useState();
 
   const { navigation } = props;
-  const LANGUAGES = [ 
-    'Spanish', 
-    'Korean', 
-    'Chinese', 
-    'Japanese', 
-    'French',
-    'German', 
-    'Vietnamese'
-    ];
+  const LANGUAGES = { 
+    Spanish: 'es', 
+    Korean: 'ko', 
+    Chinese: 'zh-TW', 
+    Japanese: 'ja', 
+    French: 'fr',
+    German: 'de', 
+    Vietnamese: 'vi'
+  };
 
   const getLangProp = (lang) => {
     if (lang === 'Chinese') {
@@ -26,7 +26,13 @@ const Settings = (props) => {
       setCurrentLanguage('ja');
     }
   }
-  
+
+  const languageComponents = Object.keys(LANGUAGES).map(label => {
+    return (
+      <Picker.Item label={label} value={LANGUAGES[label]} />
+    )
+  });
+
 
   return (
     <View style={styles.container}>
@@ -45,10 +51,8 @@ const Settings = (props) => {
           style={{ width: 160 }}
           mode="dropdown"
         >
-          <Picker.Item label="Chinese" value="zh-TW" />
-          <Picker.Item label="Korean" value="ko" />
-          <Picker.Item label="Spanish" value="es" />
-          <Picker.Item label="Japanese" value="ja" />
+          <Picker.Item label="Options"/> 
+          {languageComponents}
         </Picker>
       </View>
 
