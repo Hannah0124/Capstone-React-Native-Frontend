@@ -85,7 +85,7 @@ const PhotoTranslator = (props) => {
         })
 
         console.log('SUCCESS 4', descriptions);
-        setGetText(descriptions);
+        setGetText(descriptions.join(', '));
 
       })
       .catch(err => {
@@ -113,7 +113,7 @@ const PhotoTranslator = (props) => {
         />
 
         <Text>
-          {getText.join(', ')}
+          {getText}
         </Text>
 
         <Button 
