@@ -16,6 +16,8 @@ const PhotoTranslator = (props) => {
   const [apiPhoto, setApiPhoto] = useState();
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [currLanguage, setCurrLanguage] = useState('ko');
+  const [translatedText, setTranslatedText] = useState();
 
   const { navigation } = props;
 
@@ -59,7 +61,7 @@ const PhotoTranslator = (props) => {
         {
           features: [
             {
-              // maxResults: 5,
+              maxResults: 3,
               type: "LABEL_DETECTION"
             },
           ],
@@ -86,12 +88,40 @@ const PhotoTranslator = (props) => {
 
         console.log('SUCCESS 4', descriptions);
         setGetText(descriptions.join(', '));
+        translate(descriptions.join(', '), currLanguage);
 
       })
       .catch(err => {
         setErrorMessage(err.message);
         console.log('error: ', err);
       })
+  };
+
+  const translate = (word, targetLang) => {
+    const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
+
+    const body = {
+        q: word,
+        source: "en",
+        target: targetLang, // e.g. "es",
+        format: "text"
+      }
+
+    axios.post(baseUrl, body)
+      .then(response => {
+        // response.data.translations[0].translatedText
+        console.log('response.data: ', response.data.data.translations[0].translatedText);
+        setTranslatedText(response.data.data.translations[0].translatedText);
+
+      })
+      .catch(err => {
+        setErrorMessage(err.message);
+        console.log('error: ', err);
+      })
+  };
+
+  const setLanguage = (lang) => {
+    setCurrLanguage(lang);
   };
 
 
@@ -113,7 +143,15 @@ const PhotoTranslator = (props) => {
         />
 
         <Text>
-          {getText}
+          {errorMessage && errorMessage}
+        </Text>
+
+        <Text>
+          {getText && getText}
+        </Text>
+
+        <Text>
+          {translatedText}
         </Text>
 
         <Button 
@@ -123,16 +161,22 @@ const PhotoTranslator = (props) => {
         />
 
         <Button 
-          title="Translate Image"
+          title="Get Words"
           color={Colors.primary}
           onPress={getWords}
+        />
+
+        <Button 
+          title="Let's Translate!"
+          color={Colors.primary}
+          onPress={() => {translate(getText, currLanguage)}}
         />
 
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => navigation.navigate('Settings')}
         >
-          <Text style={styles.buttonText}>Go to Settings</Text>
+          <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
       </View>
 
