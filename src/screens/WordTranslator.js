@@ -17,6 +17,7 @@ const WordTranslator = (props) => {
   const [apiPhoto, setAPIPhoto] = useState();
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [translatedText, setTranslatedText] = useState();
 
   const { navigation } = props;
 
@@ -75,6 +76,7 @@ const WordTranslator = (props) => {
         const TEXT = response.data.responses[0].textAnnotations[0].description;
         console.log('SUCCESS 4', TEXT);
         setGetText(TEXT);
+        getTranslated(encodeURI(TEXT));
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -82,6 +84,23 @@ const WordTranslator = (props) => {
       })
   };
 
+  const getTranslated = (text) => {
+    //TODO : finish up the API call
+    // let target_lang = "zh-TW"
+    console.log('calling translation');
+    console.log(text);
+    const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=zh&key=${ENV.googleApiKey}&q=${text}`
+    axios.post(translateUrl)
+    .then((response) => {
+      const TRANSLATION = response.data.data.translations[0].translatedText;
+      console.log('Translation', TRANSLATION);
+      setTranslatedText(TRANSLATION);
+    })
+    .catch((error) => {
+      setErrorMessage(error.message);
+      console.log('error', error);
+    })
+  }
 
 
   return (
@@ -101,6 +120,9 @@ const WordTranslator = (props) => {
         />
         <Text>
           {getText}
+        </Text>
+        <Text>
+          {translatedText}
         </Text>
         <Button 
           title="Save Image" 
