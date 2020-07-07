@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
+import * as ImageManipulator from "expo-image-manipulator";
 
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
@@ -24,6 +25,8 @@ const WordTranslator = (props) => {
   // TEST
   const imageTakenHandler = imagePath => {
     setSelectedImage(imagePath);
+    let resizePhoto = await 
+    console.log(imagePath);
   };
 
   // TEST
