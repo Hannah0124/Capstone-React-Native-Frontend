@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
+import { View, Button, Image, Text, StyleSheet, Alert, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'; // open camera!
 import * as Permissions from 'expo-permissions'; //  expo install expo-permissions
 
 import Colors from '../constants/Colors';
+
+const SCREEN = Dimensions.get('screen');
 
 const ImgPicker = props => {
   const [pickedImage, setPickedImage] = useState();
@@ -51,7 +53,11 @@ const ImgPicker = props => {
         {!pickedImage ? (
           <Text>No image picked yet.</Text>
         ) : (
-          <Image style={styles.image} source={{ uri: pickedImage }} />
+          <Image
+            style={styles.image}
+            source={{ uri: pickedImage }}
+            resizeMode="contain"
+          />
         )}
       </View>
       <Button
@@ -79,8 +85,9 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   image: {
-    width: 500,
-    height: '100%'
+    width: SCREEN.width * 0.75,
+    height: 200,
+
   }
 });
 
