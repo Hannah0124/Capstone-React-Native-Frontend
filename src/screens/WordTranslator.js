@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
+import axios from 'axios';
+import ENV from '../../env';
 
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 
+
 const WordTranslator = (props) => {
 
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
+  const [apiPhoto, setAPIPhoto] = useState();
+  const [getText, setGetText] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   const { navigation } = props;
 
@@ -23,23 +29,57 @@ const WordTranslator = (props) => {
   };
 
   // TEST
-  const imageTakenHandler = imagePath => {
+  const imageTakenHandler = async imagePath => {
     setSelectedImage(imagePath);
-    console.log(imagePath);
-    let photo = ImageManipulator.manipulateAsync(
+    // a promise
+    let photo = await ImageManipulator.manipulateAsync(
       imagePath,
       [{ resize: { width: 420 } }],
       {
         base64: true
       }
     );
-    console.log(photo);
+  
+    setAPIPhoto(photo.base64);
   };
-
+  
   // TEST
   const saveImageHandler = () => {
     dispatch(imagesActions.addImage(titleValue, selectedImage));
     navigation.goBack();
+  };
+  
+  
+  const getWords = () => {
+    const baseUrl = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
+    const body = {
+      requests: [
+        {
+          features: [
+            {
+              type: 'TEXT_DETECTION',
+              // maxResults: 1
+            }
+          ],
+          image: {
+            content: apiPhoto
+            // source: {
+            //   imageUri: "https://cdn-01.media-brady.com/store/stus/media/catalog/product/cache/4/image/85e4522595efc69f496374d01ef2bf13/1544623159/f/i/first-aid-safety-signs-j28-010-lg.png"
+            // }
+          },
+        }
+      ]
+    }
+    axios.post(baseUrl, body)
+      .then((response) => {
+        const TEXT = response.data.responses[0].textAnnotations[0].description;
+        console.log('SUCCESS 4', TEXT);
+        setGetText(TEXT);
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+        console.log('error', error);
+      })
   };
 
 
@@ -59,12 +99,19 @@ const WordTranslator = (props) => {
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
+        <Text>
+          {getText}
+        </Text>
         <Button 
           title="Save Image" 
           color={Colors.primary} 
           onPress={saveImageHandler}
         />
-
+        <Button 
+          title="Get Words" 
+          color={Colors.primary} 
+          onPress={getWords}
+        />
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => navigation.navigate('Settings')}
