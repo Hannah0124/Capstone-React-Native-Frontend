@@ -23,6 +23,7 @@ const PhotoTranslator = (props) => {
   
 
   const LANGUAGES = { 
+    English: 'en', 
     Spanish: 'es', 
     Korean: 'ko', 
     Chinese: 'zh-TW', 
@@ -31,25 +32,23 @@ const PhotoTranslator = (props) => {
     German: 'de', 
     Vietnamese: 'vi'
   };
-  
-  const getLanguage = () => {
-    console.log(route);
-    const { item } = route.params;
-    const { language } = item;
-    return language;
-  };
-
-  if (getLanguage()) {
-    const language = getLanguage();
-    console.log('language: ', language);
-    setCurrLanguage(language);
-  }
 
   const displayLanguage = Object.keys(LANGUAGES).find(label => {
     return LANGUAGES[label] == currLanguage;
   });
-  
-  
+
+  const getLanguage = () => {
+    console.log(route);
+    const { item } = route.params;
+    const { language } = item;
+    console.log('language: ', language);
+    setCurrLanguage(language);
+    if (language) {
+      return language 
+    } else {
+      return 'en';
+    };
+  };
 
   const dispatch = useDispatch(); // TEST
 
@@ -118,23 +117,26 @@ const PhotoTranslator = (props) => {
 
         console.log('SUCCESS 4', descriptions);
         setGetText(descriptions.join(', '));
+        setErrorMessage('');
         getLanguage();
-        translate(descriptions.join(', '), currLanguage);
-
+        
+        if (currLanguage !== 'en') {
+          translate(descriptions.join(', '), currLanguage);
+        }
       })
       .catch(err => {
         setErrorMessage(err.message);
-        console.log('error: ', err);
+        console.log('(1) ERROR - Vision API: ', err);
       })
   };
 
-  const translate = (word) => {
+  const translate = (word, targetLang) => {
     const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
     const body = {
         q: word,
         source: "en",
-        target: currLanguage, // e.g. "es",
+        target: targetLang, // e.g. "es",
         format: "text"
       }
 
@@ -142,12 +144,14 @@ const PhotoTranslator = (props) => {
       .then(response => {
         // response.data.translations[0].translatedText
         console.log('response.data: ', response.data.data.translations[0].translatedText);
+
         setTranslatedText(response.data.data.translations[0].translatedText);
+        setErrorMessage('');
 
       })
       .catch(err => {
         setErrorMessage(err.message);
-        console.log('error: ', err);
+        console.log('(2) ERROR - Translation API: ', err);
       })
   };
 
@@ -195,8 +199,12 @@ const PhotoTranslator = (props) => {
         <Button 
           title="Let's Translate!"
           color={Colors.primary}
-          onPress={() => {translate(getText)}}
+          onPress={() => {translate(getText, currLanguage)}}
         />
+
+        <View>
+          <Text>Selected Language: {displayLanguage} ({currLanguage})</Text>
+        </View>
 
         <TouchableOpacity
           style={styles.buttonContainer}
@@ -206,10 +214,6 @@ const PhotoTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
-
-        <View>
-        <Text>Selected Language: {displayLanguage}</Text>
-        </View>
       </View>
 
     </ScrollView>

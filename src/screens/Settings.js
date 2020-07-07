@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Picker } from 'react-native';
 
@@ -6,6 +7,7 @@ const Settings = (props) => {
 
   const { navigation } = props;
   const LANGUAGES = { 
+    English: 'en', 
     Spanish: 'es', 
     Korean: 'ko', 
     Chinese: 'zh-TW', 
@@ -24,9 +26,9 @@ const Settings = (props) => {
   });
   
 
-  const languageComponents = Object.keys(LANGUAGES).map(label => {
+  const languageComponents = Object.keys(LANGUAGES).map((label, i) => {
     return (
-      <Picker.Item label={label} value={LANGUAGES[label]} />
+      <Picker.Item key={i} label={label} value={LANGUAGES[label]} />
     )
   });
 
@@ -55,7 +57,6 @@ const Settings = (props) => {
         }
       >
         <Text style={styles.buttonText}>Translating Words</Text>
-        {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
       </TouchableOpacity>
 
       <TouchableOpacity
