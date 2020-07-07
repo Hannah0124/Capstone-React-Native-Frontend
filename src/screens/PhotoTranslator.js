@@ -22,6 +22,15 @@ const PhotoTranslator = (props) => {
   const { route, navigation } = props;
   
 
+  const LANGUAGES = { 
+    Spanish: 'es', 
+    Korean: 'ko', 
+    Chinese: 'zh-TW', 
+    Japanese: 'ja', 
+    French: 'fr',
+    German: 'de', 
+    Vietnamese: 'vi'
+  };
   
   const getLanguage = () => {
     console.log(route);
@@ -30,6 +39,12 @@ const PhotoTranslator = (props) => {
     console.log('language: ', language);
     setCurrLanguage(language);
   };
+
+  const displayLanguage = Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == currLanguage;
+  });
+  
+  
 
   const dispatch = useDispatch(); // TEST
 
@@ -182,14 +197,14 @@ const PhotoTranslator = (props) => {
           style={styles.buttonContainer}
           onPress={() => {
             navigation.navigate('Settings')
-            // TEST
-            // navigation.navigate('Settings', {
-            //   language: currLanguage
-            // })
           }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
+
+        <View>
+        <Text>Selected Language: {displayLanguage}</Text>
+        </View>
       </View>
 
     </ScrollView>
