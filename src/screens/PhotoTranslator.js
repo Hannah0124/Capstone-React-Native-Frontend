@@ -19,7 +19,17 @@ const PhotoTranslator = (props) => {
   const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState();
 
-  const { navigation } = props;
+  const { route, navigation } = props;
+  
+
+  
+  const getLanguage = () => {
+    console.log(route);
+    const { item } = route.params;
+    const { language } = item;
+    console.log('language: ', language);
+    setCurrLanguage(language);
+  };
 
   const dispatch = useDispatch(); // TEST
 
@@ -88,6 +98,7 @@ const PhotoTranslator = (props) => {
 
         console.log('SUCCESS 4', descriptions);
         setGetText(descriptions.join(', '));
+        getLanguage();
         translate(descriptions.join(', '), currLanguage);
 
       })
@@ -119,11 +130,6 @@ const PhotoTranslator = (props) => {
         console.log('error: ', err);
       })
   };
-
-  const setLanguage = (lang) => {
-    setCurrLanguage(lang);
-  };
-
 
 
   return (

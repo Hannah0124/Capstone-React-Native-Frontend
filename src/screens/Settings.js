@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Picker } from 'react-native';
 
 const Settings = (props) => {
-  const [currLanguage, setCurrLanguage] = useState();
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   const { navigation } = props;
   const LANGUAGES = { 
@@ -15,17 +15,14 @@ const Settings = (props) => {
     Vietnamese: 'vi'
   };
 
-  const getLangProp = (lang) => {
-    if (lang === 'Chinese') {
-      setCurrLanguage('zh-TW');
-    } else if (lang === 'Korean') {
-      setCurrLanguage('ko');
-    } else if (lang === 'Spanish') {
-      setCurrLanguage('es');
-    } else if (lang === 'Japanese') {
-      setCurrentLanguage('ja');
-    }
-  }
+  const changeOption = (lang) => {
+    setSelectedLanguage(lang);
+  };
+
+  const displayLanguage = Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == selectedLanguage;
+  });
+  
 
   const languageComponents = Object.keys(LANGUAGES).map(label => {
     return (
@@ -36,25 +33,39 @@ const Settings = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Settings</Text>
-      <View>
-        {/* {LANGUAGES.map(
-          lang => <Text key={lang}>{lang}</Text>
-        )} */}
-      </View>
+      <Text style={styles.text}>Language Settings</Text>
 
-      {/* test */}
       <View>
         <Picker
-          selectedValue={currLanguage}
-          onValueChange={() => getLangProp(currLanguage)}
+          selectedValue={selectedLanguage}
+          onValueChange={changeOption}
           style={{ width: 160 }}
           mode="dropdown"
         >
           <Picker.Item label="Options"/> 
           {languageComponents}
         </Picker>
+        <Text>Language selectd: {displayLanguage}</Text>
       </View>
+
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => navigation.navigate('WordTranslator', {
+          item: {language: selectedLanguage}})
+        }
+      >
+        <Text style={styles.buttonText}>Translating Words</Text>
+        {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => navigation.navigate('PhotoTranslator', 
+          {item: {language: selectedLanguage}})
+        }
+      >
+        <Text style={styles.buttonText}>Translating Photo</Text>
+      </TouchableOpacity>
 
 
       <TouchableOpacity
