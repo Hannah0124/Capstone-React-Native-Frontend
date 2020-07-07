@@ -1,7 +1,9 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Picker } from 'react-native';
 
 const Settings = (props) => {
+  const [currLanguage, setCurrLanguage] = useState();
+
   const { navigation } = props;
   const LANGUAGES = [ 
     'Spanish', 
@@ -11,16 +13,46 @@ const Settings = (props) => {
     'French',
     'German', 
     'Vietnamese'
-    ]
+    ];
+
+  const getLangProp = (lang) => {
+    if (lang === 'Chinese') {
+      setCurrLanguage('zh-TW');
+    } else if (lang === 'Korean') {
+      setCurrLanguage('ko');
+    } else if (lang === 'Spanish') {
+      setCurrLanguage('es');
+    } else if (lang === 'Japanese') {
+      setCurrentLanguage('ja');
+    }
+  }
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Settings</Text>
-      <View >
-        {LANGUAGES.map(
+      <View>
+        {/* {LANGUAGES.map(
           lang => <Text key={lang}>{lang}</Text>
-        )}
+        )} */}
       </View>
+
+      {/* test */}
+      <View>
+        <Picker
+          selectedValue={currLanguage}
+          onValueChange={() => getLangProp(currLanguage)}
+          style={{ width: 160 }}
+          mode="dropdown"
+        >
+          <Picker.Item label="Chinese" value="zh-TW" />
+          <Picker.Item label="Korean" value="ko" />
+          <Picker.Item label="Spanish" value="es" />
+          <Picker.Item label="Japanese" value="ja" />
+        </Picker>
+      </View>
+
+
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.popToTop()}
@@ -56,3 +88,6 @@ const styles = StyleSheet.create({
 });
 
 export default Settings;
+
+
+// reference: https://cloud.google.com/translate/docs/languages

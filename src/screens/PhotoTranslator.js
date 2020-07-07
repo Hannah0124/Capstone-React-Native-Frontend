@@ -61,7 +61,7 @@ const PhotoTranslator = (props) => {
         {
           features: [
             {
-              maxResults: 3,
+              maxResults: 1,  //TODO: 1 for now due to API charge
               type: "LABEL_DETECTION"
             },
           ],
@@ -174,7 +174,13 @@ const PhotoTranslator = (props) => {
 
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() => {
+            navigation.navigate('Settings')
+            // TEST
+            // navigation.navigate('Settings', {
+            //   language: currLanguage
+            // })
+          }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
