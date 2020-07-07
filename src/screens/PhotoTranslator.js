@@ -16,7 +16,7 @@ const PhotoTranslator = (props) => {
   const [apiPhoto, setApiPhoto] = useState();
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
-  const [currLanguage, setCurrLanguage] = useState('ko');
+  const [currLanguage, setCurrLanguage] = useState('en');
   const [translatedText, setTranslatedText] = useState();
 
   const { route, navigation } = props;
@@ -36,9 +36,14 @@ const PhotoTranslator = (props) => {
     console.log(route);
     const { item } = route.params;
     const { language } = item;
+    return language;
+  };
+
+  if (getLanguage()) {
+    const language = getLanguage();
     console.log('language: ', language);
     setCurrLanguage(language);
-  };
+  }
 
   const displayLanguage = Object.keys(LANGUAGES).find(label => {
     return LANGUAGES[label] == currLanguage;
@@ -123,13 +128,13 @@ const PhotoTranslator = (props) => {
       })
   };
 
-  const translate = (word, targetLang) => {
+  const translate = (word) => {
     const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
     const body = {
         q: word,
         source: "en",
-        target: targetLang, // e.g. "es",
+        target: currLanguage, // e.g. "es",
         format: "text"
       }
 
@@ -190,7 +195,7 @@ const PhotoTranslator = (props) => {
         <Button 
           title="Let's Translate!"
           color={Colors.primary}
-          onPress={() => {translate(getText, currLanguage)}}
+          onPress={() => {translate(getText)}}
         />
 
         <TouchableOpacity
