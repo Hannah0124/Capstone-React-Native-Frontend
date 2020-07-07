@@ -82,6 +82,10 @@ const WordTranslator = (props) => {
       })
   };
 
+  const getTranslated = () => {
+    //TODO : finish up the API call
+    const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}=${getText}`
+  }
 
 
   return (
