@@ -9,6 +9,7 @@ import * as Speech from 'expo-speech';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
+import { nullPlaceholder } from 'i18n-js';
 
 const PhotoTranslator = (props) => {
 
@@ -17,8 +18,9 @@ const PhotoTranslator = (props) => {
   const [apiPhoto, setApiPhoto] = useState();
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState('');
+  const [flashMessage, setFlashMessage] = useState(null);
   const [currLanguage, setCurrLanguage] = useState('en');
-  const [translatedText, setTranslatedText] = useState();
+  const [translatedText, setTranslatedText] = useState(null);
 
   // TODO (TEST)
   const speak = () => {
@@ -98,6 +100,7 @@ const PhotoTranslator = (props) => {
   // };
 
   const getWords = () => {
+    
     const baseUrl = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
 
     const body = {
@@ -144,7 +147,18 @@ const PhotoTranslator = (props) => {
       .catch(err => {
         setErrorMessage(err.message);
         console.log('(1) ERROR - Vision API: ', err);
+
+        // edge case
+        if (!apiPhoto) {
+          setFlashMessage('No image to get words!');
+
+          setTimeout(() => {
+            setFlashMessage(null);
+          }, 3000);
+        }
       })
+
+      
   };
 
   const getTranslated = (word, targetLang) => {
@@ -173,7 +187,7 @@ const PhotoTranslator = (props) => {
   };
 
   
-  useEffect(getWords, [currLanguage]);
+  // useEffect(getWords, [currLanguage]);
   // useEffect(getLanguage, [currLanguage]);
 
 
@@ -189,6 +203,14 @@ const PhotoTranslator = (props) => {
           value={titleValue}
         />
 
+      
+        { flashMessage && 
+          <View style={styles.flash}>
+            <Text>{flashMessage}</Text> 
+          </View> 
+        }
+
+
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
@@ -200,22 +222,43 @@ const PhotoTranslator = (props) => {
           style={styles.buttonContainer}
         />
 
-        <Button 
-          title="📢 Press to hear some words"
-          onPress={speak}
-        />
-{/* 
+        
+        
+        {/* 
         <Text>
           {errorMessage && errorMessage}
         </Text> */}
 
-        <Text>
-          {getText && getText}
-        </Text>
+        { (translatedText || getText)  && 
+          <View style={styles.card}>
+            <Text>
+              {getText && getText}
+            </Text>
 
-        <Text>
-          {translatedText}
-        </Text>
+            <Text>
+              {translatedText}
+            </Text>
+          </View>
+        }
+
+
+        {
+          (translatedText || getText)  && 
+          <Button 
+            title="📢 Press to hear some words"
+            onPress={speak}
+          />
+        }
+
+        { getText &&
+          <Button 
+            title="Let's translate!"
+            color={Colors.primary}
+            onPress={getLanguage}
+          />
+        }
+
+        
 
         {/* <Button 
           title="Save Image" 
@@ -237,18 +280,11 @@ const PhotoTranslator = (props) => {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
-            navigation.navigate('Settings')
+            navigation.navigate('Settings', { item: 'photo' })
           }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
-
-
-        <Button 
-          title="Let's translate!"
-          color={Colors.primary}
-          onPress={getLanguage}
-        />
       </View>
 
     </ScrollView>
@@ -282,6 +318,26 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: '#fff',
+  },
+  card: {
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: Colors.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 80,
+    marginVertical: 20
+
+  },
+  flash: {
+    backgroundColor: '#fff3cd',
+    color: '#856404',
+    borderColor: '#ffeeba',
+    padding: 10,
+    marginBottom: 2,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })
 
