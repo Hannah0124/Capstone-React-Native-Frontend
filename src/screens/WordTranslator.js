@@ -86,10 +86,17 @@ const WordTranslator = (props) => {
 
   const getTranslated = () => {
     //TODO : finish up the API call
-    // let target_lang = "zh-TW"
+    // console.log(item.language);
     const ENCODED = encodeURI(getText)
-    console.log(ENCODED);
-    const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=zh&key=${ENV.googleApiKey}&q=${ENCODED}`
+    let target_lang 
+    if (route.params) {
+      const { item } = route.params
+      target_lang = item.language
+    } else {
+      target_lang =  "zh-TW"
+    }
+    
+    const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}&q=${ENCODED}`
     axios.post(translateUrl)
     .then((response) => {
       const TRANSLATION = response.data.data.translations[0].translatedText;
