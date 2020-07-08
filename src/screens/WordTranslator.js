@@ -102,28 +102,23 @@ const WordTranslator = (props) => {
     })
   }
 
-
   return (
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.text}>Word Translator Content</Text>
 
         {/* TEST */}
-        <TextInput 
-          style={styles.textInput} 
-          onChangeText={titleChangeHandler} 
-          value={titleValue}
-        />
-
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
+      
         <Text>
           {getText}
         </Text>
         <Text>
           {translatedText}
         </Text>
+        
         <Button 
           title="Save Image" 
           color={Colors.primary} 
@@ -134,6 +129,7 @@ const WordTranslator = (props) => {
           color={Colors.primary} 
           onPress={getWords}
         />
+
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => navigation.navigate('Settings')}
