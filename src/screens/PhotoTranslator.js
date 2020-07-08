@@ -9,7 +9,6 @@ import * as Speech from 'expo-speech';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
-import { nullPlaceholder } from 'i18n-js';
 
 const PhotoTranslator = (props) => {
 
