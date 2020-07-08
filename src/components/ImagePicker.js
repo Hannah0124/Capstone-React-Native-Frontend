@@ -47,6 +47,24 @@ const ImgPicker = props => {
     props.onImageTaken(image.uri);
   };
 
+  const handleChoosePhoto = async () => {
+    // function to get image from gallery
+    const hasPermission = await verifyPermissions();
+    if (!hasPermission) {
+      return; // cannot continue
+    }
+
+    const options = {};
+    const image = await ImagePicker.launchImageLibraryAsync(
+                  {
+                    aspect: [16, 9],
+                    quality: 0.5
+                  });
+    setPickedImage(image.uri); // got image from gallery
+    props.onImageTaken(image.uri);
+  };
+
+
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
@@ -64,6 +82,11 @@ const ImgPicker = props => {
         title="Take Image"
         color={Colors.primary}
         onPress={takeImageHandler} // open up the camera, and display it to the user
+      />
+      <Button
+        title="Choose Photo"
+        color={Colors.primary}
+        onPress={handleChoosePhoto} // open up the gallery and user will be able to choose picture
       />
     </View>
   );
