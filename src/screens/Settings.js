@@ -6,8 +6,9 @@ const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
   
-  const { navigation, route } = props;
-  const { item } = route.params;
+  // const { navigation, route } = props;
+  const { navigation } = props;
+  // const { item } = route.params;
 
   const LANGUAGES = { 
     English: 'en', 
@@ -36,6 +37,8 @@ const Settings = (props) => {
   });
 
   const goBack = () => {
+    const { route } = props;
+    const { item } = route.params;
     console.log('item:', item)
 
     if (item === 'photo') {
@@ -67,14 +70,14 @@ const Settings = (props) => {
         <Text>Language selectd: {displayLanguage}</Text>
       </View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('WordTranslator', {
           item: {language: selectedLanguage}})
         }
       >
         <Text style={styles.buttonText}>Translating Words</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* <TouchableOpacity
         style={styles.buttonContainer}
