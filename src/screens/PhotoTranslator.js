@@ -22,9 +22,9 @@ const PhotoTranslator = (props) => {
 
   // TODO (TEST)
   const speak = () => {
-    if (getText) {
-      Speech.speak(getText);
-    };
+    let targetText = translatedText || getText;
+
+    Speech.speak(targetText, {language: currLanguage});
   };
   
     
@@ -201,7 +201,7 @@ const PhotoTranslator = (props) => {
         />
 
         <Button 
-          title="Perss to hear some words"
+          title="📢 Press to hear some words"
           onPress={speak}
         />
 {/* 
@@ -288,3 +288,4 @@ const styles = StyleSheet.create({
 export default PhotoTranslator;
 
 // reference - picker: https://snack.expo.io/S1_ipbwSL
+// reference - speech: https://docs.expo.io/versions/latest/sdk/speech/
