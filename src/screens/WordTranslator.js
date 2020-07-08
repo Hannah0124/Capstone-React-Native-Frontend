@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
@@ -20,8 +20,7 @@ const WordTranslator = (props) => {
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
 
-  const { navigation } = props;
-
+  const { route, navigation } = props;
   const dispatch = useDispatch(); // TEST
 
   // TEST
@@ -77,7 +76,7 @@ const WordTranslator = (props) => {
         const TEXT = response.data.responses[0].textAnnotations[0].description;
         console.log('SUCCESS 4', TEXT);
         setGetText(TEXT);
-        getTranslated(encodeURI(TEXT));
+        // getTranslated(encodeURI(TEXT));
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -85,12 +84,12 @@ const WordTranslator = (props) => {
       })
   };
 
-  const getTranslated = (text) => {
+  const getTranslated = () => {
     //TODO : finish up the API call
     // let target_lang = "zh-TW"
-    console.log('calling translation');
-    console.log(text);
-    const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=zh&key=${ENV.googleApiKey}&q=${text}`
+    const ENCODED = encodeURI(getText)
+    console.log(ENCODED);
+    const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=zh&key=${ENV.googleApiKey}&q=${ENCODED}`
     axios.post(translateUrl)
     .then((response) => {
       const TRANSLATION = response.data.data.translations[0].translatedText;
@@ -120,25 +119,33 @@ const WordTranslator = (props) => {
           {translatedText}
         </Text>
         
-        <Button 
+        {/* <Button 
           title="Save Image" 
           color={Colors.primary} 
           onPress={saveImageHandler}
-        />
+        /> */}
         <Button 
           title="Get Words" 
           color={Colors.primary} 
           onPress={getWords}
+        />
+        <Button 
+          title="📢 Press to hear some words"
+          onPress={()=>{}}
         />
 
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => navigation.navigate('Settings')}
         >
-          <Text style={styles.buttonText}>Go to Settings</Text>
+          <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
+        <Button 
+          title="Let's translate!"
+          color={Colors.primary}
+          onPress={getTranslated}
+        />
       </View>
-
     </ScrollView>
   )
 }
