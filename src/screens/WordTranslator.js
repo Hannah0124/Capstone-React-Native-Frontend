@@ -8,6 +8,7 @@ import ENV from '../../env';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
+import * as Speech from 'expo-speech';
 
 
 const WordTranslator = (props) => {
