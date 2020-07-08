@@ -5,7 +5,10 @@ import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
 const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
-  const { navigation } = props;
+  
+  const { navigation, route } = props;
+  const { item } = route.params;
+
   const LANGUAGES = { 
     English: 'en', 
     Spanish: 'es', 
@@ -31,6 +34,20 @@ const Settings = (props) => {
       <Picker.Item key={i} label={label} value={LANGUAGES[label]} />
     )
   });
+
+  const goBack = () => {
+    console.log('item:', item)
+
+    if (item === 'photo') {
+      navigation.navigate('PhotoTranslator', {
+        item: {language: selectedLanguage}
+      });
+    } else {
+      navigation.navigate('WordTranslator', {
+        item: {language: selectedLanguage}
+      });
+    }
+  };
 
 
   return (
@@ -59,13 +76,23 @@ const Settings = (props) => {
         <Text style={styles.buttonText}>Translating Words</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('PhotoTranslator', 
           {item: {language: selectedLanguage}})
         }
       >
         <Text style={styles.buttonText}>Translating Photo</Text>
+      </TouchableOpacity> */}
+
+
+
+      {/* TEST */}
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={goBack}
+      >
+        <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
 
 
