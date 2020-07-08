@@ -150,7 +150,9 @@ const WordTranslator = (props) => {
 
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() => {
+            navigation.navigate('Settings', { item: 'word' })
+          }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
