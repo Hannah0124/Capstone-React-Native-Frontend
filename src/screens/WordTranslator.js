@@ -19,6 +19,7 @@ const WordTranslator = (props) => {
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
+  const [targetLang, setTargetLang] = useState();
 
   const { route, navigation } = props;
   const dispatch = useDispatch(); // TEST
@@ -93,9 +94,9 @@ const WordTranslator = (props) => {
       const { item } = route.params
       target_lang = item.language
     } else {
-      target_lang =  "zh-TW"
+      target_lang =  "es"
     }
-    
+    setTargetLang(target_lang);
     const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}&q=${ENCODED}`
     axios.post(translateUrl)
     .then((response) => {
@@ -107,6 +108,12 @@ const WordTranslator = (props) => {
       setErrorMessage(error.message);
       console.log('error', error);
     })
+  }
+
+  const toSpeak = () => {
+    console.log(translatedText);
+    console.log(targetLang);
+    Speech.speak(translatedText,{language: targetLang});
   }
 
   return (
@@ -138,7 +145,7 @@ const WordTranslator = (props) => {
         />
         <Button 
           title="📢 Press to hear some words"
-          onPress={()=>{}}
+          onPress={toSpeak}
         />
 
         <TouchableOpacity
