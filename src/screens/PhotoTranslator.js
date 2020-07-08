@@ -20,7 +20,7 @@ const PhotoTranslator = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [flashMessage, setFlashMessage] = useState(null);
   const [currLanguage, setCurrLanguage] = useState('en');
-  const [translatedText, setTranslatedText] = useState();
+  const [translatedText, setTranslatedText] = useState(null);
 
   // TODO (TEST)
   const speak = () => {
@@ -229,15 +229,17 @@ const PhotoTranslator = (props) => {
           {errorMessage && errorMessage}
         </Text> */}
 
-        <View style={styles.card}>
-          <Text>
-            {getText && getText}
-          </Text>
+        { (translatedText || getText)  && 
+          <View style={styles.card}>
+            <Text>
+              {getText && getText}
+            </Text>
 
-          <Text>
-            {translatedText}
-          </Text>
-        </View>
+            <Text>
+              {translatedText}
+            </Text>
+          </View>
+        }
 
 
         {
@@ -245,6 +247,14 @@ const PhotoTranslator = (props) => {
           <Button 
             title="📢 Press to hear some words"
             onPress={speak}
+          />
+        }
+
+        { getText &&
+          <Button 
+            title="Let's translate!"
+            color={Colors.primary}
+            onPress={getLanguage}
           />
         }
 
@@ -270,18 +280,11 @@ const PhotoTranslator = (props) => {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
-            navigation.navigate('Settings')
+            navigation.navigate('Settings', { item: 'photo' })
           }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
-
-
-        <Button 
-          title="Let's translate!"
-          color={Colors.primary}
-          onPress={getLanguage}
-        />
       </View>
 
     </ScrollView>
@@ -333,7 +336,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 2,
     width: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })
 
