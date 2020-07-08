@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Picker } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
 
 const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
