@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
 import axios from 'axios'; // npm i react-native-axios
 import ENV from '../../env'; // npm i expo-env
+import * as Speech from 'expo-speech';
 
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
@@ -19,6 +20,14 @@ const PhotoTranslator = (props) => {
   const [currLanguage, setCurrLanguage] = useState('en');
   const [translatedText, setTranslatedText] = useState();
 
+  // TODO (TEST)
+  const speak = () => {
+    if (getText) {
+      Speech.speak(getText);
+    };
+  };
+  
+    
   const { route, navigation } = props;
   
   const LANGUAGES = { 
@@ -189,6 +198,11 @@ const PhotoTranslator = (props) => {
           color={Colors.primary}
           onPress={getWords}
           style={styles.buttonContainer}
+        />
+
+        <Button 
+          title="Perss to hear some words"
+          onPress={speak}
         />
 {/* 
         <Text>

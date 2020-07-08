@@ -2571,6 +2571,11 @@ expo-permissions@~9.0.1:
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-9.0.1.tgz#dc10b58654bbe39bbbed5827369942b01b08055e"
   integrity sha512-CosJgy8XQRN/OFG2JTQDcFxz3XTGi27coCMym/hVXWtQfk0z6PwdRG5IXHfLGuSckwIcgmirrwm2+Zc0X3MmNg==
 
+expo-speech@~8.2.1:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/expo-speech/-/expo-speech-8.2.1.tgz#ca0a18356ccc79f514c259587f12ba76941c0b36"
+  integrity sha512-hjzKatGp1TptXexsZizyEtJA29tXsRZTd1CVW3llC2OIiMWu1I8/p9zMRggvAvr93G0S//vBLtZI/CPSB3ACRg==
+
 expo-splash-screen@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.3.1.tgz#4dd79d9d1ab8135281f7cc5889a68e3003223f37"
