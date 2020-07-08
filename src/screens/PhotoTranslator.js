@@ -21,7 +21,6 @@ const PhotoTranslator = (props) => {
 
   const { route, navigation } = props;
   
-
   const LANGUAGES = { 
     English: 'en', 
     Spanish: 'es', 

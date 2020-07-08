@@ -13,9 +13,6 @@ const ImgPicker = props => {
   // Ask permission for IOS (Android doesnt need this!)
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
-    // ask for Camera permission
-    // Permissions.askAsync(Permissions.CAMERA_ROLL) // Galllery permission
-
 
     if (result.status !== 'granted') {
       Alert.alert(
@@ -47,6 +44,7 @@ const ImgPicker = props => {
     props.onImageTaken(image.uri);
   };
 
+  // choose image from gallery
   const handleChoosePhoto = async () => {
     // function to get image from gallery
     const hasPermission = await verifyPermissions();
@@ -59,6 +57,7 @@ const ImgPicker = props => {
                     aspect: [16, 9],
                     quality: 0.5
                   });
+
     setPickedImage(image.uri); // got image from gallery
     props.onImageTaken(image.uri);
   };
@@ -114,3 +113,5 @@ const styles = StyleSheet.create({
 });
 
 export default ImgPicker;
+
+// reference - gallery: https://docs.expo.io/versions/latest/sdk/imagepicker/
