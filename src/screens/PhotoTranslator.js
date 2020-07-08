@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
@@ -15,7 +15,7 @@ const PhotoTranslator = (props) => {
   const [selectedImage, setSelectedImage] = useState();
   const [apiPhoto, setApiPhoto] = useState();
   const [getText, setGetText] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
   const [currLanguage, setCurrLanguage] = useState('en');
   const [translatedText, setTranslatedText] = useState();
 
@@ -40,14 +40,21 @@ const PhotoTranslator = (props) => {
   const getLanguage = () => {
     console.log(route);
     const { item } = route.params;
-    const { language } = item;
-    console.log('language: ', language);
-    setCurrLanguage(language);
-    if (language) {
-      return language 
+    
+    if (item) {
+      const { language } = item;
+      console.log('language: ', language);
+      setCurrLanguage(language);
+      if (language) {
+        // if (currLanguage !== 'en') {
+          getTranslated(getText, language);
+        // }
+
+        return language 
+      }; 
     } else {
       return 'en';
-    };
+    }
   };
 
   const dispatch = useDispatch(); // TEST
@@ -76,11 +83,11 @@ const PhotoTranslator = (props) => {
   };
 
 
-  // TEST
-  const saveImageHandler = () => {
-    dispatch(imagesActions.addImage(titleValue, selectedImage));
-    navigation.goBack();
-  };
+  // // TEST
+  // const saveImageHandler = () => {
+  //   dispatch(imagesActions.addImage(titleValue, selectedImage));
+  //   navigation.goBack();
+  // };
 
   const getWords = () => {
     const baseUrl = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
@@ -118,11 +125,13 @@ const PhotoTranslator = (props) => {
         console.log('SUCCESS 4', descriptions);
         setGetText(descriptions.join(', '));
         setErrorMessage('');
-        getLanguage();
+
+        // // TODO (TEST)
+        // getLanguage();
         
-        if (currLanguage !== 'en') {
-          translate(descriptions.join(', '), currLanguage);
-        }
+        // if (currLanguage !== 'en') {
+        //   getTranslated(descriptions.join(', '), currLanguage);
+        // }
       })
       .catch(err => {
         setErrorMessage(err.message);
@@ -130,7 +139,7 @@ const PhotoTranslator = (props) => {
       })
   };
 
-  const translate = (word, targetLang) => {
+  const getTranslated = (word, targetLang) => {
     const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
     const body = {
@@ -155,11 +164,15 @@ const PhotoTranslator = (props) => {
       })
   };
 
+  
+  useEffect(getWords, [currLanguage]);
+  // useEffect(getLanguage, [currLanguage]);
+
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Photo Translator Content</Text>
+        <Text style={styles.text}>Photo Translator</Text>
 
         {/* TEST */}
         <TextInput 
@@ -172,9 +185,16 @@ const PhotoTranslator = (props) => {
           onImageTaken={imageTakenHandler} 
         />
 
+        <Button 
+          title="Get Words"
+          color={Colors.primary}
+          onPress={getWords}
+          style={styles.buttonContainer}
+        />
+{/* 
         <Text>
           {errorMessage && errorMessage}
-        </Text>
+        </Text> */}
 
         <Text>
           {getText && getText}
@@ -184,23 +204,18 @@ const PhotoTranslator = (props) => {
           {translatedText}
         </Text>
 
-        <Button 
+        {/* <Button 
           title="Save Image" 
           color={Colors.primary} 
           onPress={saveImageHandler}
-        />
+        /> */}
 
-        <Button 
-          title="Get Words"
-          color={Colors.primary}
-          onPress={getWords}
-        />
-
-        <Button 
+        
+        {/* <Button 
           title="Let's Translate!"
           color={Colors.primary}
-          onPress={() => {translate(getText, currLanguage)}}
-        />
+          onPress={() => {getTranslated(getText, currLanguage)}}
+        /> */}
 
         <View>
           <Text>Selected Language: {displayLanguage} ({currLanguage})</Text>
@@ -214,6 +229,13 @@ const PhotoTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
+
+
+        <Button 
+          title="Let's translate!"
+          color={Colors.primary}
+          onPress={getLanguage}
+        />
       </View>
 
     </ScrollView>
@@ -239,6 +261,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: '#747EFD',
     borderRadius: 5,
+    borderWidth: 2,
+    borderColor: Colors.primary,
     padding: 10,
     margin: 20
   },
@@ -249,3 +273,5 @@ const styles = StyleSheet.create({
 })
 
 export default PhotoTranslator;
+
+// reference - picker: https://snack.expo.io/S1_ipbwSL
