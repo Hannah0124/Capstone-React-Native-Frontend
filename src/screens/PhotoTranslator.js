@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native'; 
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
 import axios from 'axios'; // npm i react-native-axios
 import ENV from '../../env'; // npm i expo-env
 import * as Speech from 'expo-speech';
+import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
@@ -48,29 +49,27 @@ const PhotoTranslator = (props) => {
 
   const getLanguage = () => {
     
-    console.log(route);
-    const { item } = route.params;
+    console.log('route? ', route);
     
-    if (item) {
-      const { language } = item;
-      console.log('language: ', language);
-      setCurrLanguage(language);
+    if (!route.params) {
+      setFlashMessage('You must change language setting!');
 
-      if (language === 'en') {
-        setFlashMessage('You must change language setting!');
-  
-        setTimeout(() => {
-          setFlashMessage(null);
-        }, 3000);
-  
-        return;
-      } else {
-        getTranslated(getText, language);
-      }
+      setTimeout(() => {
+        setFlashMessage(null);
+      }, 3000);
 
-        return language 
-    }; 
-  };
+      return;
+    }
+
+    const { item } = route.params;
+    const { language } = item;
+    console.log('language: ', language);
+
+    setCurrLanguage(language);
+    getTranslated(getText, language);
+
+    return language 
+  }; 
 
   const dispatch = useDispatch(); // TEST
 
@@ -250,10 +249,13 @@ const PhotoTranslator = (props) => {
 
         {
           (translatedText || getText)  && 
-          <Button 
-            title="📢 Press to hear some words"
-            onPress={speak}
-          />
+            <AntDesign.Button 
+              name="sound" 
+              size={24} 
+              color={Colors.primary} 
+              backgroundColor='#fff'
+              onPress={speak}
+            />
         }
 
         { getText &&
@@ -351,3 +353,4 @@ export default PhotoTranslator;
 
 // reference - picker: https://snack.expo.io/S1_ipbwSL
 // reference - speech: https://docs.expo.io/versions/latest/sdk/speech/
+// reference - icon: https://docs.expo.io/guides/icons/
