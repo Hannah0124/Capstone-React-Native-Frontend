@@ -141,6 +141,7 @@ const PhotoTranslator = (props) => {
         console.log('SUCCESS 4', descriptions);
         setGetText(descriptions.join(', '));
         setErrorMessage('');
+        setTranslatedText(null);
 
         // // TODO (TEST)
         // getLanguage();
