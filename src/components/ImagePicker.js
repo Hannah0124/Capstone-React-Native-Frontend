@@ -3,6 +3,8 @@ import { View, Button, Image, Text, StyleSheet, Alert, Dimensions } from 'react-
 import * as ImagePicker from 'expo-image-picker'; // open camera!
 import * as Permissions from 'expo-permissions'; //  expo install expo-permissions
 
+import { FontAwesome, Entypo } from '@expo/vector-icons';
+
 import Colors from '../constants/Colors';
 
 const SCREEN = Dimensions.get('screen');
@@ -76,16 +78,25 @@ const ImgPicker = props => {
           />
         )}
       </View>
-      <Button
-        title="Take Image"
-        color={Colors.primary}
-        onPress={takeImageHandler} // open up the camera, and display it to the user
-      />
-      <Button
-        title="Choose Photo"
-        color={Colors.primary}
-        onPress={handleChoosePhoto} // open up the gallery and user will be able to choose picture
-      />
+
+      <View style={styles.buttonContainer}>
+        <Entypo.Button 
+          name="camera" size={24} color="black" 
+          title="Take Image"
+          color={Colors.primary}
+          backgroundColor='#fff'
+          onPress={takeImageHandler} // open up the camera, and display it to the user
+        />
+
+        <FontAwesome.Button 
+          name="photo" 
+          size={24} 
+          title="Choose Photo"
+          color={Colors.primary}
+          backgroundColor='#fff'
+          onPress={handleChoosePhoto} // open up the gallery and user will be able to choose picture
+        />
+      </View>
     </View>
   );
 };
@@ -108,7 +119,9 @@ const styles = StyleSheet.create({
   image: {
     width: SCREEN.width * 0.75,
     height: 200,
-
+  },
+  buttonContainer: {
+    flexDirection: 'row'
   }
 });
 
