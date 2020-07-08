@@ -4,11 +4,12 @@ import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
 import ENV from '../../env';
+import * as Speech from 'expo-speech';
+import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
-import * as Speech from 'expo-speech';
 
 
 const WordTranslator = (props) => {
@@ -143,10 +144,17 @@ const WordTranslator = (props) => {
           color={Colors.primary} 
           onPress={getWords}
         />
-        <Button 
-          title="📢 Press to hear some words"
-          onPress={toSpeak}
-        />
+
+        {
+          (translatedText || getText)  && 
+            <AntDesign.Button 
+              name="sound" 
+              size={24} 
+              color={Colors.primary} 
+              backgroundColor='#fff'
+              onPress={toSpeak}
+            />
+        }
 
         <TouchableOpacity
           style={styles.buttonContainer}

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native'; 
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
 import axios from 'axios'; // npm i react-native-axios
 import ENV from '../../env'; // npm i expo-env
 import * as Speech from 'expo-speech';
+import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
@@ -250,10 +251,13 @@ const PhotoTranslator = (props) => {
 
         {
           (translatedText || getText)  && 
-          <Button 
-            title="📢 Press to hear some words"
-            onPress={speak}
-          />
+            <AntDesign.Button 
+              name="sound" 
+              size={24} 
+              color={Colors.primary} 
+              backgroundColor='#fff'
+              onPress={speak}
+            />
         }
 
         { getText &&
