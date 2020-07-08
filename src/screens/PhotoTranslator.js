@@ -47,6 +47,7 @@ const PhotoTranslator = (props) => {
   });
 
   const getLanguage = () => {
+    
     console.log(route);
     const { item } = route.params;
     
@@ -54,16 +55,21 @@ const PhotoTranslator = (props) => {
       const { language } = item;
       console.log('language: ', language);
       setCurrLanguage(language);
-      if (language) {
-        // if (currLanguage !== 'en') {
-          getTranslated(getText, language);
-        // }
+
+      if (language === 'en') {
+        setFlashMessage('You must change language setting!');
+  
+        setTimeout(() => {
+          setFlashMessage(null);
+        }, 3000);
+  
+        return;
+      } else {
+        getTranslated(getText, language);
+      }
 
         return language 
-      }; 
-    } else {
-      return 'en';
-    }
+    }; 
   };
 
   const dispatch = useDispatch(); // TEST
