@@ -54,7 +54,6 @@ const ImgPicker = props => {
       return; // cannot continue
     }
 
-    const options = {};
     const image = await ImagePicker.launchImageLibraryAsync(
                   {
                     aspect: [16, 9],
