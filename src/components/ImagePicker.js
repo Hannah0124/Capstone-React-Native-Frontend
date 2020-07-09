@@ -83,8 +83,9 @@ const ImgPicker = props => {
         <Entypo.Button 
           name="camera" size={24} color="black" 
           title="Take Image"
-          color={Colors.primary}
-          backgroundColor='#fff'
+          color='#fff'
+          backgroundColor={Colors.primary}
+          style={{marginRight: 10}}
           onPress={takeImageHandler} // open up the camera, and display it to the user
         />
 
@@ -92,8 +93,9 @@ const ImgPicker = props => {
           name="photo" 
           size={24} 
           title="Choose Photo"
-          color={Colors.primary}
-          backgroundColor='#fff'
+          color='#fff'
+          backgroundColor={Colors.primary}
+          style={{marginLeft: 10}}
           onPress={handleChoosePhoto} // open up the gallery and user will be able to choose picture
         />
       </View>
@@ -108,20 +110,31 @@ const styles = StyleSheet.create({
     // flex: 1
   },
   imagePreview: {
-    width: '100%',
+    width: 250,
     height: 200,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#ccc',
-    borderWidth: 1
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    overflow: 'hidden'
   },
   image: {
     width: SCREEN.width * 0.75,
     height: 200,
   },
   buttonContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.primary,
+    width: 500,
+    height: 70,
+    position: 'absolute',
+    bottom: -510,
+    margin: 0,
+    paddingHorizontal: 10
   }
 });
 
