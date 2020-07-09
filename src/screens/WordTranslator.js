@@ -137,6 +137,14 @@ const WordTranslator = (props) => {
     Speech.speak( words,{language: lang});
   }
 
+    // TEST
+    const saveImageHandler = () => {
+      dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+      // navigation.goBack();
+      navigation.navigate('List') // , { item: 'photo' }
+    };
+  
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -202,6 +210,12 @@ const WordTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
+
+        <Button 
+          title="Save Image" 
+          color={Colors.primary} 
+          onPress={saveImageHandler}
+        />
       </View>
     </ScrollView>
   )
