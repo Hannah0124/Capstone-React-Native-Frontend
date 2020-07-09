@@ -7,6 +7,7 @@ import ENV from '../../env';
 import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
+import LANGUAGES from '../constants/Languages';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
@@ -20,7 +21,7 @@ const WordTranslator = (props) => {
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
-  const [targetLang, setTargetLang] = useState();
+  const [targetLang, setTargetLang] = useState('en');
   const [flashMessage, setFlashMessage] = useState(null);
 
   const { route, navigation } = props;
@@ -136,14 +137,12 @@ const WordTranslator = (props) => {
     }
     Speech.speak( words,{language: lang});
   }
-
-    // TEST
-    const saveImageHandler = () => {
-      dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
-      // navigation.goBack();
-      navigation.navigate('List') // , { item: 'photo' }
-    };
   
+  // TEST
+
+  const displayLanguage = Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == targetLang;
+  });
 
   return (
     <ScrollView>
@@ -202,6 +201,9 @@ const WordTranslator = (props) => {
               onPress={getTranslated}
           />
         }
+        <View>
+          <Text>Selected Language: {displayLanguage} ({targetLang})</Text>
+        </View>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
