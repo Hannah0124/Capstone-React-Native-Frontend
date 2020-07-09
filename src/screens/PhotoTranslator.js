@@ -227,8 +227,6 @@ const PhotoTranslator = (props) => {
           style={styles.buttonContainer}
         />
 
-        
-        
         {/* 
         <Text>
           {errorMessage && errorMessage}
