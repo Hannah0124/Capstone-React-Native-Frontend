@@ -8,6 +8,7 @@ import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
+import LANGUAGES from '../constants/Languages';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 
@@ -22,31 +23,8 @@ const PhotoTranslator = (props) => {
   const [currLanguage, setCurrLanguage] = useState('en');
   const [translatedText, setTranslatedText] = useState(null);
 
-  // TODO (TEST)
-  const speak = () => {
-    let targetText = translatedText || getText;
-
-    Speech.speak(targetText, {language: currLanguage});
-  };
-  
-    
   const { route, navigation } = props;
   
-  const LANGUAGES = { 
-    English: 'en', 
-    Spanish: 'es', 
-    Korean: 'ko', 
-    Chinese: 'zh-TW', 
-    Japanese: 'ja', 
-    French: 'fr',
-    German: 'de', 
-    Vietnamese: 'vi'
-  };
-
-  const displayLanguage = Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == currLanguage;
-  });
-
   const getLanguage = () => {
     
     console.log('route? ', route);
@@ -190,6 +168,18 @@ const PhotoTranslator = (props) => {
         console.log('(2) ERROR - Translation API: ', err);
       })
   };
+
+
+  const displayLanguage = Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == currLanguage;
+  });
+
+  const speak = () => {
+    let targetText = translatedText || getText;
+
+    Speech.speak(targetText, {language: currLanguage});
+  };
+  
 
   
   // useEffect(getWords, [currLanguage]);
