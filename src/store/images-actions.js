@@ -5,7 +5,7 @@ export const SET_IMAGES = 'SET_IMAGES';
 
 import { insertImage, fetchImages } from '../helpers/db';
 
-export const addImage = (title, image) => {
+export const addImage = (title, image, text, translatedText) => {
   return async dispatch => {
     const fileName = image.split('/').pop();
     const newPath = FileSystem.documentDirectory + fileName;
@@ -18,12 +18,14 @@ export const addImage = (title, image) => {
       });
       const dbResult = await insertImage(
         title,
-        newPath
+        newPath,
+        text,
+        translatedText
       );
       console.log(dbResult);
       dispatch({ type: ADD_IMAGE, imageData: { id: dbResult.insertId, title: title, image: newPath } });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       throw err;
     }
   };
