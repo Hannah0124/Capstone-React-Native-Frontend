@@ -8,6 +8,7 @@ import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
+import LANGUAGES from '../constants/Languages';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 
@@ -22,31 +23,8 @@ const PhotoTranslator = (props) => {
   const [currLanguage, setCurrLanguage] = useState('en');
   const [translatedText, setTranslatedText] = useState(null);
 
-  // TODO (TEST)
-  const speak = () => {
-    let targetText = translatedText || getText;
-
-    Speech.speak(targetText, {language: currLanguage});
-  };
-  
-    
   const { route, navigation } = props;
   
-  const LANGUAGES = { 
-    English: 'en', 
-    Spanish: 'es', 
-    Korean: 'ko', 
-    Chinese: 'zh-TW', 
-    Japanese: 'ja', 
-    French: 'fr',
-    German: 'de', 
-    Vietnamese: 'vi'
-  };
-
-  const displayLanguage = Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == currLanguage;
-  });
-
   const getLanguage = () => {
     
     console.log('route? ', route);
@@ -79,8 +57,7 @@ const PhotoTranslator = (props) => {
     setTitleValue(text);
   };
 
-  // TODO 
-  // TEST
+  // TODO: TEST
   const imageTakenHandler = async imagePath => {
     setSelectedImage(imagePath);
 
@@ -97,11 +74,12 @@ const PhotoTranslator = (props) => {
   };
 
 
-  // // TEST
-  // const saveImageHandler = () => {
-  //   dispatch(imagesActions.addImage(titleValue, selectedImage));
-  //   navigation.goBack();
-  // };
+  // TEST
+  const saveImageHandler = () => {
+    dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+    // navigation.goBack();
+    navigation.navigate('List') // , { item: 'photo' }
+  };
 
   const getWords = () => {
     
@@ -144,10 +122,6 @@ const PhotoTranslator = (props) => {
 
         // // TODO (TEST)
         // getLanguage();
-        
-        // if (currLanguage !== 'en') {
-        //   getTranslated(descriptions.join(', '), currLanguage);
-        // }
       })
       .catch(err => {
         setErrorMessage(err.message);
@@ -162,8 +136,6 @@ const PhotoTranslator = (props) => {
           }, 3000);
         }
       })
-
-      
   };
 
   const getTranslated = (word, targetLang) => {
@@ -178,18 +150,36 @@ const PhotoTranslator = (props) => {
 
     axios.post(baseUrl, body)
       .then(response => {
-        // response.data.translations[0].translatedText
-        console.log('response.data: ', response.data.data.translations[0].translatedText);
+        // console.log('response.data: ', response.data.data.translations[0].translatedText);
 
         setTranslatedText(response.data.data.translations[0].translatedText);
         setErrorMessage('');
 
       })
       .catch(err => {
+        setFlashMessage('Something went wrong. :(');
+
+        // TODO
+        setTimeout(() => {
+          setFlashMessage(null);
+        }, 3000);
+
         setErrorMessage(err.message);
         console.log('(2) ERROR - Translation API: ', err);
       })
   };
+
+
+  const displayLanguage = Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == currLanguage;
+  });
+
+  const speak = () => {
+    let targetText = translatedText || getText;
+
+    Speech.speak(targetText, {language: currLanguage});
+  };
+  
 
   
   // useEffect(getWords, [currLanguage]);
@@ -215,6 +205,11 @@ const PhotoTranslator = (props) => {
           </View> 
         }
 
+        {/* 
+        <Text>
+          {errorMessage && errorMessage}
+        </Text> */}
+
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
@@ -227,10 +222,6 @@ const PhotoTranslator = (props) => {
           style={styles.buttonContainer}
         />
 
-        {/* 
-        <Text>
-          {errorMessage && errorMessage}
-        </Text> */}
 
         { (translatedText || getText)  && 
           <View style={styles.card}>
@@ -260,25 +251,10 @@ const PhotoTranslator = (props) => {
           <Button 
             title="Let's translate!"
             color={Colors.primary}
-            onPress={getLanguage}
+            onPress={getLanguage} // onPress={() => {getTranslated(getText, currLanguage)}}
           />
         }
-
         
-
-        {/* <Button 
-          title="Save Image" 
-          color={Colors.primary} 
-          onPress={saveImageHandler}
-        /> */}
-
-        
-        {/* <Button 
-          title="Let's Translate!"
-          color={Colors.primary}
-          onPress={() => {getTranslated(getText, currLanguage)}}
-        /> */}
-
         <View>
           <Text>Selected Language: {displayLanguage} ({currLanguage})</Text>
         </View>
@@ -291,6 +267,12 @@ const PhotoTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
+
+        <Button 
+          title="Save Image" 
+          color={Colors.primary} 
+          onPress={saveImageHandler}
+        />
       </View>
 
     </ScrollView>
@@ -302,10 +284,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#747EFD',
     backgroundColor: '#fff',
-    margin: 30
-
+    paddingVertical: 10,
   },
   text: {
     // color: '#fff',
@@ -333,7 +313,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 80,
     marginVertical: 20
-
   },
   flash: {
     backgroundColor: '#fff3cd',
