@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import WordTranslator from '../screens/WordTranslator';
 import PhotoTranslator from '../screens/PhotoTranslator';
-// import ImageList from '../screens/ImageList';
+import List from '../screens/List';
 import Settings from '../screens/Settings';
 
 const Stack = createStackNavigator();
@@ -49,11 +49,12 @@ const MainStackNavigator = () => {
           // custom title
         />
 
-        {/* <Stack.Screen 
-          name='ImageList'
-          component={ImageList}
-          options={{ title: 'Image List' }}
-        /> */}
+        <Stack.Screen 
+          name='List' 
+          component={List} 
+          // options={{ title: 'Image List' }} 
+          // custom title
+        />
 
         <Stack.Screen 
           name='Settings'
