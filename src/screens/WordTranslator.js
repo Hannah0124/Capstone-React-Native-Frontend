@@ -174,7 +174,13 @@ const WordTranslator = (props) => {
               onPress={toSpeak}
             />
         }
-
+        { (getText)  && 
+          <Button 
+              title="Let's translate!"
+              color={Colors.primary}
+              onPress={getTranslated}
+          />
+        }
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
@@ -183,11 +189,6 @@ const WordTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
-        <Button 
-          title="Let's translate!"
-          color={Colors.primary}
-          onPress={getTranslated}
-        />
       </View>
     </ScrollView>
   )
