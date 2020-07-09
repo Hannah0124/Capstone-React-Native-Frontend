@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Alert , Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
@@ -55,36 +55,48 @@ const WordTranslator = (props) => {
   
   
   const getWords = () => {
-    const baseUrl = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
-    const body = {
-      requests: [
-        {
-          features: [
-            {
-              type: 'TEXT_DETECTION',
-              // maxResults: 1
-            }
-          ],
-          image: {
-            content: apiPhoto
-            // source: {
-            //   imageUri: "https://cdn-01.media-brady.com/store/stus/media/catalog/product/cache/4/image/85e4522595efc69f496374d01ef2bf13/1544623159/f/i/first-aid-safety-signs-j28-010-lg.png"
-            // }
-          },
-        }
-      ]
+    if (!apiPhoto) {
+      Alert.alert(
+        "Image Needed",
+        "Please select a picture from gallery or take a picture",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
+    } else {
+      const baseUrl = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
+      const body = {
+        requests: [
+          {
+            features: [
+              {
+                type: 'TEXT_DETECTION',
+                // maxResults: 1
+              }
+            ],
+            image: {
+              content: apiPhoto
+              // source: {
+              //   imageUri: "https://cdn-01.media-brady.com/store/stus/media/catalog/product/cache/4/image/85e4522595efc69f496374d01ef2bf13/1544623159/f/i/first-aid-safety-signs-j28-010-lg.png"
+              // }
+            },
+          }
+        ]
+      }
+      axios.post(baseUrl, body)
+        .then((response) => {
+          const TEXT = response.data.responses[0].textAnnotations[0].description;
+          console.log('SUCCESS 4', TEXT);
+          setGetText(TEXT);
+          // getTranslated(encodeURI(TEXT));
+        })
+        .catch((error) => {
+          setErrorMessage(error.message);
+          console.log('error', error);
+        })
     }
-    axios.post(baseUrl, body)
-      .then((response) => {
-        const TEXT = response.data.responses[0].textAnnotations[0].description;
-        console.log('SUCCESS 4', TEXT);
-        setGetText(TEXT);
-        // getTranslated(encodeURI(TEXT));
-      })
-      .catch((error) => {
-        setErrorMessage(error.message);
-        console.log('error', error);
-      })
   };
 
   const getTranslated = () => {
