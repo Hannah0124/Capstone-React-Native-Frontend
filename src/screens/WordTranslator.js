@@ -21,6 +21,7 @@ const WordTranslator = (props) => {
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
   const [targetLang, setTargetLang] = useState();
+  const [flashMessage, setFlashMessage] = useState(null);
 
   const { route, navigation } = props;
   const dispatch = useDispatch(); // TEST
@@ -112,17 +113,23 @@ const WordTranslator = (props) => {
   }
 
   const toSpeak = () => {
-    console.log(translatedText);
-    console.log(targetLang);
-    Speech.speak(translatedText,{language: targetLang});
+    let lang;
+    let words;
+    if (translatedText) {
+      words = translatedText;
+      lang = targetLang;
+    } else {  
+      words = getText;
+      lang = 'en'
+    }
+    Speech.speak( words,{language: lang});
   }
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.text}>Word Translator Content</Text>
-
-        {/* TEST */}
+        
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
