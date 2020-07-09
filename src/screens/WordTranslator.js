@@ -129,8 +129,7 @@ const WordTranslator = (props) => {
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.text}>Word Translator Content</Text>
-
-        {/* TEST */}
+        
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
