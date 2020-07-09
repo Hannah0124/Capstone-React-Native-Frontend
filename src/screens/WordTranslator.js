@@ -146,13 +146,26 @@ const WordTranslator = (props) => {
           onImageTaken={imageTakenHandler} 
         />
       
-        <Text>
+        {/* <Text>
           {getText}
         </Text>
         <Text>
           {translatedText}
         </Text>
+         */}
+
         
+        { (translatedText || getText)  && 
+          <View style={styles.card}>
+            <Text style={styles.textbox}>
+              {getText}
+            </Text>
+            <Text style={styles.textbox}>
+              {translatedText}
+            </Text>
+          </View>
+        }
+
         {/* <Button 
           title="Save Image" 
           color={Colors.primary} 
@@ -210,6 +223,23 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold'
   },
+  card: {
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: Colors.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 80,
+    marginVertical: 20,
+    alignItems:'center',
+  },
+  textbox: {
+    // borderWidth: 1,
+    // borderRadius: 5,
+    maxWidth: "70%",
+    minWidth: "70%",
+    // borderColor: Colors.primary
+  },
   buttonContainer: {
     backgroundColor: '#747EFD',
     borderRadius: 5,
@@ -219,7 +249,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: '#fff',
-  }
+  },
 })
 
 export default WordTranslator;
