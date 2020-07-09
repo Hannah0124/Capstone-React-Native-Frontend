@@ -57,8 +57,7 @@ const PhotoTranslator = (props) => {
     setTitleValue(text);
   };
 
-  // TODO 
-  // TEST
+  // TODO: TEST
   const imageTakenHandler = async imagePath => {
     setSelectedImage(imagePath);
 
@@ -77,8 +76,9 @@ const PhotoTranslator = (props) => {
 
   // TEST
   const saveImageHandler = () => {
-    dispatch(imagesActions.addImage(titleValue, selectedImage, getText, trasnlatedText));
-    navigation.goBack();
+    dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+    // navigation.goBack();
+    navigation.navigate('List') // , { item: 'photo' }
   };
 
   const getWords = () => {
