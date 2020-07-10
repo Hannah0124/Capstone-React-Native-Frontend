@@ -1,8 +1,10 @@
 class Image {
-  constructor(id, title, imageUri) {
+  constructor(id, imageUri, text, translatedText) {
     this.id = id;
-    this.title = title;
+    // this.title = title;
     this.imageUri = imageUri;
+    this.text = text;
+    this.translatedText = translatedText;
   }
 }
 

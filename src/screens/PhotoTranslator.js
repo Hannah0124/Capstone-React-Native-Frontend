@@ -76,7 +76,7 @@ const PhotoTranslator = (props) => {
 
   // TEST
   const saveImageHandler = () => {
-    dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+    dispatch(imagesActions.addImage(selectedImage, getText, translatedText));
     // navigation.goBack();
     navigation.navigate('List') // , { item: 'photo' }
   };

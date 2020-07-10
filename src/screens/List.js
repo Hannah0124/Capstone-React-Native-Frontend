@@ -23,11 +23,11 @@ const List = props => {
       renderItem={itemData => (
         <ImageItem
           image={itemData.item.imageUri}
-          title={itemData.item.title}
-          text="dummy text"
-          translatedText="dummy text"
-          // text={itemData.item.text}
-          // translatedText={itemData.item.translatedText}
+          // title={itemData.item.title}
+          // text="dummy text"
+          // translatedText="dummy text"
+          text={itemData.item.text}
+          translatedText={itemData.item.translatedText}
           onSelect={() => {
             // props.navigation.navigate('ImageDetail', {
             //   imageTitle: itemData.item.title,

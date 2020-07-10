@@ -7,9 +7,9 @@ const ImageItem = props => {
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.image }} />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{props.title}</Text>
-        {/* <Text style={styles.text}>{props.text}</Text> */}
-        {/* <Text style={styles.translatedText}>{props.translatedText}</Text> */}
+        {/* <Text style={styles.title}>{props.title}</Text> */}
+        <Text style={styles.title}>{props.text}</Text>
+        <Text style={styles.title}>{props.translatedText}</Text>
       </View>
     </TouchableOpacity>
   );
