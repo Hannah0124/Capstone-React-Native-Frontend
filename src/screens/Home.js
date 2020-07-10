@@ -1,25 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Button } from 'react-native';
+import axios from 'axios';
 import ENV from '../../env'; 
 import * as Google from 'expo-google-app-auth';
 import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
+import Axios from 'axios';
+
+const SIGN_IN = 'SIGNED_IN';
+const SIGN_OUT = 'SIGNED_OUT';
+
+const initialStateForm = {
+  signedIn: false,
+  name: "",
+  photoUrl: "",
+  uid: null, 
+  provider: null, 
+  username: null, 
+  email: null,
+  accessToken: null
+};
+
+// Reducer: Take old state and genearate the new state
+const reducer = (state, action) => {
+  switch (action.type) {
+    case SIGN_IN:
+      return { 
+        ...state, 
+        ...action.payload,
+        signedIn: true 
+      };
+    case SIGN_OUT:
+      return { 
+        ...state, 
+        ...action.payload,
+        signedIn: false 
+      };
+    default:
+      throw new Error("Don't understand action");
+  };
+};
 
 
 const Home = (props) => {
 
   const { navigation } = props;
 
-  const initialStateForm = {
-    signedIn: false,
-    name: "",
-    photoUrl: ""
-  };
-
-  const [initialState, setInitialState] = useState(initialStateForm);
+  const [state, dispatch] = useReducer(reducer, initialStateForm);
 
   
+  const addUserApiCall = (body) => {
+    const BASE_URL = 'http://192.168.0.38:5000';
+    // console.log('body in addUserApiCall: ', body);
+
+    axios.post(`${BASE_URL}/add_user`, body)
+      .then(response => {
+        console.log('SUCCESS: ', response.data);
+      })
+      .catch(err => {
+        console.log('ERROR: ', err);
+      })
+  };
+
   const signIn = async () => {
     try {
       const result = await Google.logInAsync({
@@ -27,15 +70,45 @@ const Home = (props) => {
         iosClientId: ENV.iosClientId,
         scopes: ['profile', 'email'],
       });
+
+      // console.log('login result: ', result);
+
+      // "accessToken": "3",
+      // "idToken": "2",
+      // "refreshToken": "1",
+
+      // user: => 
+      // "email": "hannahjoo24@gmail.com",
+      // "id": "110807254680202631698",
+      // "name": "Hannah",
+      // "photoUrl": "https://lh6.googleusercontent.com/-7wLdQjCiN78/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm9KjIczfjg1BuDVOuJ1zcBxpLoXg/photo.jpg",
   
       if (result.type === 'success') {
-        setInitialState({
-          signedIn: true,
-          name: result.user.name, // username?
-          photoUrl: result.user.photoUrl
-        })
+        dispatch({
+          type: SIGN_IN,
+          payload: {
+            name: result.user.name,  // need to delete this
+            photoUrl: result.user.photoUrl,
+            uid: result.user.id, 
+            provider: "Google", 
+            username: result.user.name, 
+            email: result.user.email,
+            accessToken: result.accessToken
+          }
+        });
 
-        // return result.accessToken;
+        const body = {
+          uid: result.user.id, 
+          provider: "Google", 
+          username: result.user.name, 
+          email: result.user.email,
+          // accessToken: result.accessToken
+        }
+
+
+        addUserApiCall(body);
+
+        return result.accessToken; // TODO: ???
       } else {
         console.log('cancelled');
         // return { cancelled: true };
@@ -50,8 +123,8 @@ const Home = (props) => {
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
 
-      {initialState.signedIn ? (
-        <LoggedInPage name={initialState.name} photoUrl={initialState.photoUrl} />
+      {state.signedIn ? (
+        <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
       ) :
         <LoginPage signIn={signIn} />
       }
@@ -88,7 +161,7 @@ const LoginPage = props => {
 const LoggedInPage = props => {
   return (
     <View style={styles.userContainer}>
-      <Text style={styles.header}>Welcome {props.name}!</Text>
+      <Text style={styles.header}>Welcome {props.username}!</Text>
       <Image style={styles.image} source={{ uri: props.photoUrl }} />
     </View>
   )
@@ -161,3 +234,7 @@ export default Home;
 // google login front-end: https://www.youtube.com/watch?v=ELXvcyiTTHM
 // google login documentation: https://docs.expo.io/versions/latest/sdk/google/?redirected
 // login button style: https://codepen.io/slukas23/pen/qwMevr
+
+// useState or useReducer: https://www.youtube.com/watch?v=NnwkRvElx9E
+// useReducer: https://www.youtube.com/watch?v=cKzrgB6MqqM
+// payload: https://www.youtube.com/watch?v=AQLNv2nasU0
