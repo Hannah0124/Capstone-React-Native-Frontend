@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import axios from 'axios';
 import ENV from '../../env'; 
@@ -12,7 +12,6 @@ const SIGN_OUT = 'SIGNED_OUT';
 
 const initialStateForm = {
   signedIn: false,
-  name: "",
   photoUrl: "",
   uid: null, 
   provider: null, 
@@ -77,23 +76,16 @@ const Home = (props) => {
       });
 
       // console.log('login result: ', result);
-
       // "accessToken": "3",
       // "idToken": "2",
       // "refreshToken": "1",
 
-      // user: => 
-      // "email": "hannahjoo24@gmail.com",
-      // "id": "110807254680202631698",
-      // "name": "Hannah",
-      // "photoUrl": "https://lh6.googleusercontent.com/-7wLdQjCiN78/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm9KjIczfjg1BuDVOuJ1zcBxpLoXg/photo.jpg",
   
       if (result.type === 'success') {
         // how to update state
         dispatch({
           type: SIGN_IN,
           payload: {
-            name: result.user.name,  // need to delete this 
             photoUrl: result.user.photoUrl,
             uid: result.user.id, //google called it differently
             provider: "Google", 
