@@ -11,7 +11,9 @@ import Settings from '../screens/Settings';
 
 const Stack = createStackNavigator();
 
-const MainStackNavigator = () => {
+const MainStackNavigator = (props) => {
+  // console.log('images in MainStackNavigator: ', props.images);
+
   return (
     <NavigationContainer>
       <Stack.Navigator 
@@ -45,13 +47,17 @@ const MainStackNavigator = () => {
         <Stack.Screen 
           name='PhotoTranslator' 
           component={PhotoTranslator} 
-          // options={{ title: 'Detail Screen' }} 
+          initialParams={{ images: props.images }}
+          // options={{ title: 'Detail Screen'}} 
           // custom title
-        />
+        >
+          
+        </Stack.Screen>
 
         <Stack.Screen 
           name='List' 
           component={List} 
+          initialParams={{ images: props.images }}
           // options={{ title: 'Image List' }} 
           // custom title
         />
@@ -69,3 +75,5 @@ const MainStackNavigator = () => {
 
 
 export default MainStackNavigator;
+
+// reference: https://reactnavigation.org/docs/params/
