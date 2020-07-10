@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Alert  } from 'react-native'
 import * as Google from 'expo-google-app-auth';
 import ENV from '../../env';
 
@@ -64,6 +64,15 @@ const Home = (props) => {
         return { cancelled: true };
       }
     } catch (e) {
+      Alert.alert(
+        "Login Failed",
+        "Please try again!",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
       return { error: true };
     }
   }
