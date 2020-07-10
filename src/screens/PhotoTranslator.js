@@ -14,6 +14,8 @@ import ImagePicker from '../components/ImagePicker';
 
 const PhotoTranslator = (props) => {
 
+  // console.log('images in PhotoTranslator.js: ', props.route.params.images)
+
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
   const [apiPhoto, setApiPhoto] = useState();
@@ -76,8 +78,31 @@ const PhotoTranslator = (props) => {
 
   // TEST
   const saveImageHandler = () => {
-    dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
-    // navigation.goBack();
+    const baseUrl = 'http://192.168.0.38:5000';
+
+    const body = {
+      image_url: 'dummy', // apiPhoto,
+      text: 'dummy test', getText,
+      translated_text: 'translated', translatedText,
+      favorite: false,
+      language: 'Chinese', // currLanguage,
+      user_id: 1 // dummy
+    };
+
+    axios.post(`${baseUrl}/add_image`, body)
+    // axios.post(`${baseUrl}add_image?` + 'image_url=' + body.image_url + '&text=' + body.text + '&translated_text=' + body.translated_text + '&language=' + body.language + '&user_id' + body.user_id)
+      .then(response => {
+
+        console.log('internal API - success: ', response.data)
+        
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        
+      })
+
+    // dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+    // // navigation.goBack();
     navigation.navigate('List') // , { item: 'photo' }
   };
 
