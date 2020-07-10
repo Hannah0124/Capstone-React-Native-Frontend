@@ -1,13 +1,40 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import * as Google from 'expo-google-app-auth';
+import ENV from '../../env';
 
 const Home = (props) => {
 
   const { navigation } = props;
+  
+  async function signInWithGoogleAsync() {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: ENV.androidClientId,
+        iosClientId: ENV.iosClientId,
+        scopes: ['profile', 'email'],
+      });
+  
+      if (result.type === 'success') {
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
+      
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={signInWithGoogleAsync}
+      >
+        <Text style={styles.buttonText}>Log in with Google</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.buttonContainer}
