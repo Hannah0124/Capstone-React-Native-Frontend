@@ -10,11 +10,13 @@ const initialState = {
   uid: null,
   username: null,
   email: null,
-  provider: null
+  provider: null,
+  accessToken: null,
+  //accessToken to authenticate & authorize users??
 }
 
 // function that accepts the action(state to be changed) and changes the state
-const reducer = action => {
+const reducer = (state, action)=> {
   switch(action.type) {
     case 'successfully_login':
       return {
@@ -29,7 +31,7 @@ const Home = (props) => {
 
   const { navigation } = props;
   // dispatch calls the reducer and pass the action(action should be an object)
-  // const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   
 
   const signInWithGoogleAsync = async () => {
@@ -39,24 +41,21 @@ const Home = (props) => {
         iosClientId: ENV.iosClientId,
         scopes: ['profile', 'email'],
       });
-
-      // {
-      //   uid: state.uid,
-      //   firstName: state.
-      // }
-
-      // how to update state
-      // dispatch({
-      //   type: 'successfully_login',
-      //   payload: {
-      //     uid: 1233,
-      //     firstName: 'Bob'
-      //   }
-      // });
-  
       
       if (result.type === 'success') {
         console.log("result", result);
+        // how to update state
+        dispatch({
+          type: 'successfully_login',
+          payload: {
+            uid: result.user.id, //google called it differently
+            username: result.user.name, //google called it differently
+            email: result.user.email,
+            provider: "Google",
+            accessToken: result.accessToken //accessToken to authenticate & authorize users??
+          }
+        });
+        // TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER
         return result.accessToken;
       } else {
         return { cancelled: true };
@@ -65,7 +64,8 @@ const Home = (props) => {
       return { error: true };
     }
   }
-
+  console.log("state", state);
+  
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
