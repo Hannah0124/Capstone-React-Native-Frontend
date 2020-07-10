@@ -1,12 +1,21 @@
+// import React, { useState, useReducer } from 'react';
+// import { StyleSheet, View, Text, TouchableOpacity, Image, Button } from 'react-native';
+// import axios from 'axios';
+// import ENV from '../../env'; 
+// import * as Google from 'expo-google-app-auth';
+// import { AntDesign } from '@expo/vector-icons';
+
+// import Colors from '../constants/Colors';
+// import Axios from 'axios';
+
 import React, { useState, useReducer } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import axios from 'axios';
 import ENV from '../../env'; 
 import * as Google from 'expo-google-app-auth';
 import { AntDesign } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
-import Axios from 'axios';
 
 const SIGN_IN = 'SIGNED_IN';
 const SIGN_OUT = 'SIGNED_OUT';
@@ -23,6 +32,7 @@ const initialStateForm = {
 };
 
 // Reducer: Take old state and genearate the new state
+// function that accepts the action(state to be changed) and changes the state
 const reducer = (state, action) => {
   switch (action.type) {
     case SIGN_IN:
@@ -41,19 +51,121 @@ const reducer = (state, action) => {
       throw new Error("Don't understand action");
   };
 };
+  //accessToken to authenticate & authorize users?? not sure if we should pass accessToken around!
+  //  <-- should be JWT to make it security!!!!!
+  ///////////// send them JWT to set loggin after closing the app ///////////////////
+
+
+
+
+//useReducer 
+// state
+// const initialState = {
+//   // user - using the variable to match with backend
+//   uid: null,
+//   username: null,
+//   email: null,
+//   provider: null,
+//   accessToken: null,
+//   //accessToken to authenticate & authorize users?? not sure if we should pass accessToken around!
+//   //  <-- should be JWT to make it security!!!!!
+//   ///////////// send them JWT to set loggin after closing the app ///////////////////
+// }
+
+// // function that accepts the action(state to be changed) and changes the state
+// const reducer = (state, action)=> {
+//   switch(action.type) {
+//     case 'successfully_login':
+//       return {
+//         // overriding whatever we have in the state with payload
+//         ...state,
+//         ...action.payload
+//       }
+//   }
+// }
 
 
 const Home = (props) => {
 
   const { navigation } = props;
+//   // dispatch calls the reducer and pass the action(action should be an object)
+//   const [state, dispatch] = useReducer(reducer, initialState);
+//   const [login, setLogin] = useState(false);
 
+//   const signInWithGoogleAsync = async () => {
+//     try {
+//       const result = await Google.logInAsync({
+//         androidClientId: ENV.androidClientId,
+//         iosClientId: ENV.iosClientId,
+//         scopes: ['profile', 'email'],
+//       });
+      
+//       if (result.type === 'success') {
+//         // console.log("result", result);
+//         // how to update state
+//         dispatch({
+//           type: 'successfully_login',
+//           payload: {
+//             uid: result.user.id, //google called it differently
+//             username: result.user.name, //google called it differently
+//             email: result.user.email,
+//             provider: "Google",
+//             accessToken: result.accessToken //accessToken to authenticate & authorize users??
+//           }
+//         });
+
+//         const url = 'http://192.168.1.2:5000/add_user'
+//         // BACKEND API CALL TRAIL ( using my own Network IP for now)
+//         const body = {
+//           uid: result.user.id,
+//           provider: "Google", 
+//           username: result.user.name,
+//           email: result.user.email,
+//         }
+//         // TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER
+//         // axios.post(url, body)
+//         // .then((response) => {
+//         //   console.log('SUCCESS', response);
+//         // })
+//         // .catch((error) => {
+//         //   console.log('error', error);
+//         // })
+//         console.log("body",body);
+//         setLogin(true);
+        
+
+//         return result.accessToken;
+//       } else {
+//         return { cancelled: true };
+//       }
+//     } catch (e) {
+//       Alert.alert(
+//         "Login Failed",
+//         "Please try again!",
+//         [
+//           { text: "OK", 
+//             onPress: () => console.log("OK Pressed") 
+//           }
+//         ]
+//       )
+//       return { error: true };
+//     }
+//   }
+//   console.log("state", state);
+  
+
+///////////////////////////////////////////////////////
+
+  // dispatch calls the reducer and pass the action(action should be an object)
   const [state, dispatch] = useReducer(reducer, initialStateForm);
 
   
   const addUserApiCall = (body) => {
+    // BACKEND API CALL TRAIL ( using my own Network IP for now)
     const BASE_URL = 'http://192.168.0.38:5000';
     // console.log('body in addUserApiCall: ', body);
-
+    
+  ///////////// TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER//////////
     axios.post(`${BASE_URL}/add_user`, body)
       .then(response => {
         console.log('SUCCESS: ', response.data);
@@ -84,16 +196,17 @@ const Home = (props) => {
       // "photoUrl": "https://lh6.googleusercontent.com/-7wLdQjCiN78/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm9KjIczfjg1BuDVOuJ1zcBxpLoXg/photo.jpg",
   
       if (result.type === 'success') {
+        // how to update state
         dispatch({
           type: SIGN_IN,
           payload: {
-            name: result.user.name,  // need to delete this
+            name: result.user.name,  // need to delete this 
             photoUrl: result.user.photoUrl,
-            uid: result.user.id, 
+            uid: result.user.id, //google called it differently
             provider: "Google", 
-            username: result.user.name, 
+            username: result.user.name, //google called it differently
             email: result.user.email,
-            accessToken: result.accessToken
+            accessToken: result.accessToken //accessToken to authenticate & authorize users??
           }
         });
 
@@ -114,6 +227,15 @@ const Home = (props) => {
         // return { cancelled: true };
       }
     } catch (err) {
+      Alert.alert(
+        "Login Failed",
+        "Please try again!",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
       console.log('error', err)
       // return { error: true };
     }
@@ -122,6 +244,19 @@ const Home = (props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
+      
+//       { (login !== true ) &&
+//         <TouchableOpacity
+//           style={styles.buttonContainer}
+//           onPress={signInWithGoogleAsync}
+//         >
+//           <Text style={styles.buttonText}>Log in with Google</Text>
+//         </TouchableOpacity>
+//       }
+      
+//       { (login) &&
+//         <Text>Welcome {state.username}!</Text>
+//       }
 
       {state.signedIn ? (
         <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
