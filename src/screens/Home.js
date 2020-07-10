@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import * as Google from 'expo-google-app-auth';
 import ENV from '../../env';
@@ -12,7 +12,9 @@ const initialState = {
   email: null,
   provider: null,
   accessToken: null,
-  //accessToken to authenticate & authorize users??
+  //accessToken to authenticate & authorize users?? not sure if we should pass accessToken around!
+  //  <-- should be JWT to make it security!!!!!
+  ///////////// send them JWT to set loggin after closing the app ///////////////////
 }
 
 // function that accepts the action(state to be changed) and changes the state
@@ -32,7 +34,7 @@ const Home = (props) => {
   const { navigation } = props;
   // dispatch calls the reducer and pass the action(action should be an object)
   const [state, dispatch] = useReducer(reducer, initialState);
-  
+  const [login, setLogin] = useState(false);
 
   const signInWithGoogleAsync = async () => {
     try {
@@ -56,6 +58,7 @@ const Home = (props) => {
           }
         });
         // TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER
+        setLogin(true);
         return result.accessToken;
       } else {
         return { cancelled: true };
@@ -70,12 +73,18 @@ const Home = (props) => {
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
       
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={signInWithGoogleAsync}
-      >
-        <Text style={styles.buttonText}>Log in with Google</Text>
-      </TouchableOpacity>
+      { (login !== true ) &&
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={signInWithGoogleAsync}
+        >
+          <Text style={styles.buttonText}>Log in with Google</Text>
+        </TouchableOpacity>
+      }
+      
+      { (login) &&
+        <Text>Welcome {state.username}!</Text>
+      }
 
       <TouchableOpacity
         style={styles.buttonContainer}
