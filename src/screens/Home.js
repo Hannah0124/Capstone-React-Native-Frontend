@@ -1,21 +1,61 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import * as Google from 'expo-google-app-auth';
 import ENV from '../../env';
 
+
+// state
+const initialState = {
+  // user - using the variable to match with backend
+  uid: null,
+  username: null,
+  email: null,
+  provider: null
+}
+
+// function that accepts the action(state to be changed) and changes the state
+const reducer = action => {
+  switch(action.type) {
+    case 'update':
+      return {
+        ...state,
+        ...action.payload
+      }
+  }
+}
+
 const Home = (props) => {
 
   const { navigation } = props;
+  // dispatch calls the reducer and pass the action(action should be an object)
+  // const [state, dispatch] = useReducer(reducer, initialState);
   
-  async function signInWithGoogleAsync() {
+
+  const signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
         androidClientId: ENV.androidClientId,
         iosClientId: ENV.iosClientId,
         scopes: ['profile', 'email'],
       });
+
+      // {
+      //   uid: state.uid,
+      //   firstName: state.
+      // }
+
+      // how to update state
+      // dispatch({
+      //   type: 'update',
+      //   payload: {
+      //     uid: 1233,
+      //     firstName: 'Bob'
+      //   }
+      // });
   
+      
       if (result.type === 'success') {
+        console.log("result", result);
         return result.accessToken;
       } else {
         return { cancelled: true };
