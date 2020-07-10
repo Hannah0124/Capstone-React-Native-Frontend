@@ -47,7 +47,7 @@ const MainStackNavigator = (props) => {
         <Stack.Screen 
           name='PhotoTranslator' 
           component={PhotoTranslator} 
-          initialParams={{ images: props.images }}
+          // initialParams={{ images: props.images }}
           // options={{ title: 'Detail Screen'}} 
           // custom title
         >
