@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native'; 
+import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView, Alert } from 'react-native'; 
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
 import axios from 'axios'; // npm i react-native-axios
@@ -11,6 +11,10 @@ import Colors from '../constants/Colors';
 import LANGUAGES from '../constants/Languages';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
+
+const GOOGOLE_VISION_URL = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
+
+const GOOGOLE_TRANSLATION_URL = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
 const PhotoTranslator = (props) => {
 
@@ -31,12 +35,22 @@ const PhotoTranslator = (props) => {
     
     console.log('route? ', route);
     
-    if (!route.params) {
-      setFlashMessage('You must change language setting!');
+    if (!route.params.item) {
+      Alert.alert(
+        "Need to select Language",
+        "Please change a language setting",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
+      
+      // setFlashMessage('You must change language setting!');
 
-      setTimeout(() => {
-        setFlashMessage(null);
-      }, 3000);
+      // setTimeout(() => {
+      //   setFlashMessage(null);
+      // }, 3000);
 
       return;
     }
@@ -107,8 +121,21 @@ const PhotoTranslator = (props) => {
   };
 
   const getWords = () => {
+    // edge case
+    if (!apiPhoto) {
+      Alert.alert(
+        "Image Needed",
+        "Please select a picture from gallery or take a picture",
+        [
+          { 
+            text: "OK",
+            onPress: () => console.log("OK pressed")
+          }
+        ]
+      )
+    }
     
-    const baseUrl = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
+    
 
     const body = {
       requests: [
@@ -130,7 +157,7 @@ const PhotoTranslator = (props) => {
       ]
     }
 
-    axios.post(baseUrl, body)
+    axios.post(GOOGOLE_VISION_URL, body)
       .then(response => {
         console.log('response.data: ', response.data.responses[0].labelAnnotations)
 
@@ -151,20 +178,11 @@ const PhotoTranslator = (props) => {
       .catch(err => {
         setErrorMessage(err.message);
         console.log('(1) ERROR - Vision API: ', err);
-
-        // edge case
-        if (!apiPhoto) {
-          setFlashMessage('No image to get words!');
-
-          setTimeout(() => {
-            setFlashMessage(null);
-          }, 3000);
-        }
       })
   };
 
-  const getTranslated = (word, targetLang) => {
-    const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
+  const getTranslated = (word, targetLang="es") => {
+    // const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
     const body = {
         q: word,
@@ -173,7 +191,7 @@ const PhotoTranslator = (props) => {
         format: "text"
       }
 
-    axios.post(baseUrl, body)
+    axios.post(GOOGOLE_TRANSLATION_URL, body)
       .then(response => {
         // console.log('response.data: ', response.data.data.translations[0].translatedText);
 
@@ -182,12 +200,21 @@ const PhotoTranslator = (props) => {
 
       })
       .catch(err => {
-        setFlashMessage('Something went wrong. :(');
+        Alert.alert(
+          "Need to select Language",
+          "Please change a language setting",
+          [
+            { text: "OK", 
+              onPress: () => console.log("OK Pressed") 
+            }
+          ]
+        )
 
-        // TODO
-        setTimeout(() => {
-          setFlashMessage(null);
-        }, 3000);
+        // setFlashMessage('Something went wrong. :(');
+
+        // setTimeout(() => {
+        //   setFlashMessage(null);
+        // }, 3000);
 
         setErrorMessage(err.message);
         console.log('(2) ERROR - Translation API: ', err);
@@ -272,7 +299,7 @@ const PhotoTranslator = (props) => {
             />
         }
 
-        { getText &&
+        { getText && currLanguage &&
           <Button 
             title="Let's translate!"
             color={Colors.primary}
@@ -293,11 +320,13 @@ const PhotoTranslator = (props) => {
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
 
-        <Button 
-          title="Save Image" 
-          color={Colors.primary} 
-          onPress={saveImageHandler}
-        />
+        {apiPhoto && currLanguage && getText && translatedText &&
+          <Button 
+            title="Save Image" 
+            color={Colors.primary} 
+            onPress={saveImageHandler}
+          />
+        }
       </View>
 
     </ScrollView>
