@@ -45,7 +45,7 @@ const Home = (props) => {
       });
       
       if (result.type === 'success') {
-        console.log("result", result);
+        // console.log("result", result);
         // how to update state
         dispatch({
           type: 'successfully_login',
@@ -57,8 +57,27 @@ const Home = (props) => {
             accessToken: result.accessToken //accessToken to authenticate & authorize users??
           }
         });
+
+        const url = 'http://192.168.1.2:5000/add_user'
+        // BACKEND API CALL TRAIL ( using my own Network IP for now)
+        const body = {
+          uid: result.user.id,
+          provider: "Google", 
+          username: result.user.name,
+          email: result.user.email,
+        }
         // TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER
+        // axios.post(url, body)
+        // .then((response) => {
+        //   console.log('SUCCESS', response);
+        // })
+        // .catch((error) => {
+        //   console.log('error', error);
+        // })
+        console.log("body",body);
         setLogin(true);
+        
+
         return result.accessToken;
       } else {
         return { cancelled: true };
@@ -78,6 +97,9 @@ const Home = (props) => {
   }
   console.log("state", state);
   
+
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
