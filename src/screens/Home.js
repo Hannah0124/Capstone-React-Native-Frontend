@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import * as Google from 'expo-google-app-auth';
 import ENV from '../../env';
 
-
+//useReducer 
 // state
 const initialState = {
   // user - using the variable to match with backend
@@ -16,8 +16,9 @@ const initialState = {
 // function that accepts the action(state to be changed) and changes the state
 const reducer = action => {
   switch(action.type) {
-    case 'update':
+    case 'successfully_login':
       return {
+        // overriding whatever we have in the state with payload
         ...state,
         ...action.payload
       }
@@ -46,7 +47,7 @@ const Home = (props) => {
 
       // how to update state
       // dispatch({
-      //   type: 'update',
+      //   type: 'successfully_login',
       //   payload: {
       //     uid: 1233,
       //     firstName: 'Bob'
