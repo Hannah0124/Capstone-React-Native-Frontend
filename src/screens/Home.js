@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import axios from 'axios';
 import ENV from '../../env'; 
@@ -9,6 +9,8 @@ import Colors from '../constants/Colors';
 
 const SIGN_IN = 'SIGNED_IN';
 const SIGN_OUT = 'SIGNED_OUT';
+
+const BASE_URL = 'http://192.168.0.38:5000';
 
 const initialStateForm = {
   signedIn: false,
@@ -50,21 +52,59 @@ const Home = (props) => {
 
   // dispatch calls the reducer and pass the action(action should be an object)
   const [state, dispatch] = useReducer(reducer, initialStateForm);
+  const [userUids, setUserUids] = useState([]);
 
-  
-  const addUserApiCall = (body) => {
-    // BACKEND API CALL TRAIL ( using my own Network IP for now)
-    const BASE_URL = 'http://192.168.0.38:5000';
-    // console.log('body in addUserApiCall: ', body);
-    
-  ///////////// TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER//////////
-    axios.post(`${BASE_URL}/add_user`, body)
+  console.log('userUids: ', userUids);
+
+  // get uids! (TEST)
+  useEffect(() => {
+    axios.get(`${BASE_URL}/users`)
       .then(response => {
-        console.log('SUCCESS: ', response.data);
+        console.log('SUCCESS 1: ', response.data);
+        const uids = response.data.users.map(user =>{
+          return user.uid
+        })
+
+        setUserUids(uids);
       })
       .catch(err => {
-        console.log('ERROR: ', err);
+        console.log('ERROR 1: ', err);
+
       })
+
+  }, []);
+  
+  const addUserApiCall = (body) => {
+    // if user exists, dont call /add_user api
+    const hasUser = userUids.find(uid => {
+      return uid == body.uid;
+    });
+
+    if (!hasUser) {
+      // BACKEND API CALL TRAIL ( using my own Network IP for now)
+    
+      // console.log('body in addUserApiCall: ', body);
+    
+     ///////////// TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER//////////
+      axios.post(`${BASE_URL}/add_user`, body)
+      .then(response => {
+        console.log('SUCCESS (new user): ', response.data);
+      })
+      .catch(err => {
+        console.log('ERROR 2: ', err);
+      })
+    } else {
+      // // TEST (TODO)
+      axios.post(`${BASE_URL}/login`, {
+        "username": body.username,
+        "password": body.password || null
+      }).then(response => {
+        console.log('SUCCESS (returning user): ', response.data);
+
+      }).catch(err => {
+        console.log('ERROR 3: ', err); // [Error: Request failed with status code 401] TODO!
+      })
+    }
   };
 
   const signIn = async () => {
@@ -100,7 +140,7 @@ const Home = (props) => {
           provider: "Google", 
           username: result.user.name, 
           email: result.user.email,
-          // accessToken: result.accessToken
+          password: result.accessToken
         }
 
 
