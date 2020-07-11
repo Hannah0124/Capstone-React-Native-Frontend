@@ -31,6 +31,16 @@ export default function App() {
   const [images, setImages] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  console.log('images in App.js: ', images);
+
+  const getImages = (userId, images) => {
+    const myImages = images.filter(image => {
+      return image.user_id === userId
+    })
+    setImages(myImages);
+  };
+
+  
   // TEST
   const baseUrl = 'http://192.168.0.38:5000';
   useEffect(() => {
@@ -40,7 +50,9 @@ export default function App() {
         // console.log('internal API - success: ', response.data.images)
 
         const apiData = response.data.images;
-        setImages(apiData);
+
+        getImages(1, apiData); // 1 => dummy_data
+        // setImages(apiData);
       })
       .catch(err => {
         console.log('internal API - error: ', err)
