@@ -7,14 +7,29 @@ import ENV from '../../env'; // npm i expo-env
 import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
+// TODO: TEST
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+
+
 import Colors from '../constants/Colors';
 import LANGUAGES from '../constants/Languages';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
+import LineButton from '../components/LineButton';
 
 const GOOGOLE_VISION_URL = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
 
 const GOOGOLE_TRANSLATION_URL = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
+
+
+const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
+
+// Set the locale once at the beginning of your app.
+i18n.locale = defaultLanguage;
+
+// console.log('defaultLanguage: ', defaultLanguage);
+console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
@@ -26,7 +41,7 @@ const PhotoTranslator = (props) => {
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const [flashMessage, setFlashMessage] = useState(null);
-  const [currLanguage, setCurrLanguage] = useState('en');
+  const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState(null);
 
   const { route, navigation } = props;
@@ -174,14 +189,18 @@ const PhotoTranslator = (props) => {
 
         // // TODO (TEST)
         // getLanguage();
+        getTranslated(descriptions.join(', '), currLanguage);
       })
       .catch(err => {
         setErrorMessage(err.message);
         console.log('(1) ERROR - Vision API: ', err);
       })
+
+    
+
   };
 
-  const getTranslated = (word, targetLang="es") => {
+  const getTranslated = (word, targetLang) => {
     // const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
     const body = {
@@ -222,16 +241,39 @@ const PhotoTranslator = (props) => {
   };
 
 
-  const displayLanguage = Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == currLanguage;
-  });
+  const displayLanguage = (target) => {
+    return Object.keys(LANGUAGES).find(label => {
+      return LANGUAGES[label] == target;
+    })
+  };
 
-  const speak = () => {
-    let targetText = translatedText || getText;
+  const speak = (targetText, selectedLanguage) => {
+    // let targetText = translatedText || getText;
 
-    Speech.speak(targetText, {language: currLanguage});
+    Speech.speak(targetText, {language: selectedLanguage});
   };
   
+  const languageButtons = (marginTop) => {
+    return (
+      <View style={styles.buttonContainer} marginTop={marginTop}>
+        <TouchableOpacity
+          style={styles.cornerButton}
+          onPress={() => {
+            navigation.navigate('Settings', { item: 'photo' })
+          }}
+        >
+          <Text style={styles.buttonText}>Language</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.cornerButton}
+          onPress={getLanguage} // onPress={() => {getTranslated(getText, currLanguage)}}   
+        >
+          <Text style={styles.buttonText}> Let's translate! </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   
   // useEffect(getWords, [currLanguage]);
@@ -241,7 +283,7 @@ const PhotoTranslator = (props) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Photo Translator</Text>
+        {/* <Text style={styles.text}>Photo Translator</Text> */}
 
         {/* TEST */}
         <TextInput 
@@ -267,66 +309,64 @@ const PhotoTranslator = (props) => {
           onImageTaken={imageTakenHandler} 
         />
 
-        <Button 
-          title="Get Words"
-          color={Colors.primary}
-          onPress={getWords}
-          style={styles.buttonContainer}
-        />
+        <View style={styles.buttonContainer}>
+          {apiPhoto &&
+            <LineButton 
+              title="Get Words"
+              color={Colors.primary}
+              onPress={getWords}
+            />
+          }
+
+          {apiPhoto && currLanguage && getText && translatedText &&
+            <LineButton 
+              title="Save Image" 
+              color={Colors.primary} 
+              onPress={saveImageHandler}
+            />
+          }
+        </View>
 
 
-        { (translatedText || getText)  && 
-          <View style={styles.card}>
-            <Text>
-              {getText && getText}
-            </Text>
+        { (translatedText || getText)  &&
+          <View style={styles.cardsContainer}> 
+            <View style={styles.cardContainer}>
+              <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
+              <Text style={styles.card}>
+                {getText && getText}
+              </Text>
 
-            <Text>
-              {translatedText}
-            </Text>
+              <AntDesign.Button 
+                name="sound" 
+                size={24} 
+                color={Colors.primary} 
+                backgroundColor='#fff'
+                onPress={() => speak(getText, i18n.locale)}
+              />
+            </View>
+
+            <View style={styles.cardContainer}>
+              <Text style={styles.cardText}>{displayLanguage(currLanguage)}</Text>
+              <Text style={styles.card}>
+                {translatedText}
+              </Text>
+              <AntDesign.Button 
+                name="sound" 
+                size={24} 
+                color={Colors.primary} 
+                backgroundColor='#fff'
+                onPress={() => speak(translatedText, currLanguage)}
+              />
+            </View>
           </View>
         }
 
 
         {
-          (translatedText || getText)  && 
-            <AntDesign.Button 
-              name="sound" 
-              size={24} 
-              color={Colors.primary} 
-              backgroundColor='#fff'
-              onPress={speak}
-            />
-        }
-
-        { getText && currLanguage &&
-          <Button 
-            title="Let's translate!"
-            color={Colors.primary}
-            onPress={getLanguage} // onPress={() => {getTranslated(getText, currLanguage)}}
-          />
+          apiPhoto && getText && languageButtons(100)  
+          //  : languageButtons(260)
         }
         
-        <View>
-          <Text>Selected Language: {displayLanguage} ({currLanguage})</Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => {
-            navigation.navigate('Settings', { item: 'photo' })
-          }}
-        >
-          <Text style={styles.buttonText}>Language Settings</Text>
-        </TouchableOpacity>
-
-        {apiPhoto && currLanguage && getText && translatedText &&
-          <Button 
-            title="Save Image" 
-            color={Colors.primary} 
-            onPress={saveImageHandler}
-          />
-        }
       </View>
 
     </ScrollView>
@@ -339,7 +379,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingVertical: 10,
+    paddingTop: 50,
+    paddingBottom: '100%',
   },
   text: {
     // color: '#fff',
@@ -348,10 +389,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonContainer: {
-    backgroundColor: '#747EFD',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cornerButton: {
+    right: 0,
+    backgroundColor: Colors.primary,
+    color: "#fff",
     borderRadius: 5,
-    borderWidth: 2,
-    borderColor: Colors.primary,
     padding: 10,
     margin: 20
   },
@@ -359,14 +405,27 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
   },
+  cardsContainer: {
+    marginTop: 20
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardText: {
+    marginRight: 20,
+  },
   card: {
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'center',
+    textAlign: 'center',
     borderRadius: 5,
-    borderColor: Colors.primary,
+    backgroundColor: '#FAFAFA',
     paddingVertical: 10,
-    paddingHorizontal: 80,
-    marginVertical: 20
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    width: 220
   },
   flash: {
     backgroundColor: '#fff3cd',
