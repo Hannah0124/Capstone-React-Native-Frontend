@@ -94,6 +94,16 @@ const WordTranslator = (props) => {
           // getTranslated(encodeURI(TEXT));
         })
         .catch((error) => {
+
+          Alert.alert(
+            "Text Needed",
+            "Please select a picture with text",
+            [
+              { text: "OK", 
+                onPress: () => console.log("OK Pressed") 
+              }
+            ]
+          )
           setErrorMessage(error.message);
           console.log('error', error);
         })
@@ -147,7 +157,7 @@ const WordTranslator = (props) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Word Translator Content</Text>
+        {/* <Text style={styles.text}>Word Translator Content</Text> */}
         
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
@@ -228,10 +238,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#747EFD',
     backgroundColor: '#fff',
-    margin: 30
-
+    paddingTop: 50,
+    paddingBottom: '100%',
   },
   text: {
     // color: '#fff',
