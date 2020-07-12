@@ -2,24 +2,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
 
+import LANGUAGES from '../constants/Languages';
+
 const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
+  // console.log('props => getLanguage:', () => props.getLanguage())
   
   // const { navigation, route } = props;
   const { navigation } = props;
   // const { item } = route.params;
-
-  const LANGUAGES = { 
-    English: 'en', 
-    Spanish: 'es', 
-    Korean: 'ko', 
-    Chinese: 'zh-TW', 
-    Japanese: 'ja', 
-    French: 'fr',
-    German: 'de', 
-    Vietnamese: 'vi'
-  };
 
   const changeOption = (lang) => {
     setSelectedLanguage(lang);
@@ -42,12 +34,14 @@ const Settings = (props) => {
     console.log('item:', item)
 
     if (item === 'photo') {
-      navigation.navigate('PhotoTranslator', {
+      navigation.navigate(
+        'PhotoTranslator', {
         item: {language: selectedLanguage}
       });
     } else {
-      navigation.navigate('WordTranslator', {
-        item: {language: selectedLanguage}
+      navigation.navigate(
+        'WordTranslator', {
+        item: {language: selectedLanguage},
       });
     }
   };

@@ -32,6 +32,8 @@ const PhotoTranslator = (props) => {
   const { route, navigation } = props;
   
   const getLanguage = () => {
+
+    console.log('hoy');
     
     console.log('route? ', route);
     
@@ -314,7 +316,10 @@ const PhotoTranslator = (props) => {
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
-            navigation.navigate('Settings', { item: 'photo' })
+            navigation.navigate(
+              'Settings', 
+              { item: 'photo' },
+            )
           }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
