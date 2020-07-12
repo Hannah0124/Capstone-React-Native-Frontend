@@ -69,7 +69,7 @@ const ImgPicker = props => {
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
         {!pickedImage ? (
-          <Text>No image picked yet.</Text>
+          <Text style={styles.previewText}>No image picked yet.</Text>
         ) : (
           <Image
             style={styles.image}
@@ -112,17 +112,24 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: 250,
     height: 200,
+    marginTop: 50,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 15,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    borderWidth: 15,
+    borderColor: Colors.primary
+  },
+  previewText: {
+    color: 'gray',
+    fontSize: 20
   },
   image: {
     width: SCREEN.width * 0.75,
-    height: 200,
+    height: 300,
   },
   buttonContainer: {
     position: 'absolute',
@@ -133,7 +140,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 110,
     position: 'absolute',
-    bottom: -530,
+    bottom: -480,
     margin: 0,
     paddingHorizontal: 10
   },
