@@ -188,7 +188,7 @@ const Home = (props) => {
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('PhotoTranslator')}
       >
-        <Text style={styles.buttonText}>Translating Photo</Text>
+        <Text style={styles.buttonText}>Translating Object</Text>
       </TouchableOpacity>
     </View>
   )
