@@ -2,24 +2,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
 
+import LANGUAGES from '../constants/Languages';
+
 const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
-  
-  // const { navigation, route } = props;
-  const { navigation } = props;
+    const { navigation } = props;
   // const { item } = route.params;
-
-  const LANGUAGES = { 
-    English: 'en', 
-    Spanish: 'es', 
-    Korean: 'ko', 
-    Chinese: 'zh-TW', 
-    Japanese: 'ja', 
-    French: 'fr',
-    German: 'de', 
-    Vietnamese: 'vi'
-  };
 
   const changeOption = (lang) => {
     setSelectedLanguage(lang);
