@@ -4,6 +4,8 @@ import axios from 'axios';
 import ENV from '../../env'; 
 import * as Google from 'expo-google-app-auth';
 import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
 
 import Colors from '../constants/Colors';
 
@@ -180,7 +182,8 @@ const Home = (props) => {
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('WordTranslator')}
       >
-        <Text style={styles.buttonText}>Translating Words</Text>
+        <Text style={styles.buttonText}>Translate Text</Text>
+        <MaterialCommunityIcons name="format-text" size={24} color="#fff" />
         {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
       </TouchableOpacity>
 
@@ -188,7 +191,8 @@ const Home = (props) => {
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('PhotoTranslator')}
       >
-        <Text style={styles.buttonText}>Translating Object</Text>
+        <Text style={styles.buttonText}>Translate Image</Text>
+        <Entypo name="image" size={24} color="#fff" />
       </TouchableOpacity>
     </View>
   )
@@ -229,17 +233,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderColor: '#fff',
     // backgroundColor: Colors.primary,
     borderWidth: 3,
     borderRadius: 15,
     padding: 10,
     margin: 20,
-    marginTop: 0
+    marginTop: 0,
+    width: 200
   },
   buttonText: {
     fontSize: 20,
     color: '#fff',
+    marginRight: 10
   },
   userContainer: {
     justifyContent: 'center',

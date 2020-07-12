@@ -364,7 +364,6 @@ const PhotoTranslator = (props) => {
 
         {
           apiPhoto && getText && languageButtons(100)  
-          //  : languageButtons(260)
         }
         
       </View>
