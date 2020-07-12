@@ -269,11 +269,7 @@ const PhotoTranslator = (props) => {
           style={styles.cornerButton}
           onPress={getLanguage} // onPress={() => {getTranslated(getText, currLanguage)}}   
         >
-          <Text
-            // title="Let's translate!"
-            style={styles.buttonText}
-            
-          >Let's translate!</Text>
+          <Text style={styles.buttonText}> Let's translate! </Text>
         </TouchableOpacity>
       </View>
     )
@@ -333,7 +329,7 @@ const PhotoTranslator = (props) => {
 
 
         { (translatedText || getText)  &&
-          <View> 
+          <View style={styles.cardsContainer}> 
             <View style={styles.cardContainer}>
               <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
               <Text style={styles.card}>
@@ -366,14 +362,8 @@ const PhotoTranslator = (props) => {
         }
 
 
-
-
-        {/* <View>
-          <Text>Selected Language: {displayLanguage} ({currLanguage})</Text>
-        </View> */}
-
         {
-          apiPhoto && getText && languageButtons(170)  
+          apiPhoto && getText && languageButtons(100)  
           //  : languageButtons(260)
         }
         
@@ -401,7 +391,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   cornerButton: {
     right: 0,
@@ -414,6 +404,9 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: '#fff',
+  },
+  cardsContainer: {
+    marginTop: 20
   },
   cardContainer: {
     flexDirection: 'row',
