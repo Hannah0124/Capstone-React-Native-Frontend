@@ -1,5 +1,4 @@
 export default {
-  // languages: {
     English: 'en', 
     Spanish: 'es', 
     Korean: 'ko', 
@@ -8,5 +7,4 @@ export default {
     French: 'fr',
     German: 'de', 
     Vietnamese: 'vi'
-  // }
 };
