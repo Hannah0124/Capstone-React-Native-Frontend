@@ -50,17 +50,16 @@ const PhotoTranslator = (props) => {
 
   const { route, navigation } = props;
   
-  console.log('images??', props.route.params.images);
+  // console.log('images??', props.route.params.images);
 
   useEffect(() => {
     axios.get(URLS.BASE_URL + '/images')
       .then(response => {
 
         
-
         const apiData = response.data.images;
 
-        console.log('/images?? apiData: ', apiData)
+        // console.log('/images?? apiData: ', apiData)
 
         const currImages = apiData.filter(image => {
           return image.user_id === uid
@@ -69,7 +68,7 @@ const PhotoTranslator = (props) => {
         // getImages(1, apiData); // 1 => dummy_data
         setMyImages(currImages);
 
-        console.log('yo!', currImages)
+        // console.log('yo!', currImages)
       })
       .catch(err => {
         console.log('internal API - error: ', err)
@@ -77,33 +76,6 @@ const PhotoTranslator = (props) => {
       })
   }, [])
 
-  // const getImages = (uid, images) => {
-  //   const currImages = images.filter(image => {
-  //     return image.user_id === uid
-  //   })
-
-  //   return currImages
-  //   // 
-  //   console.log('??currimages in getImage function: ', currImages)
-  //   setMyImages(currImages);
-
-    
-  //   // return myImages;
-  // };
-
-  // console.log('currimages in getImage function: ', getImages(123, testImages))
-
-
-  // useEffect(
-  //   getImages(uid, testImages),
-  //   [] 
-  // )
-
-  // if (testImages) {
-  //   useEffect(() => {
-  //     getImages(uid, testImages) 
-  //   }, [myImages]);
-  // }
 
   const getLanguage = () => {
     
@@ -163,12 +135,12 @@ const PhotoTranslator = (props) => {
     setApiPhoto(photo.base64);
   };
 
-  console.log('myimages??: ', myImages)
+  // console.log('myimages??: ', myImages)
 
   // TEST
   const saveImageHandler = () => {
 
-    console.log('state in PhotoTranslator.js: ', props.route.params);
+    // console.log('state in PhotoTranslator.js: ', props.route.params);
 
     const body = {
       image_url: selectedImage, // apiPhoto,
@@ -179,20 +151,17 @@ const PhotoTranslator = (props) => {
       user_id: uid
     };
 
-    console.log('body??', body);
+    // console.log('body??', body);
 
     // const copyMyImages = getImages(uid, images); // TODO test
 
     const copyMyImages = [...myImages];
 
-    console.log('huh?', copyMyImages)
+    // console.log('huh?', copyMyImages)
 
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
-
-        // const myImages = copyMyImages ? [...copyMyImages, body] : [body];
-        // setImages(myImages);
 
         copyMyImages.push(body);
         setMyImages(copyMyImages);
