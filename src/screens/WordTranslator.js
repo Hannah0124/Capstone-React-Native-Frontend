@@ -340,12 +340,12 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: '100%',
   },
-  text: {
-    // color: '#fff',
-    color: '#747EFD',
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
+  // text: {
+  //   // color: '#fff',
+  //   color: '#747EFD',
+  //   fontSize: 24,
+  //   fontWeight: 'bold'
+  // },
   card: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -354,8 +354,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFA',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    marginVertical: 5,
-    width: 220
+    marginVertical: 0,
+    width: 270
   },
   // textbox: {
   //   // borderWidth: 1,
@@ -382,11 +382,11 @@ const styles = StyleSheet.create({
     margin: 20
   },
   cardsContainer: {
-    marginTop: 20
+    marginTop: 10
   },
   cardContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   cardText: {
