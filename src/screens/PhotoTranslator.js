@@ -32,8 +32,9 @@ console.log('i18n.locale: ', i18n.locale)
 const PhotoTranslator = (props) => {
 
   const uid = props.route.params.currentUid || 123;
+  const testImages = props.route.params.images;
 
-  console.log('images in PhotoTranslator.js: ', props.route.params.images)
+  console.log('!!images in PhotoTranslator.js: ', props.route.params.images)
 
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -48,21 +49,35 @@ const PhotoTranslator = (props) => {
 
   const { route, navigation } = props;
   
-  // console.log('images??', images)
+  console.log('images??', props.route.params.images)
 
-  const getImages = (uid) => {
-    return props.route.params.images.filter(image => {
-      return image.uid === uid
+  const getImages = (uid, images) => {
+    const currImages = images.filter(image => {
+      return image.user_id === uid
     })
-    // setImages(myImages);
 
-    // console.log('myimages in getImage function: ', myImages)
+    return currImages
+    // 
+    console.log('??currimages in getImage function: ', currImages)
+    setMyImages(currImages);
+
+    
     // return myImages;
   };
 
-  if (props.route.params.images) {
-    useEffect(() => getImages(uid, props.route.params.images), []);
-  }
+  // console.log('currimages in getImage function: ', getImages(123, testImages))
+
+
+  // useEffect(
+  //   getImages(uid, testImages),
+  //   [] 
+  // )
+
+  // if (testImages) {
+  //   useEffect(() => {
+  //     getImages(uid, testImages) 
+  //   }, [myImages]);
+  // }
 
   const getLanguage = () => {
     
@@ -128,6 +143,7 @@ const PhotoTranslator = (props) => {
     // setApiPhoto(newPath);
   };
 
+  console.log('myimages??: ', myImages)
 
   // TEST
   const saveImageHandler = () => {
@@ -160,11 +176,13 @@ const PhotoTranslator = (props) => {
 
     console.log('body??', body);
 
+    const copyMyImages = getImages(uid, testImages); // TODO test
+
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
 
-        const myImages = [...getImages(uid), body] || [];
+        const myImages = copyMyImages ? [...copyMyImages, body] : [body];
         // setImages(myImages);
         setMyImages(myImages)
 
@@ -173,7 +191,7 @@ const PhotoTranslator = (props) => {
         navigation.navigate('List', { currentUid: uid, myImages: myImages })
       })
       .catch(err => {
-        console.log('internal API - error: ', err)
+        console.log('3. internal API - error: ', err)
 
         Alert.alert(
           "Unique value needed",
