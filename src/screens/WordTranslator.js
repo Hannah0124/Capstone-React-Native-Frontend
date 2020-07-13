@@ -7,11 +7,17 @@ import ENV from '../../env';
 import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
+// TODO: TEST
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+
 import LANGUAGES from '../constants/Languages';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
+import LineButton from '../components/LineButton';
 
+const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
 
@@ -171,6 +177,23 @@ const WordTranslator = (props) => {
         </Text>
          */}
 
+        <View style={styles.buttonContainer}>
+          { apiPhoto &&
+            <LineButton 
+              title="Get Words"
+              color={Colors.primary}
+              onPress={getWords}
+            />
+          }
+
+          {apiPhoto && targetLang && getText && translatedText &&
+            <LineButton 
+              title="Save Image" 
+              color={Colors.primary} 
+              onPress={saveImageHandler}
+            />
+          }
+        </View>
         
         { (translatedText || getText)  && 
           <View style={styles.card}>
@@ -188,11 +211,11 @@ const WordTranslator = (props) => {
           color={Colors.primary} 
           onPress={saveImageHandler}
         /> */}
-        <Button 
+        {/* <Button 
           title="Get Words" 
           color={Colors.primary} 
           onPress={getWords}
-        />
+        /> */}
 
         {
           (translatedText || getText)  && 
@@ -211,9 +234,9 @@ const WordTranslator = (props) => {
               onPress={getTranslated}
           />
         }
-        <View>
+        {/* <View>
           <Text>Selected Language: {displayLanguage} ({targetLang})</Text>
-        </View>
+        </View> */}
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
@@ -223,11 +246,11 @@ const WordTranslator = (props) => {
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
 
-        <Button 
+        {/* <Button 
           title="Save Image" 
           color={Colors.primary} 
           onPress={saveImageHandler}
-        />
+        /> */}
       </View>
     </ScrollView>
   )
@@ -266,14 +289,29 @@ const styles = StyleSheet.create({
     // borderColor: Colors.primary
   },
   buttonContainer: {
-    backgroundColor: '#747EFD',
-    borderRadius: 5,
-    padding: 10,
-    margin: 20
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     fontSize: 20,
     color: '#fff',
+  },
+  cornerButton: {
+    right: 0,
+    backgroundColor: Colors.primary,
+    color: "#fff",
+    borderRadius: 5,
+    padding: 10,
+    margin: 20
+  },
+  cardsContainer: {
+    marginTop: 20
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
