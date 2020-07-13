@@ -126,7 +126,7 @@ const WordTranslator = (props) => {
       const { item } = route.params
       target_lang = item.language
     } else {
-      target_lang =  "es"
+      target_lang = "zh-TW"
     }
     setTargetLang(target_lang);
     const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}&q=${ENCODED}`
