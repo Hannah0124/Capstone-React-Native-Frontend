@@ -6,11 +6,11 @@ const ImageItem = props => {
   console.log('props in ImageItem: ', props)
   return (
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
-      <Image style={styles.image} source={{ uri: props.image }} />
-      <Image style={styles.image} source={{ uri: props.image_url }} />
+      <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{props.text}</Text>
-        <Text style={styles.title}>{props.translatedText}</Text>
+        <Text style={styles.title}>{props.translatedText} ({props.language})</Text>
+        <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     marginLeft: 25,
     width: 250,
+    color: 'black',
     justifyContent: 'center',
     alignItems: 'flex-start'
   },

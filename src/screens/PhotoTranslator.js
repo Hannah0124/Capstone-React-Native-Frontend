@@ -19,6 +19,8 @@ import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 import LineButton from '../components/LineButton';
 
+import * as FileSystem from 'expo-file-system';
+
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 // Set the locale once at the beginning of your app.
@@ -29,23 +31,25 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  const uid = props.route.params.currentUid;
+  const uid = props.route.params.currentUid || 123;
 
   console.log('images in PhotoTranslator.js: ', props.route.params.images)
 
   const [titleValue, setTitleValue] = useState('');
-  const [selectedImage, setSelectedImage] = useState();
-  const [apiPhoto, setApiPhoto] = useState();
-  const [getText, setGetText] = useState();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [apiPhoto, setApiPhoto] = useState(null);
+  const [getText, setGetText] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [flashMessage, setFlashMessage] = useState(null);
   const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState(null);
   const [images, setImages] = useState([]);
+  const [myImages, setMyImages] = useState([]);
 
   const { route, navigation } = props;
   
-  console.log('images??', images)
+  // console.log('images??', images)
+
   const getImages = (uid) => {
     return props.route.params.images.filter(image => {
       return image.uid === uid
@@ -56,7 +60,9 @@ const PhotoTranslator = (props) => {
     // return myImages;
   };
 
-  // useEffect(() => getImages(uid, images), [])
+  if (props.route.params.images) {
+    useEffect(() => getImages(uid, props.route.params.images), []);
+  }
 
   const getLanguage = () => {
     
@@ -114,6 +120,12 @@ const PhotoTranslator = (props) => {
     );
 
     setApiPhoto(photo.base64);
+    // // test TODO
+    // const image = photo.base64;
+    // const fileName = image.split('/').pop();
+    // const newPath = FileSystem.documentDirectory + fileName;
+    // console.log('newPath in PhotoTranslator?: ', newPath)
+    // setApiPhoto(newPath);
   };
 
 
@@ -130,8 +142,15 @@ const PhotoTranslator = (props) => {
 
     
 
+    // TODO: test
+    // const image = apiPhoto;
+    // const fileName = image.split('/').pop();
+    // const newPath = FileSystem.documentDirectory + fileName;
+    // console.log('newPath in PhotoTranslator?: ', newPath)
+    // setApiPhoto(newPath);
+
     const body = {
-      image_url: apiPhoto, // apiPhoto,
+      image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
       favorite: true,
@@ -139,12 +158,15 @@ const PhotoTranslator = (props) => {
       user_id: uid
     };
 
+    console.log('body??', body);
+
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
 
-        const myImages = [...getImages(uid), body];
-        setImages(myImages);
+        const myImages = [...getImages(uid), body] || [];
+        // setImages(myImages);
+        setMyImages(myImages)
 
         console.log('myImages in Photo', myImages);
 
@@ -166,7 +188,8 @@ const PhotoTranslator = (props) => {
     
       })
 
-    // dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
+
     // // navigation.goBack();
     
   };
@@ -358,6 +381,14 @@ const PhotoTranslator = (props) => {
             />
           }
         </View>
+
+        <LineButton 
+          title="Image List" 
+          color={Colors.primary} 
+          onPress={() => {
+            navigation.navigate('List', {currentUid: uid, myImages: myImages})
+          }}
+        />
 
 
         { (translatedText || getText)  &&

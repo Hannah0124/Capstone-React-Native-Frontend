@@ -11,63 +11,36 @@ import * as imagesActions from '../store/images-actions';
 import URLS from '../constants/Urls';
 
 const List = props => {
-  const myImages = props.route.params.myImages;
-  console.log('params in List.js: ', props.route.params.myImages)
-  const testImages = useSelector(state => state.images.images);
-
-  // console.log('testImages: ', testImages);
+  // const myImages = props.route.params.myImages;
+  // console.log('params in List.js: ', props.route.params.myImages)
+  // const [images, setImages] = useState([]);
+  // const [errorMessage, setErrorMessage] = useState(null);
 
   
-  const [images, setImages] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
+  // TEST: TODO
+  // const images = useSelector(state => state.images.images);
+  const myImages = useSelector(state => props.route.params.myImages);
+
+  // console.log('1. images in List.js!!: ', images);
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(imagesActions.loadImages());
-  // }), [dispatch];
-
-  
-
-  // console.log('images in List.js: ', images);
-
-  // const getImages = (uid, images) => {
-  //   const myImages = images.filter(image => {
-  //     return image.uid === uid
-  //   })
-  //   console.log('myImages: ', myImages)
-  //   setImages(myImages);
-  // };
-
-  // useEffect(() => {
-  //   axios.get(URLS.BASE_URL + '/images')
-  //     .then(response => {
-
-  //       const apiData = response.data.images;
-
-  //       getImages(props.route.params.currentUid, apiData); // 1 => dummy_data
-  //       // setImages(apiData);
-  //     })
-  //     .catch(err => {
-  //       console.log('internal API - error: ', err)
-  //       setErrorMessage(err.message);
-  //     })
-  // }, [])
-
-
-
-  // console.log('1. images in List.js: ', images)
+  useEffect(() => {
+    dispatch(imagesActions.loadImages());
+  }), [dispatch];
 
   
   // const newImages = props.route.params.images;
-  console.log('2. images in List.js: ', props.route.params.images)
+  console.log('2. myImages in List.js: ', myImages)
 
   const listComponent = myImages.map(image => {
     return (
       <ImageItem 
-        image={image.image_url}
+        imageUri={image.image_url}
         text={image.text}
         translatedText={image.translated_text}
+        favorite={image.favorite}
+        language={image.language}
       />
     )
   })
@@ -76,32 +49,32 @@ const List = props => {
 
   return (
     <View>
+      {/* <View>
       {listComponent}
+      </View> */}
+
+
+    <FlatList
+      data={myImages}
+      keyExtractor={item => item.id}
+      renderItem={itemData => (
+        <ImageItem
+          imageUri={itemData.item.image_url}
+          text={itemData.item.text}
+          translatedText={itemData.item.translated_text}
+          favorite={itemData.item.favorite}
+          language={itemData.item.language}
+          onSelect={() => {
+            // props.navigation.navigate('ImageDetail', {
+            //   imageTitle: itemData.item.title,
+            //   imageId: itemData.item.id
+            // });
+            }}
+          /> 
+        )} 
+      />
     </View>
 
-
-    // <FlatList
-    //   data={images}
-    //   keyExtractor={item => item.id}
-    //   renderItem={itemData => (
-    //   // itemData={ listComponent }
-    //     <ImageItem
-    //       // image={image.image_url}
-    //       // text={image.text}
-    //       // translatedText={image.translated_text}
-    //       image={itemData.item.image_url}
-    //       title={itemData.item.title}
-    //       text={itemData.item.text}
-    //       translatedText={itemData.item.translated_text}
-    //       onSelect={() => {
-    //         // props.navigation.navigate('ImageDetail', {
-    //         //   imageTitle: itemData.item.title,
-    //         //   imageId: itemData.item.id
-    //         // });
-    //       }}
-    //     />
-    //   )}
-    // />
   );
 };
 
