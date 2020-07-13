@@ -98,6 +98,7 @@ const WordTranslator = (props) => {
           console.log('SUCCESS 4', TEXT);
           setGetText(TEXT);
           // getTranslated(encodeURI(TEXT));
+          getTranslated(TEXT);
         })
         .catch((error) => {
 
@@ -116,10 +117,10 @@ const WordTranslator = (props) => {
     }
   };
 
-  const getTranslated = () => {
+  const getTranslated = (text) => {
     //TODO : finish up the API call
     // console.log(item.language);
-    const ENCODED = encodeURI(getText)
+    const ENCODED = encodeURI(text)
     let target_lang 
     if (route.params) {
       const { item } = route.params
@@ -141,25 +142,64 @@ const WordTranslator = (props) => {
     })
   }
 
-  const toSpeak = () => {
-    let lang;
-    let words;
-    if (translatedText) {
-      words = translatedText;
-      lang = targetLang;
-    } else {  
-      words = getText;
-      lang = 'en'
-    }
+  const toSpeak = (words, lang) => {
+    // let lang;
+    // let words;
+    // if (translatedText) {
+    //   words = translatedText;
+    //   lang = targetLang;
+    // } else {  
+    //   words = getText;
+    //   lang = 'en'
+    // }
     Speech.speak( words,{language: lang});
   }
   
   // TEST
 
-  const displayLanguage = Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == targetLang;
-  });
+  const displayLanguage = (target) => {
+    return Object.keys(LANGUAGES).find(label => {
+      return LANGUAGES[label] == target;
+    })
+  };
+  const getTranslation = () => {
+    if (!targetLang) {
+      Alert.alert(
+        "Need to select Language",
+        "Please change a language setting",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
+    } else {
+      getTranslated(getText);
+    }
+  }
 
+  const languageButtons = (marginTop) => {
+    return (
+      <View style={styles.buttonContainer} marginTop={marginTop}>
+        <TouchableOpacity
+          style={styles.cornerButton}
+          onPress={() => {
+            navigation.navigate('Settings', { item: 'text' })
+          }}
+        >
+          <Text style={styles.buttonText}>Language</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.cornerButton}
+          onPress={getTranslation}  
+        >
+          <Text style={styles.buttonText}> Let's translate! </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+  console.log('gettext', getText);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -196,13 +236,39 @@ const WordTranslator = (props) => {
         </View>
         
         { (translatedText || getText)  && 
-          <View style={styles.card}>
-            <Text style={styles.textbox}>
-              {getText}
-            </Text>
-            <Text style={styles.textbox}>
-              {translatedText}
-            </Text>
+          <View style={styles.cardsContainer}> 
+            <View style={styles.cardContainer}>
+              <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
+              <Text style={styles.card}>
+                  {getText}
+              </Text>
+
+            <AntDesign.Button 
+            name="sound" 
+            size={24} 
+            color={Colors.primary} 
+            backgroundColor='#fff'
+            onPress={() => toSpeak(getText,'en')}
+            />
+            </View>
+          </View>
+        }
+        { (translatedText || getText)  && 
+          <View style={styles.cardsContainer}> 
+            <View style={styles.cardContainer}>
+              <Text style={styles.cardText}>{displayLanguage(targetLang)}</Text>
+              <Text style={styles.card}>
+                  {translatedText}
+              </Text>
+
+            <AntDesign.Button 
+            name="sound" 
+            size={24} 
+            color={Colors.primary} 
+            backgroundColor='#fff'
+            onPress={() => toSpeak(translatedText, targetLang)}
+            />
+            </View>
           </View>
         }
 
@@ -218,21 +284,22 @@ const WordTranslator = (props) => {
         /> */}
 
         {
-          (translatedText || getText)  && 
-            <AntDesign.Button 
-              name="sound" 
-              size={24} 
-              color={Colors.primary} 
-              backgroundColor='#fff'
-              onPress={toSpeak}
-            />
+          // (translatedText || getText)  && 
+            // <AntDesign.Button 
+            //   name="sound" 
+            //   size={24} 
+            //   color={Colors.primary} 
+            //   backgroundColor='#fff'
+            //   onPress={toSpeak}
+            // />
         }
-        { (getText)  && 
-          <Button 
-              title="Let's translate!"
-              color={Colors.primary}
-              onPress={getTranslated}
-          />
+        {
+          // (getText)  && 
+          // <Button 
+          //     title="Let's translate!"
+          //     color={Colors.primary}
+          //     onPress={getTranslated}
+          // />
         }
         {/* <View>
           <Text>Selected Language: {displayLanguage} ({targetLang})</Text>
@@ -251,6 +318,9 @@ const WordTranslator = (props) => {
           color={Colors.primary} 
           onPress={saveImageHandler}
         /> */}
+        {
+          apiPhoto && getText && languageButtons(5)  
+        }
       </View>
     </ScrollView>
   )
@@ -273,13 +343,14 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'center',
+    textAlign: 'center',
     borderRadius: 5,
-    borderColor: Colors.primary,
+    backgroundColor: '#FAFAFA',
     paddingVertical: 10,
-    paddingHorizontal: 80,
-    marginVertical: 20,
-    alignItems:'center',
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    width: 220
   },
   textbox: {
     // borderWidth: 1,
@@ -312,6 +383,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  cardText: {
+    marginRight: 20,
   },
 })
 
