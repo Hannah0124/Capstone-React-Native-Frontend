@@ -42,26 +42,34 @@ const ImgPicker = props => {
 
     // console.log(image);
 
+    // edge case (when a user has not choose an image)
+    if (!image.uri) {
+      return;
+    }
+
     setPickedImage(image.uri); // got image!
     props.onImageTaken(image.uri);
   };
 
   // choose image from gallery
-  const handleChoosePhoto = async () => {
+  const chooseImageHandler = async () => {
     // function to get image from gallery
     const hasPermission = await verifyPermissions();
     if (!hasPermission) {
       return; // cannot continue
     }
 
-    const image = await ImagePicker.launchImageLibraryAsync(
-                  {
-                    aspect: [16, 9],
-                    quality: 0.5
-                  });
+    const image = await ImagePicker.launchImageLibraryAsync({
+      aspect: [16, 9],
+      quality: 0.5
+    });
 
+    // edge case (when a user has not choose an image)
+    if (!image.uri) {
+      return;
+    }
     setPickedImage(image.uri); // got image from gallery
-    props.onImageTaken(image.uri);
+    props.onImageTaken(image.uri);  
   };
 
 
@@ -96,7 +104,7 @@ const ImgPicker = props => {
           title="Choose Photo"
           color='#fff'
           backgroundColor={Colors.primary}
-          onPress={handleChoosePhoto} // open up the gallery and user will be able to choose picture
+          onPress={chooseImageHandler} // open up the gallery and user will be able to choose picture
         />
       </View>
     </View>
