@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     // width: 250,
     // height: 200,
 
-    width: 330,
-    height: 280,
+    width: 280,
+    height: 230,
     marginTop: 0,
     marginBottom: 10,
     justifyContent: 'center',

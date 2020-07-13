@@ -10,16 +10,24 @@ export default (state = initialState, action) => {
     case SET_IMAGES:
       return {
         images: action.images.map(
-          img => new Image(img.id.toString(), img.imageUri, img.text, img.trasnlatedText)
+          img => new Image(
+            img.id.toString(), 
+            img.imageUri, 
+            img.text, 
+            img.trasnlatedText,
+            img.favorite,
+            img.language
+          )
         )
       };
     case ADD_IMAGE:
       const newImage = new Image(
         action.imageData.id.toString(),
-        // action.imageData.title,
         action.imageData.image,
         action.imageData.text,
         action.imageData.translatedText,
+        action.imageData.favorite,
+        action.imageData.language
       );
       return {
         images: state.images.concat(newImage)

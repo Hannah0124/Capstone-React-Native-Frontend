@@ -19,6 +19,8 @@ import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 import LineButton from '../components/LineButton';
 
+import * as FileSystem from 'expo-file-system';
+
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 // Set the locale once at the beginning of your app.
@@ -29,38 +31,64 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  const uid = props.route.params.currentUid;
+  const uid = props.route.params.currentUid || "123";
+  // const testImages = props.route.params.images;
 
-  console.log('images in PhotoTranslator.js: ', props.route.params.images)
+  console.log('!!images in PhotoTranslator.js: ', props.route.params.images)
+  console.log('!!uid in PhotoTranslator.js: ', props.route.params.currentUid)
 
   const [titleValue, setTitleValue] = useState('');
-  const [selectedImage, setSelectedImage] = useState();
-  const [apiPhoto, setApiPhoto] = useState();
-  const [getText, setGetText] = useState();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [apiPhoto, setApiPhoto] = useState(null);
+  const [getText, setGetText] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [flashMessage, setFlashMessage] = useState(null);
   const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState(null);
   const [images, setImages] = useState([]);
+  const [myImages, setMyImages] = useState([]);
+
+  const initialStateForm = {
+    id: null,
+    image_url: null,
+    text: null,
+    translated_text: null,
+    favorite: false,
+    language: null,
+    user_id: props.route.params.currentUid || "123"
+  }
+
+  const [state, setState] = useState(initialStateForm);
 
   const { route, navigation } = props;
   
-  console.log('images??', images)
-  const getImages = (uid) => {
-    return props.route.params.images.filter(image => {
-      return image.uid === uid
-    })
-    // setImages(myImages);
+  // console.log('images??', props.route.params.images);
 
-    // console.log('myimages in getImage function: ', myImages)
-    // return myImages;
-  };
+  useEffect(() => {
+    axios.get(URLS.BASE_URL + '/images')
+      .then(response => {
 
-  // useEffect(() => getImages(uid, images), [])
+        const apiData = response.data.images;
+        setImages(apiData);
+
+        console.log('apiData? ', apiData);
+
+        const currImages = apiData.filter(image => {
+          return image.user_id === uid
+        })
+
+        setMyImages(currImages);
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        setErrorMessage(err.message);
+      })
+  }, [])
+
 
   const getLanguage = () => {
     
-    console.log('route? ', route);
+    // console.log('route? ', route);
     
     if (!route.params.item) {
       Alert.alert(
@@ -117,21 +145,15 @@ const PhotoTranslator = (props) => {
   };
 
 
+
   // TEST
   const saveImageHandler = () => {
 
-    console.log('state in PhotoTranslator.js: ', props.route.params);
-
-    console.log("!!!")
-    console.log(getText);
-    console.log(translatedText);
-    console.log(currLanguage);
-    console.log(props.route.params.currentUid);
-
-    
+    // console.log('state in PhotoTranslator.js: ', props.route.params);
 
     const body = {
-      image_url: apiPhoto, // apiPhoto,
+      id: images.length + 1,
+      image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
       favorite: true,
@@ -139,19 +161,27 @@ const PhotoTranslator = (props) => {
       user_id: uid
     };
 
+
+    const copyState = {...state}
+    copyState["id"] = images.length + 1
+    copyState["favorite"] = true
+    setState(copyState);
+
+    console.log("images.length? ", images.length + 1)
+    const copyMyImages = [...myImages];
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
 
-        const myImages = [...getImages(uid), body];
-        setImages(myImages);
+        copyMyImages.push(body);
+        setMyImages(copyMyImages);
 
-        console.log('myImages in Photo', myImages);
+        console.log('copyMyImages in Photo', copyMyImages);
 
-        navigation.navigate('List', { currentUid: uid, myImages: myImages })
+        // navigation.navigate('List', { currentUid: uid, myImages: copyMyImages })
       })
       .catch(err => {
-        console.log('internal API - error: ', err)
+        console.log('3. internal API - error: ', err)
 
         Alert.alert(
           "Unique value needed",
@@ -166,9 +196,35 @@ const PhotoTranslator = (props) => {
     
       })
 
-    // dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
+    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
+
     // // navigation.goBack();
     
+  };
+
+
+  const removeImageHandler = (id) => {
+
+    const copyState = {...state}
+    copyState["favorite"] = false;
+    setState(copyState);
+
+    axios.post(`${URLS.BASE_URL}/image/${id}`)
+      .then(response => {
+        console.log('4. internal API - successfully deleted: ', response.data)
+        setState(initialStateForm);
+
+        const filterdMyImages = myImages.filter(image => {
+          return image.id !== id
+        });
+
+        console.log('filtered? ', filterdMyImages)
+        setMyImages(filterdMyImages);
+      })
+      .catch(err => {
+        console.log('4. internal API - error (deleted): ', err)
+      })
+
   };
 
   const getWords = () => {
@@ -199,10 +255,7 @@ const PhotoTranslator = (props) => {
           ],
           //
           image: {
-            // source: {
-              content: apiPhoto
-              // gcsImageUri: ""
-            // }
+            content: apiPhoto
           },
         }
       ]
@@ -307,29 +360,25 @@ const PhotoTranslator = (props) => {
     )
   }
 
-  
-  // useEffect(getWords, [currLanguage]);
-  // useEffect(getLanguage, [currLanguage]);
 
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        {/* <Text style={styles.text}>Photo Translator</Text> */}
 
         {/* TEST */}
-        <TextInput 
+        {/* <TextInput 
           style={styles.textInput} 
           onChangeText={titleChangeHandler} 
           value={titleValue}
-        />
+        /> */}
 
       
-        { flashMessage && 
+        {/* { flashMessage && 
           <View style={styles.flash}>
             <Text>{flashMessage}</Text> 
           </View> 
-        }
+        } */}
 
         {/* 
         <Text>
@@ -337,24 +386,52 @@ const PhotoTranslator = (props) => {
         </Text> */}
 
 
+        
+        <View style={styles.favoriteButton}>
+          <Button 
+            title="My Favorites" 
+            color={Colors.primary} 
+            onPress={() => {
+              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+            }}
+          />
+        </View>
+
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
 
         <View style={styles.buttonContainer}>
+          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) ? 
+            <AntDesign.Button 
+              name="star" 
+              size={30} 
+              color="#C99B13" 
+              backgroundColor="#fff"
+              onPress={() => removeImageHandler(state.id)}
+            >
+              {/* <Text>Add Favorite</Text> */}
+            </AntDesign.Button>
+              
+            :
+            
+            <AntDesign.Button 
+            name="staro" 
+            size={30} 
+            color="#C99B13" 
+            backgroundColor="#fff"
+            onPress={saveImageHandler}
+          >
+            {/* <Text>Add Favorite</Text> */}
+          </AntDesign.Button>
+          }
+
+
           {apiPhoto &&
-            <LineButton 
+            <Button 
               title="Get Words"
               color={Colors.primary}
               onPress={getWords}
-            />
-          }
-
-          {apiPhoto && currLanguage && getText && translatedText &&
-            <LineButton 
-              title="Save Image" 
-              color={Colors.primary} 
-              onPress={saveImageHandler}
             />
           }
         </View>
@@ -434,6 +511,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: '#fff',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0
   },
   cardsContainer: {
     marginTop: 20
