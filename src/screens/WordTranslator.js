@@ -7,6 +7,7 @@ import ENV from '../../env';
 import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
+import LANGUAGES from '../constants/Languages';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
@@ -20,7 +21,7 @@ const WordTranslator = (props) => {
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
-  const [targetLang, setTargetLang] = useState();
+  const [targetLang, setTargetLang] = useState('en');
   const [flashMessage, setFlashMessage] = useState(null);
 
   const { route, navigation } = props;
@@ -93,6 +94,16 @@ const WordTranslator = (props) => {
           // getTranslated(encodeURI(TEXT));
         })
         .catch((error) => {
+
+          Alert.alert(
+            "Text Needed",
+            "Please select a picture with text",
+            [
+              { text: "OK", 
+                onPress: () => console.log("OK Pressed") 
+              }
+            ]
+          )
           setErrorMessage(error.message);
           console.log('error', error);
         })
@@ -136,11 +147,17 @@ const WordTranslator = (props) => {
     }
     Speech.speak( words,{language: lang});
   }
+  
+  // TEST
+
+  const displayLanguage = Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == targetLang;
+  });
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.text}>Word Translator Content</Text>
+        {/* <Text style={styles.text}>Word Translator Content</Text> */}
         
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
@@ -194,6 +211,9 @@ const WordTranslator = (props) => {
               onPress={getTranslated}
           />
         }
+        <View>
+          <Text>Selected Language: {displayLanguage} ({targetLang})</Text>
+        </View>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
@@ -202,6 +222,12 @@ const WordTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language Settings</Text>
         </TouchableOpacity>
+
+        <Button 
+          title="Save Image" 
+          color={Colors.primary} 
+          onPress={saveImageHandler}
+        />
       </View>
     </ScrollView>
   )
@@ -212,10 +238,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#747EFD',
     backgroundColor: '#fff',
-    margin: 30
-
+    paddingTop: 50,
+    paddingBottom: '100%',
   },
   text: {
     // color: '#fff',
