@@ -381,11 +381,11 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: '100%',
   },
-  text: {
-    color: '#747EFD',
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
+  // text: {
+  //   color: '#747EFD',
+  //   fontSize: 24,
+  //   fontWeight: 'bold'
+  // },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
