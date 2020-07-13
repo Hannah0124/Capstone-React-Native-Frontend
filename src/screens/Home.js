@@ -172,6 +172,12 @@ const Home = (props) => {
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
 
+      {state.signedIn ? (
+        <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
+      ) :
+        <LoginPage signIn={signIn} />
+      }
+
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('WordTranslator')}
@@ -188,12 +194,6 @@ const Home = (props) => {
         <Text style={styles.buttonText}>Translate Image</Text>
         <Entypo name="image" size={24} color="#fff" />
       </TouchableOpacity>
-
-      {state.signedIn ? (
-        <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
-      ) :
-        <LoginPage signIn={signIn} />
-      }
     </View>
   )
 }
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 50,
     fontWeight: 'bold',
-    marginBottom: 100
+    marginBottom: 50
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -253,8 +253,7 @@ const styles = StyleSheet.create({
   userContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 30
-
+    marginVertical: 50
   },
   header: {
     fontSize: 25
