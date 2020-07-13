@@ -151,7 +151,7 @@ const PhotoTranslator = (props) => {
     }
     
     
-
+    
     const body = {
       requests: [
         {
@@ -363,7 +363,7 @@ const PhotoTranslator = (props) => {
 
 
         {
-          apiPhoto && getText && languageButtons(100)  
+          apiPhoto && getText && languageButtons(60)  
         }
         
       </View>
@@ -382,7 +382,6 @@ const styles = StyleSheet.create({
     paddingBottom: '100%',
   },
   text: {
-    // color: '#fff',
     color: '#747EFD',
     fontSize: 24,
     fontWeight: 'bold'
