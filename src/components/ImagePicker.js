@@ -110,8 +110,10 @@ const styles = StyleSheet.create({
     // flex: 1
   },
   imagePreview: {
-    width: 250,
-    height: 200,
+    // width: 250,
+    // height: 200,
+    width: 330,
+    height: 280,
     marginTop: 50,
     marginBottom: 10,
     justifyContent: 'center',
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 110,
     position: 'absolute',
-    bottom: -480,
+    bottom: -450,
     margin: 0,
     paddingHorizontal: 10
   },
