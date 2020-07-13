@@ -48,6 +48,18 @@ const PhotoTranslator = (props) => {
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
 
+  const initialStateForm = {
+    id: null,
+    image_url: null,
+    text: null,
+    translated_text: null,
+    favorite: false,
+    language: null,
+    user_id: props.route.params.currentUid || "123"
+  }
+
+  const [state, setState] = useState(initialStateForm);
+
   const { route, navigation } = props;
   
   // console.log('images??', props.route.params.images);
@@ -56,19 +68,16 @@ const PhotoTranslator = (props) => {
     axios.get(URLS.BASE_URL + '/images')
       .then(response => {
 
-        
         const apiData = response.data.images;
+        setImages(apiData);
 
-        // console.log('/images?? apiData: ', apiData)
+        console.log('apiData? ', apiData);
 
         const currImages = apiData.filter(image => {
           return image.user_id === uid
         })
 
-        // getImages(1, apiData); // 1 => dummy_data
         setMyImages(currImages);
-
-        // console.log('yo!', currImages)
       })
       .catch(err => {
         console.log('internal API - error: ', err)
@@ -79,7 +88,7 @@ const PhotoTranslator = (props) => {
 
   const getLanguage = () => {
     
-    console.log('route? ', route);
+    // console.log('route? ', route);
     
     if (!route.params.item) {
       Alert.alert(
@@ -135,7 +144,7 @@ const PhotoTranslator = (props) => {
     setApiPhoto(photo.base64);
   };
 
-  // console.log('myimages??: ', myImages)
+
 
   // TEST
   const saveImageHandler = () => {
@@ -143,6 +152,7 @@ const PhotoTranslator = (props) => {
     // console.log('state in PhotoTranslator.js: ', props.route.params);
 
     const body = {
+      id: images.length + 1,
       image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
@@ -151,14 +161,14 @@ const PhotoTranslator = (props) => {
       user_id: uid
     };
 
-    // console.log('body??', body);
 
-    // const copyMyImages = getImages(uid, images); // TODO test
+    const copyState = {...state}
+    copyState["id"] = images.length + 1
+    copyState["favorite"] = true
+    setState(copyState);
 
+    console.log("images.length? ", images.length + 1)
     const copyMyImages = [...myImages];
-
-    // console.log('huh?', copyMyImages)
-
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
@@ -168,7 +178,7 @@ const PhotoTranslator = (props) => {
 
         console.log('copyMyImages in Photo', copyMyImages);
 
-        navigation.navigate('List', { currentUid: uid, myImages: copyMyImages })
+        // navigation.navigate('List', { currentUid: uid, myImages: copyMyImages })
       })
       .catch(err => {
         console.log('3. internal API - error: ', err)
@@ -190,6 +200,31 @@ const PhotoTranslator = (props) => {
 
     // // navigation.goBack();
     
+  };
+
+
+  const removeImageHandler = (id) => {
+
+    const copyState = {...state}
+    copyState["favorite"] = false;
+    setState(copyState);
+
+    axios.post(`${URLS.BASE_URL}/image/${id}`)
+      .then(response => {
+        console.log('4. internal API - successfully deleted: ', response.data)
+        setState(initialStateForm);
+
+        const filterdMyImages = myImages.filter(image => {
+          return image.id !== id
+        });
+
+        console.log('filtered? ', filterdMyImages)
+        setMyImages(filterdMyImages);
+      })
+      .catch(err => {
+        console.log('4. internal API - error (deleted): ', err)
+      })
+
   };
 
   const getWords = () => {
@@ -351,35 +386,55 @@ const PhotoTranslator = (props) => {
         </Text> */}
 
 
+        
+        <View style={styles.favoriteButton}>
+          <Button 
+            title="My Favorites" 
+            color={Colors.primary} 
+            onPress={() => {
+              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+            }}
+          />
+        </View>
+
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
 
         <View style={styles.buttonContainer}>
+          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) ? 
+            <AntDesign.Button 
+              name="star" 
+              size={30} 
+              color="#C99B13" 
+              backgroundColor="#fff"
+              onPress={() => removeImageHandler(state.id)}
+            >
+              {/* <Text>Add Favorite</Text> */}
+            </AntDesign.Button>
+              
+            :
+            
+            <AntDesign.Button 
+            name="staro" 
+            size={30} 
+            color="#C99B13" 
+            backgroundColor="#fff"
+            onPress={saveImageHandler}
+          >
+            {/* <Text>Add Favorite</Text> */}
+          </AntDesign.Button>
+          }
+
+
           {apiPhoto &&
-            <LineButton 
+            <Button 
               title="Get Words"
               color={Colors.primary}
               onPress={getWords}
             />
           }
-
-          {apiPhoto && currLanguage && getText && translatedText &&
-            <LineButton 
-              title="Save Image" 
-              color={Colors.primary} 
-              onPress={saveImageHandler}
-            />
-          }
         </View>
-
-        <LineButton 
-          title="Image List" 
-          color={Colors.primary} 
-          onPress={() => {
-            navigation.navigate('List', {currentUid: uid, myImages: myImages})
-          }}
-        />
 
 
         { (translatedText || getText)  &&
@@ -456,6 +511,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: '#fff',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0
   },
   cardsContainer: {
     marginTop: 20

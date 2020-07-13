@@ -58,6 +58,7 @@ const List = props => {
     <FlatList
       data={myImages}
       keyExtractor={item => item.id}
+      key={item => item.id}
       renderItem={itemData => (
         <ImageItem
           imageUri={itemData.item.image_url}
