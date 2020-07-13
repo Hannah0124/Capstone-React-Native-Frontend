@@ -11,6 +11,7 @@ const ImageItem = props => {
         <Text style={styles.title}>{props.text}</Text>
         <Text style={styles.title}>{props.translatedText} ({props.language})</Text>
         <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text>
+        <Text style={styles.title}>user id: {props.user_id}</Text>
       </View>
     </TouchableOpacity>
   );

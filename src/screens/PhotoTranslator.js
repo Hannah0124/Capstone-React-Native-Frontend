@@ -31,10 +31,11 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  const uid = props.route.params.currentUid || 123;
-  const testImages = props.route.params.images;
+  const uid = props.route.params.currentUid || "123";
+  // const testImages = props.route.params.images;
 
   console.log('!!images in PhotoTranslator.js: ', props.route.params.images)
+  console.log('!!uid in PhotoTranslator.js: ', props.route.params.currentUid)
 
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -49,21 +50,46 @@ const PhotoTranslator = (props) => {
 
   const { route, navigation } = props;
   
-  console.log('images??', props.route.params.images)
+  console.log('images??', props.route.params.images);
 
-  const getImages = (uid, images) => {
-    const currImages = images.filter(image => {
-      return image.user_id === uid
-    })
+  useEffect(() => {
+    axios.get(URLS.BASE_URL + '/images')
+      .then(response => {
 
-    return currImages
-    // 
-    console.log('??currimages in getImage function: ', currImages)
-    setMyImages(currImages);
+        
+
+        const apiData = response.data.images;
+
+        console.log('/images?? apiData: ', apiData)
+
+        const currImages = apiData.filter(image => {
+          return image.user_id === uid
+        })
+
+        // getImages(1, apiData); // 1 => dummy_data
+        setMyImages(currImages);
+
+        console.log('yo!', currImages)
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        setErrorMessage(err.message);
+      })
+  }, [])
+
+  // const getImages = (uid, images) => {
+  //   const currImages = images.filter(image => {
+  //     return image.user_id === uid
+  //   })
+
+  //   return currImages
+  //   // 
+  //   console.log('??currimages in getImage function: ', currImages)
+  //   setMyImages(currImages);
 
     
-    // return myImages;
-  };
+  //   // return myImages;
+  // };
 
   // console.log('currimages in getImage function: ', getImages(123, testImages))
 
@@ -135,12 +161,6 @@ const PhotoTranslator = (props) => {
     );
 
     setApiPhoto(photo.base64);
-    // // test TODO
-    // const image = photo.base64;
-    // const fileName = image.split('/').pop();
-    // const newPath = FileSystem.documentDirectory + fileName;
-    // console.log('newPath in PhotoTranslator?: ', newPath)
-    // setApiPhoto(newPath);
   };
 
   console.log('myimages??: ', myImages)
@@ -149,21 +169,6 @@ const PhotoTranslator = (props) => {
   const saveImageHandler = () => {
 
     console.log('state in PhotoTranslator.js: ', props.route.params);
-
-    console.log("!!!")
-    console.log(getText);
-    console.log(translatedText);
-    console.log(currLanguage);
-    console.log(props.route.params.currentUid);
-
-    
-
-    // TODO: test
-    // const image = apiPhoto;
-    // const fileName = image.split('/').pop();
-    // const newPath = FileSystem.documentDirectory + fileName;
-    // console.log('newPath in PhotoTranslator?: ', newPath)
-    // setApiPhoto(newPath);
 
     const body = {
       image_url: selectedImage, // apiPhoto,
@@ -176,19 +181,25 @@ const PhotoTranslator = (props) => {
 
     console.log('body??', body);
 
-    const copyMyImages = getImages(uid, testImages); // TODO test
+    // const copyMyImages = getImages(uid, images); // TODO test
+
+    const copyMyImages = [...myImages];
+
+    console.log('huh?', copyMyImages)
 
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
 
-        const myImages = copyMyImages ? [...copyMyImages, body] : [body];
+        // const myImages = copyMyImages ? [...copyMyImages, body] : [body];
         // setImages(myImages);
-        setMyImages(myImages)
 
-        console.log('myImages in Photo', myImages);
+        copyMyImages.push(body);
+        setMyImages(copyMyImages);
 
-        navigation.navigate('List', { currentUid: uid, myImages: myImages })
+        console.log('copyMyImages in Photo', copyMyImages);
+
+        navigation.navigate('List', { currentUid: uid, myImages: copyMyImages })
       })
       .catch(err => {
         console.log('3. internal API - error: ', err)
@@ -240,10 +251,7 @@ const PhotoTranslator = (props) => {
           ],
           //
           image: {
-            // source: {
-              content: apiPhoto
-              // gcsImageUri: ""
-            // }
+            content: apiPhoto
           },
         }
       ]
@@ -348,29 +356,25 @@ const PhotoTranslator = (props) => {
     )
   }
 
-  
-  // useEffect(getWords, [currLanguage]);
-  // useEffect(getLanguage, [currLanguage]);
 
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        {/* <Text style={styles.text}>Photo Translator</Text> */}
 
         {/* TEST */}
-        <TextInput 
+        {/* <TextInput 
           style={styles.textInput} 
           onChangeText={titleChangeHandler} 
           value={titleValue}
-        />
+        /> */}
 
       
-        { flashMessage && 
+        {/* { flashMessage && 
           <View style={styles.flash}>
             <Text>{flashMessage}</Text> 
           </View> 
-        }
+        } */}
 
         {/* 
         <Text>

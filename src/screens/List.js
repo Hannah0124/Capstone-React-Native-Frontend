@@ -41,6 +41,7 @@ const List = props => {
         translatedText={image.translated_text}
         favorite={image.favorite}
         language={image.language}
+        uid={image.uid}
       />
     )
   })
@@ -64,6 +65,7 @@ const List = props => {
           translatedText={itemData.item.translated_text}
           favorite={itemData.item.favorite}
           language={itemData.item.language}
+          user_id={itemData.item.user_id}
           onSelect={() => {
             // props.navigation.navigate('ImageDetail', {
             //   imageTitle: itemData.item.title,
