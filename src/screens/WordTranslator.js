@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Alert , Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Alert , TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
@@ -204,7 +204,12 @@ const WordTranslator = (props) => {
     <ScrollView>
       <View style={styles.container}>
         {/* <Text style={styles.text}>Word Translator Content</Text> */}
-        
+        <TextInput 
+          style={styles.textInput} 
+          onChangeText={titleChangeHandler} 
+          value={titleValue}
+        />
+
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
@@ -304,14 +309,14 @@ const WordTranslator = (props) => {
         {/* <View>
           <Text>Selected Language: {displayLanguage} ({targetLang})</Text>
         </View> */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
             navigation.navigate('Settings', { item: 'word' })
           }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* <Button 
           title="Save Image" 
@@ -352,13 +357,13 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     width: 220
   },
-  textbox: {
-    // borderWidth: 1,
-    // borderRadius: 5,
-    maxWidth: "70%",
-    minWidth: "70%",
-    // borderColor: Colors.primary
-  },
+  // textbox: {
+  //   // borderWidth: 1,
+  //   // borderRadius: 5,
+  //   maxWidth: "70%",
+  //   minWidth: "70%",
+  //   // borderColor: Colors.primary
+  // },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
