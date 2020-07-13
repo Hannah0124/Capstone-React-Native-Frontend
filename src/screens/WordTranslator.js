@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Alert , Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Alert , TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
@@ -7,11 +7,17 @@ import ENV from '../../env';
 import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
 
+// TODO: TEST
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+
 import LANGUAGES from '../constants/Languages';
 import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
+import LineButton from '../components/LineButton';
 
+const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
 
@@ -92,6 +98,7 @@ const WordTranslator = (props) => {
           console.log('SUCCESS 4', TEXT);
           setGetText(TEXT);
           // getTranslated(encodeURI(TEXT));
+          getTranslated(TEXT);
         })
         .catch((error) => {
 
@@ -110,10 +117,10 @@ const WordTranslator = (props) => {
     }
   };
 
-  const getTranslated = () => {
+  const getTranslated = (text) => {
     //TODO : finish up the API call
     // console.log(item.language);
-    const ENCODED = encodeURI(getText)
+    const ENCODED = encodeURI(text)
     let target_lang 
     if (route.params) {
       const { item } = route.params
@@ -135,30 +142,74 @@ const WordTranslator = (props) => {
     })
   }
 
-  const toSpeak = () => {
-    let lang;
-    let words;
-    if (translatedText) {
-      words = translatedText;
-      lang = targetLang;
-    } else {  
-      words = getText;
-      lang = 'en'
-    }
+  const toSpeak = (words, lang) => {
+    // let lang;
+    // let words;
+    // if (translatedText) {
+    //   words = translatedText;
+    //   lang = targetLang;
+    // } else {  
+    //   words = getText;
+    //   lang = 'en'
+    // }
     Speech.speak( words,{language: lang});
   }
   
   // TEST
 
-  const displayLanguage = Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == targetLang;
-  });
+  const displayLanguage = (target) => {
+    return Object.keys(LANGUAGES).find(label => {
+      return LANGUAGES[label] == target;
+    })
+  };
+  const getTranslation = () => {
+    if (!targetLang) {
+      Alert.alert(
+        "Need to select Language",
+        "Please change a language setting",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
+    } else {
+      getTranslated(getText);
+    }
+  }
 
+  const languageButtons = (marginTop) => {
+    return (
+      <View style={styles.buttonContainer} marginTop={marginTop}>
+        <TouchableOpacity
+          style={styles.cornerButton}
+          onPress={() => {
+            navigation.navigate('Settings', { item: 'text' })
+          }}
+        >
+          <Text style={styles.buttonText}>Language</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.cornerButton}
+          onPress={getTranslation}  
+        >
+          <Text style={styles.buttonText}> Let's translate! </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+  console.log('gettext', getText);
   return (
     <ScrollView>
       <View style={styles.container}>
         {/* <Text style={styles.text}>Word Translator Content</Text> */}
-        
+        <TextInput 
+          style={styles.textInput} 
+          onChangeText={titleChangeHandler} 
+          value={titleValue}
+        />
+
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
@@ -171,15 +222,58 @@ const WordTranslator = (props) => {
         </Text>
          */}
 
+        <View style={styles.buttonContainer}>
+          { apiPhoto &&
+            <LineButton 
+              title="Get Words"
+              color={Colors.primary}
+              onPress={getWords}
+            />
+          }
+
+          {apiPhoto && targetLang && getText && translatedText &&
+            <LineButton 
+              title="Save Image" 
+              color={Colors.primary} 
+              onPress={saveImageHandler}
+            />
+          }
+        </View>
         
         { (translatedText || getText)  && 
-          <View style={styles.card}>
-            <Text style={styles.textbox}>
-              {getText}
-            </Text>
-            <Text style={styles.textbox}>
-              {translatedText}
-            </Text>
+          <View style={styles.cardsContainer}> 
+            <View style={styles.cardContainer}>
+              <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
+              <Text style={styles.card}>
+                  {getText}
+              </Text>
+
+            <AntDesign.Button 
+            name="sound" 
+            size={24} 
+            color={Colors.primary} 
+            backgroundColor='#fff'
+            onPress={() => toSpeak(getText,'en')}
+            />
+            </View>
+          </View>
+        }
+        { (translatedText || getText)  && 
+          <View style={styles.cardsContainer}> 
+            <View style={styles.cardContainer}>
+              <Text style={styles.cardText}>{displayLanguage(targetLang)}</Text>
+              <Text style={styles.card}>
+                  {translatedText}
+              </Text>
+
+            <AntDesign.Button 
+            name="sound" 
+            size={24} 
+            color={Colors.primary} 
+            backgroundColor='#fff'
+            onPress={() => toSpeak(translatedText, targetLang)}
+            />
+            </View>
           </View>
         }
 
@@ -188,46 +282,50 @@ const WordTranslator = (props) => {
           color={Colors.primary} 
           onPress={saveImageHandler}
         /> */}
-        <Button 
+        {/* <Button 
           title="Get Words" 
           color={Colors.primary} 
           onPress={getWords}
-        />
+        /> */}
 
         {
-          (translatedText || getText)  && 
-            <AntDesign.Button 
-              name="sound" 
-              size={24} 
-              color={Colors.primary} 
-              backgroundColor='#fff'
-              onPress={toSpeak}
-            />
+          // (translatedText || getText)  && 
+            // <AntDesign.Button 
+            //   name="sound" 
+            //   size={24} 
+            //   color={Colors.primary} 
+            //   backgroundColor='#fff'
+            //   onPress={toSpeak}
+            // />
         }
-        { (getText)  && 
-          <Button 
-              title="Let's translate!"
-              color={Colors.primary}
-              onPress={getTranslated}
-          />
+        {
+          // (getText)  && 
+          // <Button 
+          //     title="Let's translate!"
+          //     color={Colors.primary}
+          //     onPress={getTranslated}
+          // />
         }
-        <View>
+        {/* <View>
           <Text>Selected Language: {displayLanguage} ({targetLang})</Text>
-        </View>
-        <TouchableOpacity
+        </View> */}
+        {/* <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => {
             navigation.navigate('Settings', { item: 'word' })
           }}
         >
           <Text style={styles.buttonText}>Language Settings</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <Button 
+        {/* <Button 
           title="Save Image" 
           color={Colors.primary} 
           onPress={saveImageHandler}
-        />
+        /> */}
+        {
+          apiPhoto && getText && languageButtons(5)  
+        }
       </View>
     </ScrollView>
   )
@@ -250,30 +348,49 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'center',
+    textAlign: 'center',
     borderRadius: 5,
-    borderColor: Colors.primary,
+    backgroundColor: '#FAFAFA',
     paddingVertical: 10,
-    paddingHorizontal: 80,
-    marginVertical: 20,
-    alignItems:'center',
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    width: 220
   },
-  textbox: {
-    // borderWidth: 1,
-    // borderRadius: 5,
-    maxWidth: "70%",
-    minWidth: "70%",
-    // borderColor: Colors.primary
-  },
+  // textbox: {
+  //   // borderWidth: 1,
+  //   // borderRadius: 5,
+  //   maxWidth: "70%",
+  //   minWidth: "70%",
+  //   // borderColor: Colors.primary
+  // },
   buttonContainer: {
-    backgroundColor: '#747EFD',
-    borderRadius: 5,
-    padding: 10,
-    margin: 20
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     fontSize: 20,
     color: '#fff',
+  },
+  cornerButton: {
+    right: 0,
+    backgroundColor: Colors.primary,
+    color: "#fff",
+    borderRadius: 5,
+    padding: 10,
+    margin: 20
+  },
+  cardsContainer: {
+    marginTop: 20
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardText: {
+    marginRight: 20,
   },
 })
 
