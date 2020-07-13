@@ -29,7 +29,9 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  // console.log('images in PhotoTranslator.js: ', props.route.params.images)
+  const uid = props.route.params.currentUid;
+
+  console.log('images in PhotoTranslator.js: ', props.route.params.images)
 
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
@@ -39,9 +41,23 @@ const PhotoTranslator = (props) => {
   const [flashMessage, setFlashMessage] = useState(null);
   const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState(null);
+  const [images, setImages] = useState([]);
 
   const { route, navigation } = props;
   
+  console.log('images??', images)
+  const getImages = (uid) => {
+    return props.route.params.images.filter(image => {
+      return image.uid === uid
+    })
+    // setImages(myImages);
+
+    // console.log('myimages in getImage function: ', myImages)
+    // return myImages;
+  };
+
+  // useEffect(() => getImages(uid, images), [])
+
   const getLanguage = () => {
     
     console.log('route? ', route);
@@ -104,29 +120,55 @@ const PhotoTranslator = (props) => {
   // TEST
   const saveImageHandler = () => {
 
+    console.log('state in PhotoTranslator.js: ', props.route.params);
+
+    console.log("!!!")
+    console.log(getText);
+    console.log(translatedText);
+    console.log(currLanguage);
+    console.log(props.route.params.currentUid);
+
+    
+
     const body = {
-      image_url: 'dummy', // apiPhoto,
-      text: 'dummy test', getText,
-      translated_text: 'translated', translatedText,
-      favorite: false,
-      language: 'Chinese', // currLanguage,
-      user_id: 1 // dummy
+      image_url: apiPhoto, // apiPhoto,
+      text: getText,
+      translated_text: translatedText,
+      favorite: true,
+      language: currLanguage,
+      user_id: uid
     };
 
     axios.post(`${URLS.BASE_URL}/add_image`, body)
-    // axios.post(`${URLS.BASE_URL}add_image?` + 'image_url=' + body.image_url + '&text=' + body.text + '&translated_text=' + body.translated_text + '&language=' + body.language + '&user_id' + body.user_id)
       .then(response => {
-
         console.log('internal API - success: ', response.data)
-        
+
+        const myImages = [...getImages(uid), body];
+        setImages(myImages);
+
+        console.log('myImages in Photo', myImages);
+
+        navigation.navigate('List', { currentUid: uid, myImages: myImages })
       })
       .catch(err => {
         console.log('internal API - error: ', err)
-        
+
+        Alert.alert(
+          "Unique value needed",
+          "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
+          [
+            { 
+              text: "OK",
+              onPress: () => console.log("OK pressed")
+            }
+          ]
+        )
+    
       })
 
     // dispatch(imagesActions.addImage(titleValue, selectedImage, getText, translatedText));
     // // navigation.goBack();
+    
   };
 
   const getWords = () => {

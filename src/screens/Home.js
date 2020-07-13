@@ -8,11 +8,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 
 import Colors from '../constants/Colors';
+import URLS from '../constants/Urls';
 
 const SIGN_IN = 'SIGNED_IN';
 const SIGN_OUT = 'SIGNED_OUT';
 
-const BASE_URL = 'http://192.168.0.38:5000';
+// const BASE_URL = 'http://192.168.0.38:5000';
 
 const initialStateForm = {
   signedIn: false,
@@ -60,7 +61,7 @@ const Home = (props) => {
 
   // get uids! (TEST)
   useEffect(() => {
-    axios.get(`${BASE_URL}/users`)
+    axios.get(`${URLS.BASE_URL}/users`)
       .then(response => {
         console.log('SUCCESS 1: ', response.data);
         const uids = response.data.users.map(user =>{
@@ -88,7 +89,7 @@ const Home = (props) => {
       // console.log('body in addUserApiCall: ', body);
     
      ///////////// TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER//////////
-      axios.post(`${BASE_URL}/add_user`, body)
+      axios.post(`${URLS.BASE_URL}/add_user`, body)
       .then(response => {
         console.log('SUCCESS (new user): ', response.data);
       })
@@ -97,7 +98,7 @@ const Home = (props) => {
       })
     } else {
       // // TEST (TODO)
-      axios.post(`${BASE_URL}/login`, {
+      axios.post(`${URLS.BASE_URL}/login`, {
         "username": body.username,
         "password": body.password || null
       }).then(response => {
@@ -189,7 +190,12 @@ const Home = (props) => {
 
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('PhotoTranslator')}
+        onPress={() => navigation.navigate(
+          'PhotoTranslator',
+          {
+            currentUid: state.uid
+          }
+        )}
       >
         <Text style={styles.buttonText}>Translate Image</Text>
         <Entypo name="image" size={24} color="#fff" />

@@ -3,11 +3,12 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
 
 const ImageItem = props => {
+  console.log('props in ImageItem: ', props)
   return (
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.image }} />
+      <Image style={styles.image} source={{ uri: props.image_url }} />
       <View style={styles.infoContainer}>
-        {/* <Text style={styles.title}>{props.title}</Text> */}
         <Text style={styles.title}>{props.text}</Text>
         <Text style={styles.title}>{props.translatedText}</Text>
       </View>
