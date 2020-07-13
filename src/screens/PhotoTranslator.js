@@ -14,14 +14,10 @@ import i18n from 'i18n-js';
 
 import Colors from '../constants/Colors';
 import LANGUAGES from '../constants/Languages';
+import URLS from '../constants/Urls';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 import LineButton from '../components/LineButton';
-
-const GOOGOLE_VISION_URL = `https://content-vision.googleapis.com/v1/images:annotate?key=${ENV.googleApiKey}`;
-
-const GOOGOLE_TRANSLATION_URL = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
-
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
@@ -107,7 +103,6 @@ const PhotoTranslator = (props) => {
 
   // TEST
   const saveImageHandler = () => {
-    const baseUrl = 'http://192.168.0.38:5000';
 
     const body = {
       image_url: 'dummy', // apiPhoto,
@@ -118,8 +113,8 @@ const PhotoTranslator = (props) => {
       user_id: 1 // dummy
     };
 
-    axios.post(`${baseUrl}/add_image`, body)
-    // axios.post(`${baseUrl}add_image?` + 'image_url=' + body.image_url + '&text=' + body.text + '&translated_text=' + body.translated_text + '&language=' + body.language + '&user_id' + body.user_id)
+    axios.post(`${URLS.BASE_URL}/add_image`, body)
+    // axios.post(`${URLS.BASE_URL}add_image?` + 'image_url=' + body.image_url + '&text=' + body.text + '&translated_text=' + body.translated_text + '&language=' + body.language + '&user_id' + body.user_id)
       .then(response => {
 
         console.log('internal API - success: ', response.data)
@@ -171,7 +166,7 @@ const PhotoTranslator = (props) => {
       ]
     }
 
-    axios.post(GOOGOLE_VISION_URL, body)
+    axios.post(URLS.GOOGOLE_VISION_URL, body)
       .then(response => {
         console.log('response.data: ', response.data.responses[0].labelAnnotations)
 
@@ -194,13 +189,9 @@ const PhotoTranslator = (props) => {
         setErrorMessage(err.message);
         console.log('(1) ERROR - Vision API: ', err);
       })
-
-    
-
   };
 
   const getTranslated = (word, targetLang) => {
-    // const baseUrl = `https://translation.googleapis.com/language/translate/v2?key=${ENV.googleApiKey}`;
 
     const body = {
         q: word,
@@ -209,7 +200,7 @@ const PhotoTranslator = (props) => {
         format: "text"
       }
 
-    axios.post(GOOGOLE_TRANSLATION_URL, body)
+    axios.post(URLS.GOOGOLE_TRANSLATION_URL, body)
       .then(response => {
         // console.log('response.data: ', response.data.data.translations[0].translatedText);
 
