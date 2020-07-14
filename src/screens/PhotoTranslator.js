@@ -31,7 +31,7 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  const uid = props.route.params.currentUid || "123";
+  const id = props.route.params.currentId || 1;
   // const testImages = props.route.params.images;
 
   // console.log("!!!props in PhotoTranslator.js: ", props)
@@ -52,7 +52,7 @@ const PhotoTranslator = (props) => {
     translated_text: null,
     favorite: false,
     language: null,
-    user_id: props.route.params.currentUid || "123"
+    user_id: props.route.params.currentId || "123"
   }
 
   const [state, setState] = useState(initialStateForm);
@@ -71,7 +71,7 @@ const PhotoTranslator = (props) => {
         // console.log('apiData? ', apiData);
 
         const currImages = apiData.filter(image => {
-          return image.user_id === uid
+          return image.user_id === id
         })
 
         // console.log('currImages??' , currImages)
@@ -155,7 +155,7 @@ const PhotoTranslator = (props) => {
       translated_text: translatedText,
       favorite: true,
       language: displayLanguage(currLanguage),
-      user_id: uid
+      user_id: id
     };
 
     // setRecentId(recentId + 1);
@@ -409,7 +409,7 @@ const PhotoTranslator = (props) => {
             onPress={() => {
               navigation.navigate('List', 
               {
-                currentUid: uid, 
+                currentId: id, 
                 images: images,
                 myImages: myImages,
                 updateImagesCallback: updateImages,
