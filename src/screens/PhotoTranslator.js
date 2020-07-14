@@ -351,13 +351,6 @@ const PhotoTranslator = (props) => {
     setTranslatedText(null);
   }
 
-  const reset = () => {
-    setState(initialStateForm);
-    setApiPhoto(null);
-    setGetText(null);
-    setTranslatedText(null);
-  }
-
 
   return (
     <ScrollView>

@@ -14,10 +14,9 @@ const Stack = createStackNavigator();
 const MainStackNavigator = (props) => {
   console.log('props in MainStackNavigator: ', props);
 
-  const myProps = {
-    updateImagesCallback:() => props.updateImagesCallback()
-  };  
-  // <Navigator  screenProps={props} />
+  // const myProps = {
+  //   updateImagesCallback:() => props.updateImagesCallback()
+  // };  
 
   return (
     <NavigationContainer>
@@ -53,7 +52,8 @@ const MainStackNavigator = (props) => {
         <Stack.Screen 
           name='PhotoTranslator' 
           component={PhotoTranslator} 
-          initialParams={{ images: props.images, updateImagesCallback: props.updateImagesCallback }}
+          // initialParams={{ images: props.images, updateImagesCallback: props.updateImagesCallback }}
+          initialParams={{ images: props.images }}
           options={{ title: 'Image Translator'}} 
           // screenProps={myProps}
           // custom title
