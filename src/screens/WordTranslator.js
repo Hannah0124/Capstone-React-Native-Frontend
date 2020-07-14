@@ -30,6 +30,17 @@ const WordTranslator = (props) => {
   const [targetLang, setTargetLang] = useState('en');
   const [flashMessage, setFlashMessage] = useState(null);
 
+  const initialStateForm = {
+    id: null,
+    image_url: null,
+    text: null,
+    translated_text: null,
+    favorite: false,
+    language: null,
+    user_id: props.route.params.currentUid || "123"
+  }
+  const [state, setState] = useState(initialStateForm);
+  
   const { route, navigation } = props;
   const dispatch = useDispatch(); // TEST
 
