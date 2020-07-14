@@ -21,7 +21,7 @@ import URLS from '../constants/Urls';
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
-  console.log(props)
+  console.log(props.route.params)
   const uid = props.route.params.currentUid || "123";
   // const testImages = props.route.params.images;
 
@@ -211,8 +211,9 @@ const WordTranslator = (props) => {
     // console.log(item.language);
     const ENCODED = encodeURI(text)
     let target_lang 
-    if (route.params.language) {
-      // const { item } = route.params
+    console.log(route.params.item)
+    if (route.params.item) {
+      const { item } = route.params
       target_lang = item.language
     } else {
       target_lang = "zh-TW"
