@@ -44,29 +44,36 @@ export default function App() {
   // };
 
   
-  // TEST
-  // const baseUrl = 'http://192.168.0.38:5000';
-  useEffect(() => {
-    axios.get(URLS.BASE_URL + '/images')
-      .then(response => {
+  // // TEST
+  // // const baseUrl = 'http://192.168.0.38:5000';
+  // useEffect(() => {
+  //   axios.get(URLS.BASE_URL + '/images')
+  //     .then(response => {
 
-        // console.log('internal API - success: ', response.data.images)
+  //       console.log('internal API - success in App.js: ', response.data.images)
 
-        const apiData = response.data.images;
+  //       const apiData = response.data.images;
 
-        // getImages(1, apiData); // 1 => dummy_data
-        setImages(apiData);
-      })
-      .catch(err => {
-        console.log('internal API - error: ', err)
-        setErrorMessage(err.message);
-      })
-  }, [])
+  //       // getImages(1, apiData); // 1 => dummy_data
+  //       setImages(apiData);
+  //     })
+  //     .catch(err => {
+  //       console.log('internal API - error: ', err)
+  //       setErrorMessage(err.message);
+  //     })
+  // }, [])
+
+  // const updateImages = (newImages) => {
+  //   setImages(newImages);
+  // }
+
+  // useEffect(updateImages, [images]);
 
   return (
     <Provider store={store}>
       {/* <MainStackNavigator /> */}
-      <MainStackNavigator images={images} /> 
+      {/* <MainStackNavigator images={images} updateImagesCallback={updateImages} />  */}
+      <MainStackNavigator /> 
       {/* TODO */}
     </Provider>
   );

@@ -12,7 +12,11 @@ import Settings from '../screens/Settings';
 const Stack = createStackNavigator();
 
 const MainStackNavigator = (props) => {
-  // console.log('images in MainStackNavigator: ', props.images);
+  console.log('props in MainStackNavigator: ', props);
+
+  // const myProps = {
+  //   updateImagesCallback:() => props.updateImagesCallback()
+  // };  
 
   return (
     <NavigationContainer>
@@ -44,11 +48,14 @@ const MainStackNavigator = (props) => {
           // custom title
         />
 
+{/* <AppNavigator screenProps={{signOut: this.signOut}} /> */}
         <Stack.Screen 
           name='PhotoTranslator' 
           component={PhotoTranslator} 
+          // initialParams={{ images: props.images, updateImagesCallback: props.updateImagesCallback }}
           initialParams={{ images: props.images }}
           options={{ title: 'Image Translator'}} 
+          // screenProps={myProps}
           // custom title
         >
           

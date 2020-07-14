@@ -34,10 +34,8 @@ const PhotoTranslator = (props) => {
   const uid = props.route.params.currentUid || "123";
   // const testImages = props.route.params.images;
 
-  console.log('!!images in PhotoTranslator.js: ', props.route.params.images)
-  console.log('!!uid in PhotoTranslator.js: ', props.route.params.currentUid)
+  console.log("!!!props in PhotoTranslator.js: ", props)
 
-  const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [apiPhoto, setApiPhoto] = useState(null);
   const [getText, setGetText] = useState(null);
@@ -47,9 +45,14 @@ const PhotoTranslator = (props) => {
   const [translatedText, setTranslatedText] = useState(null);
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
+  // const [recentId, setRecentId] = useState(null);
+
+  // if (props.route.params.images) {
+  //   setRecentId(props.route.params.images.length);
+  // };
 
   const initialStateForm = {
-    id: null,
+    // id: null,
     image_url: null,
     text: null,
     translated_text: null,
@@ -77,6 +80,7 @@ const PhotoTranslator = (props) => {
           return image.user_id === uid
         })
 
+        console.log('currImages??' , currImages)
         setMyImages(currImages);
       })
       .catch(err => {
@@ -85,6 +89,11 @@ const PhotoTranslator = (props) => {
       })
   }, [])
 
+  const updateImages = (newImages) => {
+    setImages(newImages);
+  }
+
+  useEffect(updateImages, images)
 
   const getLanguage = () => {
     
@@ -122,11 +131,6 @@ const PhotoTranslator = (props) => {
 
   const dispatch = useDispatch(); // TEST
 
-  // TEST
-  const titleChangeHandler = text => {
-    // You could add validation 
-    setTitleValue(text);
-  };
 
   // TODO: TEST
   const imageTakenHandler = async imagePath => {
@@ -152,29 +156,31 @@ const PhotoTranslator = (props) => {
     // console.log('state in PhotoTranslator.js: ', props.route.params);
 
     const body = {
-      id: images.length + 1,
+      // id: recentId + 1,
       image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
       favorite: true,
-      language: currLanguage,
+      language: displayLanguage(currLanguage),
       user_id: uid
     };
 
+    // setRecentId(recentId + 1);
+
 
     const copyState = {...state}
-    copyState["id"] = images.length + 1
+    // copyState["id"] = images.length + 1
     copyState["favorite"] = true
     setState(copyState);
 
-    console.log("images.length? ", images.length + 1)
+    // console.log("images.length? ", images.length + 1)
     const copyMyImages = [...myImages];
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
 
-        copyMyImages.push(body);
-        setMyImages(copyMyImages);
+        // copyMyImages.push(body);
+        // setMyImages(copyMyImages);
 
         console.log('copyMyImages in Photo', copyMyImages);
 
@@ -203,29 +209,6 @@ const PhotoTranslator = (props) => {
   };
 
 
-  const removeImageHandler = (id) => {
-
-    const copyState = {...state}
-    copyState["favorite"] = false;
-    setState(copyState);
-
-    axios.post(`${URLS.BASE_URL}/image/${id}`)
-      .then(response => {
-        console.log('4. internal API - successfully deleted: ', response.data)
-        setState(initialStateForm);
-
-        const filterdMyImages = myImages.filter(image => {
-          return image.id !== id
-        });
-
-        console.log('filtered? ', filterdMyImages)
-        setMyImages(filterdMyImages);
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-      })
-
-  };
 
   const getWords = () => {
     // edge case
@@ -358,7 +341,8 @@ const PhotoTranslator = (props) => {
         </TouchableOpacity>
       </View>
     )
-  }
+  };
+
 
   const reset = () => {
     setState(initialStateForm);
@@ -396,7 +380,12 @@ const PhotoTranslator = (props) => {
             title="My Favorites" 
             color={Colors.primary} 
             onPress={() => {
-              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+              navigation.navigate('List', 
+              {
+                currentUid: uid, 
+                myImages: myImages,
+                updateImagesCallback: updateImages
+              })
             }}
           />
         </View>
@@ -411,19 +400,20 @@ const PhotoTranslator = (props) => {
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
+          resetCallback={reset}
         />
 
         <View style={styles.buttonContainer}>
           {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) ? 
-            <AntDesign.Button 
+            <AntDesign 
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
-              onPress={() => removeImageHandler(state.id)}
+              // onPress={() => removeImageHandler(state.id)}
             >
               {/* <Text>Add Favorite</Text> */}
-            </AntDesign.Button>
+            </AntDesign>
               
             :
             
