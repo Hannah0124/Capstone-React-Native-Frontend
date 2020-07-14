@@ -1,6 +1,21 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+import { FontAwesome } from '@expo/vector-icons';
+
 import Colors from '../constants/Colors';
+import LANGUAGES from '../constants/Languages';
+
+// displayLanguage(i18n.locale)
+
+
+const displayLanguage = (target) => {
+  return Object.keys(LANGUAGES).find(label => {
+    return LANGUAGES[label] == target;
+  })
+};
 
 const ImageItem = props => {
   console.log('props in ImageItem: ', props)
@@ -8,10 +23,18 @@ const ImageItem = props => {
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{props.text}</Text>
-        <Text style={styles.title}>{props.translatedText} ({props.language})</Text>
-        <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text>
-        <Text style={styles.title}>user id: {props.user_id}</Text>
+        <Text style={styles.title}>{displayLanguage(i18n.locale)}: {props.text}</Text>
+        <Text style={styles.title}>{props.language}: {props.translatedText}</Text>
+        {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
+        <Text style={styles.sub}>user id: {props.user_id}</Text>
+        <Text style={styles.sub}>image id: {props.id}</Text>
+        <FontAwesome.Button 
+          name="remove" 
+          size={24} 
+          color="red" 
+          backgroundColor="transparent" 
+          onPress={() => props.removeImageHandlerCallback(props.id)}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -46,9 +69,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5
   },
-  address: {
+  sub: {
     color: '#666',
-    fontSize: 16
+    fontSize: 13
   }
 });
 
