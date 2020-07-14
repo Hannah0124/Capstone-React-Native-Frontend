@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
       return {
         images: action.images.map(
           img => new Image(
-            img.id.toString(), 
+            img.id, 
             img.imageUri, 
             img.text, 
             img.trasnlatedText,
@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
       };
     case ADD_IMAGE:
       const newImage = new Image(
-        action.imageData.id.toString(),
+        action.imageData.id,
         action.imageData.image,
         action.imageData.text,
         action.imageData.translatedText,

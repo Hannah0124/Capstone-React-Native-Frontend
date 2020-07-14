@@ -55,20 +55,20 @@ const Home = (props) => {
 
   // dispatch calls the reducer and pass the action(action should be an object)
   const [state, dispatch] = useReducer(reducer, initialStateForm);
-  const [userUids, setUserUids] = useState([]);
+  const [userIds, setUserIds] = useState([]);
 
-  console.log('userUids: ', userUids);
+  console.log('userIds: ', userIds);
 
-  // get uids! (TEST)
+  // get ids! (TEST)
   useEffect(() => {
     axios.get(`${URLS.BASE_URL}/users`)
       .then(response => {
         console.log('SUCCESS 1: ', response.data);
-        const uids = response.data.users.map(user =>{
-          return user.uid
+        const ids = response.data.users.map(user =>{
+          return user.id
         })
 
-        setUserUids(uids);
+        setUserIds(ids);
       })
       .catch(err => {
         console.log('ERROR 1: ', err);
@@ -79,8 +79,8 @@ const Home = (props) => {
   
   const addUserApiCall = (body) => {
     // if user exists, dont call /add_user api
-    const hasUser = userUids.find(uid => {
-      return uid == body.uid;
+    const hasUser = userIds.find(id => {
+      return id == body.id;
     });
 
     if (!hasUser) {
@@ -184,7 +184,7 @@ const Home = (props) => {
         onPress={() => navigation.navigate(
           'WordTranslator',
           {
-            currentUid: state.uid
+            currentId: state.id
           }
         )}
       >
@@ -198,7 +198,7 @@ const Home = (props) => {
         onPress={() => navigation.navigate(
           'PhotoTranslator',
           {
-            currentUid: state.uid
+            currentId: state.id
           }
         )}
       >
