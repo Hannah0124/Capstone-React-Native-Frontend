@@ -35,6 +35,7 @@ const WordTranslator = (props) => {
   const [flashMessage, setFlashMessage] = useState(null);
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
+  const [originalLang, setOriginalLang] = useState('en');
 
   const initialStateForm = {
     id: null,
@@ -184,8 +185,10 @@ const WordTranslator = (props) => {
       axios.post(baseUrl, body)
         .then((response) => {
           const TEXT = response.data.responses[0].textAnnotations[0].description;
-          console.log('SUCCESS 4', TEXT);
+          const LANG = response.data.responses[0].textAnnotations[0].locale
+          console.log('SUCCESS 4', response.data.responses[0].textAnnotations[0].locale);
           setGetText(TEXT);
+          setOriginalLang(LANG);
           // getTranslated(encodeURI(TEXT));
           getTranslated(TEXT);
         })
@@ -254,6 +257,7 @@ const WordTranslator = (props) => {
       return LANGUAGES[label] == target;
     })
   };
+  
   const getTranslation = () => {
     if (!targetLang) {
       Alert.alert(
@@ -403,7 +407,7 @@ const WordTranslator = (props) => {
         { (translatedText || getText)  && 
           <View style={styles.cardsContainer}> 
             <View style={styles.cardContainer}>
-              <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
+              <Text style={styles.cardText}>{displayLanguage(originalLang)}</Text>
               <Text style={styles.card}>
                   {getText}
               </Text>
@@ -413,7 +417,7 @@ const WordTranslator = (props) => {
             size={24} 
             color={Colors.primary} 
             backgroundColor='#fff'
-            onPress={() => toSpeak(getText,'en')}
+            onPress={() => toSpeak(getText, originalLang)}
             />
             </View>
           </View>
