@@ -6,5 +6,6 @@ export default {
     Japanese: 'ja', 
     French: 'fr',
     German: 'de', 
-    Vietnamese: 'vi'
+    Vietnamese: 'vi',
+    Chinese2: 'zh',
 };

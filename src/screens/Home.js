@@ -181,7 +181,12 @@ const Home = (props) => {
 
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('WordTranslator')}
+        onPress={() => navigation.navigate(
+          'WordTranslator',
+          {
+            currentUid: state.uid
+          }
+        )}
       >
         <Text style={styles.buttonText}>Translate Text</Text>
         <MaterialCommunityIcons name="format-text" size={24} color="#fff" />

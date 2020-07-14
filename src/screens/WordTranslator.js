@@ -16,10 +16,14 @@ import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 import LineButton from '../components/LineButton';
+import URLS from '../constants/Urls';
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
+  console.log(props.route.params)
+  const uid = props.route.params.currentUid || "123";
+  // const testImages = props.route.params.images;
 
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
@@ -29,6 +33,20 @@ const WordTranslator = (props) => {
   const [translatedText, setTranslatedText] = useState();
   const [targetLang, setTargetLang] = useState('en');
   const [flashMessage, setFlashMessage] = useState(null);
+  const [images, setImages] = useState([]);
+  const [myImages, setMyImages] = useState([]);
+  const [originalLang, setOriginalLang] = useState('en');
+
+  const initialStateForm = {
+    id: null,
+    image_url: null,
+    text: null,
+    translated_text: null,
+    favorite: false,
+    language: null,
+    user_id: props.route.params.currentUid || "123"
+  }
+  const [state, setState] = useState(initialStateForm);
 
   const { route, navigation } = props;
   const dispatch = useDispatch(); // TEST
@@ -38,6 +56,30 @@ const WordTranslator = (props) => {
     // You could add validation 
     setTitleValue(text);
   };
+
+
+  useEffect(() => {
+    axios.get(URLS.BASE_URL + '/images')
+      .then(response => {
+
+        const apiData = response.data.images;
+        setImages(apiData);
+
+        console.log('apiData? ', apiData);
+
+        const currImages = apiData.filter(image => {
+          return image.user_id === uid
+        })
+
+        setMyImages(currImages);
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        setErrorMessage(err.message);
+      })
+  }, [])
+
+
 
   // TEST
   const imageTakenHandler = async imagePath => {
@@ -56,8 +98,56 @@ const WordTranslator = (props) => {
   
   // TEST
   const saveImageHandler = () => {
-    dispatch(imagesActions.addImage(titleValue, selectedImage));
-    navigation.goBack();
+    
+    const body = {
+      id: images.length + 1,
+      image_url: selectedImage, // apiPhoto,
+      text: getText,
+      translated_text: translatedText,
+      favorite: true,
+      language: targetLang,
+      user_id: uid
+    };
+
+
+    const copyState = {...state}
+    copyState["id"] = images.length + 1
+    copyState["favorite"] = true
+    setState(copyState);
+
+    console.log("images.length? ", images.length + 1)
+    const copyMyImages = [...myImages];
+    axios.post(`${URLS.BASE_URL}/add_image`, body)
+      .then(response => {
+        console.log('internal API - success: ', response.data)
+
+        copyMyImages.push(body);
+        setMyImages(copyMyImages);
+
+        console.log('copyMyImages in Photo', copyMyImages);
+
+        // navigation.navigate('List', { currentUid: uid, myImages: copyMyImages })
+      })
+      .catch(err => {
+        console.log('3. internal API - error: ', err)
+
+        Alert.alert(
+          "Unique value needed",
+          "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
+          [
+            { 
+              text: "OK",
+              onPress: () => console.log("OK pressed")
+            }
+          ]
+        )
+    
+      })
+
+    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
+
+    // // navigation.goBack();
+    
   };
   
   
@@ -95,8 +185,10 @@ const WordTranslator = (props) => {
       axios.post(baseUrl, body)
         .then((response) => {
           const TEXT = response.data.responses[0].textAnnotations[0].description;
-          console.log('SUCCESS 4', TEXT);
+          const LANG = response.data.responses[0].textAnnotations[0].locale
+          console.log('SUCCESS 4', response.data.responses[0].textAnnotations[0].locale);
           setGetText(TEXT);
+          setOriginalLang(LANG);
           // getTranslated(encodeURI(TEXT));
           getTranslated(TEXT);
         })
@@ -122,12 +214,15 @@ const WordTranslator = (props) => {
     // console.log(item.language);
     const ENCODED = encodeURI(text)
     let target_lang 
-    if (route.params) {
+    console.log(route.params.item)
+    if (route.params.item) {
       const { item } = route.params
       target_lang = item.language
     } else {
       target_lang = "zh-TW"
     }
+    console.log('loading')
+    console.log('lang', target_lang);
     setTargetLang(target_lang);
     const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}&q=${ENCODED}`
     axios.post(translateUrl)
@@ -162,6 +257,7 @@ const WordTranslator = (props) => {
       return LANGUAGES[label] == target;
     })
   };
+  
   const getTranslation = () => {
     if (!targetLang) {
       Alert.alert(
@@ -199,21 +295,96 @@ const WordTranslator = (props) => {
       </View>
     )
   }
+
+  const removeImageHandler = (id) => {
+
+    const copyState = {...state}
+    copyState["favorite"] = false;
+    setState(copyState);
+
+    axios.post(`${URLS.BASE_URL}/image/${id}`)
+      .then(response => {
+        console.log('4. internal API - successfully deleted: ', response.data)
+        setState(initialStateForm);
+
+        const filterdMyImages = myImages.filter(image => {
+          return image.id !== id
+        });
+
+        console.log('filtered? ', filterdMyImages)
+        setMyImages(filterdMyImages);
+      })
+      .catch(err => {
+        console.log('4. internal API - error (deleted): ', err)
+      })
+  };
+
+  const reset = () => {
+    setState(initialStateForm);
+    setAPIPhoto(null);
+    setGetText(null);
+    setTranslatedText(null);
+  }
+
   console.log('gettext', getText);
   return (
     <ScrollView>
       <View style={styles.container}>
         {/* <Text style={styles.text}>Word Translator Content</Text> */}
-        <TextInput 
+        {/* <TextInput 
           style={styles.textInput} 
           onChangeText={titleChangeHandler} 
           value={titleValue}
-        />
+        /> */}
+
+<View style={styles.favoriteButton}>
+          <Button 
+            title="My Favorites" 
+            color={Colors.primary} 
+            onPress={() => {
+              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+            }}
+          />
+        </View>
+
+        <View >
+          <Button 
+            title="Reset" 
+            color={Colors.primary} 
+            onPress={reset}
+          />
+        </View>
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
         />
-      
+
+        <View style={styles.buttonContainer}>
+          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) ? 
+            <AntDesign.Button 
+              name="star" 
+              size={30} 
+              color="#C99B13" 
+              backgroundColor="#fff"
+              onPress={() => removeImageHandler(state.id)}
+            >
+              {/* <Text>Add Favorite</Text> */}
+            </AntDesign.Button>
+              
+            :
+            
+            <AntDesign.Button 
+            name="staro" 
+            size={30} 
+            color="#C99B13" 
+            backgroundColor="#fff"
+            onPress={saveImageHandler}
+          >
+            {/* <Text>Add Favorite</Text> */}
+          </AntDesign.Button>
+          }
+
+
         {/* <Text>
           {getText}
         </Text>
@@ -222,7 +393,6 @@ const WordTranslator = (props) => {
         </Text>
          */}
 
-        <View style={styles.buttonContainer}>
           { apiPhoto &&
             <LineButton 
               title="Get Words"
@@ -231,19 +401,13 @@ const WordTranslator = (props) => {
             />
           }
 
-          {apiPhoto && targetLang && getText && translatedText &&
-            <LineButton 
-              title="Save Image" 
-              color={Colors.primary} 
-              onPress={saveImageHandler}
-            />
-          }
+
         </View>
         
         { (translatedText || getText)  && 
           <View style={styles.cardsContainer}> 
             <View style={styles.cardContainer}>
-              <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
+              <Text style={styles.cardText}>{displayLanguage(originalLang)}</Text>
               <Text style={styles.card}>
                   {getText}
               </Text>
@@ -253,7 +417,7 @@ const WordTranslator = (props) => {
             size={24} 
             color={Colors.primary} 
             backgroundColor='#fff'
-            onPress={() => toSpeak(getText,'en')}
+            onPress={() => toSpeak(getText, originalLang)}
             />
             </View>
           </View>
