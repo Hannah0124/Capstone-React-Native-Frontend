@@ -89,6 +89,11 @@ const PhotoTranslator = (props) => {
       })
   }, [])
 
+  const updateImages = (newImages) => {
+    setImages(newImages);
+  }
+
+  useEffect(updateImages, images)
 
   const getLanguage = () => {
     
@@ -375,7 +380,6 @@ const PhotoTranslator = (props) => {
         
         <View style={styles.favoriteButton}>
           <Button 
-            
             title="My Favorites" 
             color={Colors.primary} 
             onPress={() => {
@@ -383,7 +387,7 @@ const PhotoTranslator = (props) => {
               {
                 currentUid: uid, 
                 myImages: myImages,
-                updateImagesCallback: props.route.params.updateImagesCallback
+                updateImagesCallback: updateImages
               })
             }}
           />

@@ -61,7 +61,7 @@ const List = props => {
           ]
         )
 
-        props.navigation.navigate('List');
+        // props.navigation.navigate('List');
         // props.navigation.goBack();
 
       })
