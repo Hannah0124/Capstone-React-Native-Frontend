@@ -21,6 +21,7 @@ import URLS from '../constants/Urls';
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
+  console.log(props)
   const uid = props.route.params.currentUid || "123";
   // const testImages = props.route.params.images;
 
@@ -210,12 +211,14 @@ const WordTranslator = (props) => {
     // console.log(item.language);
     const ENCODED = encodeURI(text)
     let target_lang 
-    if (route.params) {
-      const { item } = route.params
+    if (route.params.language) {
+      // const { item } = route.params
       target_lang = item.language
     } else {
       target_lang = "zh-TW"
     }
+    console.log('loading')
+    console.log('lang', target_lang);
     setTargetLang(target_lang);
     const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}&q=${ENCODED}`
     axios.post(translateUrl)
