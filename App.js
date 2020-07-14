@@ -50,7 +50,7 @@ export default function App() {
     axios.get(URLS.BASE_URL + '/images')
       .then(response => {
 
-        // console.log('internal API - success: ', response.data.images)
+        console.log('internal API - success in App.js: ', response.data.images)
 
         const apiData = response.data.images;
 
@@ -63,10 +63,16 @@ export default function App() {
       })
   }, [])
 
+  const updateImages = (newImages) => {
+    setImages(newImages);
+  }
+
+  useEffect(updateImages, [images]);
+
   return (
     <Provider store={store}>
       {/* <MainStackNavigator /> */}
-      <MainStackNavigator images={images} /> 
+      <MainStackNavigator images={images} updateImagesCallback={updateImages} /> 
       {/* TODO */}
     </Provider>
   );
