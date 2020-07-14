@@ -157,7 +157,7 @@ const PhotoTranslator = (props) => {
       text: getText,
       translated_text: translatedText,
       favorite: true,
-      language: currLanguage,
+      language: displayLanguage(currLanguage),
       user_id: uid
     };
 
