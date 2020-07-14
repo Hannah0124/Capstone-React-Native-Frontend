@@ -34,22 +34,17 @@ const PhotoTranslator = (props) => {
   const uid = props.route.params.currentUid || "123";
   // const testImages = props.route.params.images;
 
-  console.log("!!!props in PhotoTranslator.js: ", props)
+  // console.log("!!!props in PhotoTranslator.js: ", props)
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [apiPhoto, setApiPhoto] = useState(null);
   const [getText, setGetText] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [flashMessage, setFlashMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState(null);
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
-  // const [recentId, setRecentId] = useState(null);
 
-  // if (props.route.params.images) {
-  //   setRecentId(props.route.params.images.length);
-  // };
 
   const initialStateForm = {
     // id: null,
@@ -67,33 +62,40 @@ const PhotoTranslator = (props) => {
   
   // console.log('images??', props.route.params.images);
 
-  useEffect(() => {
+  const getImages = () => {
     axios.get(URLS.BASE_URL + '/images')
       .then(response => {
 
         const apiData = response.data.images;
         setImages(apiData);
 
-        console.log('apiData? ', apiData);
+        // console.log('apiData? ', apiData);
 
         const currImages = apiData.filter(image => {
           return image.user_id === uid
         })
 
-        console.log('currImages??' , currImages)
+        // console.log('currImages??' , currImages)
         setMyImages(currImages);
       })
       .catch(err => {
         console.log('internal API - error: ', err)
         setErrorMessage(err.message);
       })
-  }, [])
 
-  const updateImages = (newImages) => {
+  };
+
+  useEffect(() => {
+    getImages();
+  }, [myImages]);
+
+
+
+  const updateImages = (newImages, newMyImages) => {
     setImages(newImages);
+    setMyImages(newMyImages);
   }
 
-  useEffect(updateImages, images)
 
   const getLanguage = () => {
     
@@ -109,19 +111,13 @@ const PhotoTranslator = (props) => {
           }
         ]
       )
-      
-      // setFlashMessage('You must change language setting!');
-
-      // setTimeout(() => {
-      //   setFlashMessage(null);
-      // }, 3000);
 
       return;
     }
 
     const { item } = route.params;
     const { language } = item;
-    console.log('language: ', language);
+    // console.log('language: ', language);
 
     setCurrLanguage(language);
     getTranslated(getText, language);
@@ -173,7 +169,6 @@ const PhotoTranslator = (props) => {
     copyState["favorite"] = true
     setState(copyState);
 
-    // console.log("images.length? ", images.length + 1)
     const copyMyImages = [...myImages];
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
@@ -182,9 +177,9 @@ const PhotoTranslator = (props) => {
         // copyMyImages.push(body);
         // setMyImages(copyMyImages);
 
-        console.log('copyMyImages in Photo', copyMyImages);
+        // console.log('copyMyImages in Photo', copyMyImages);
 
-        // navigation.navigate('List', { currentUid: uid, myImages: copyMyImages })
+        // navigation.navigate('List', { currentUid: uid, myImages: copyMyImages, images: images })
       })
       .catch(err => {
         console.log('3. internal API - error: ', err)
@@ -206,6 +201,60 @@ const PhotoTranslator = (props) => {
 
     // // navigation.goBack();
     
+  };
+
+
+  const areYouSure = () => {
+    Alert.alert(
+      "Delete the image",
+      "Are you sure?",
+      [
+        { text: "OK", 
+          onPress: () => console.log("OK Pressed") 
+        }
+      ]
+    )
+
+    return true;
+  };
+
+  const removeImageHandler = (id) => {
+
+    if (areYouSure) {
+      areYouSure();
+      axios.post(`${URLS.BASE_URL}/image/${id}`)
+    
+      .then(response => {
+        
+        console.log('4. internal API - successfully deleted: ', response.data)
+        
+        const filteredImages = images.filter(image => {
+          return image.id !== id
+        });
+
+        const filteredMyImages = myImages.filter(image => {
+          return image.id !== id
+        });
+
+        setMyImages(filteredMyImages);
+
+        // // props.route.params.updateImagesCallback(filteredImages, filterdMyImages)
+        // updateImages(filteredImages, filterdMyImages);
+      })
+      .catch(err => {
+        console.log('4. internal API - error (deleted): ', err)
+      //   Alert.alert(
+      //     "Something went wrong",
+      //     `Please try again. Error Message: ${err.message}\n`,
+      //     [
+      //       { text: "OK", 
+      //         onPress: () => console.log("OK Pressed") 
+      //       }
+      //     ]
+      //   )
+      })
+
+    }
   };
 
 
@@ -383,8 +432,10 @@ const PhotoTranslator = (props) => {
               navigation.navigate('List', 
               {
                 currentUid: uid, 
+                images: images,
                 myImages: myImages,
-                updateImagesCallback: updateImages
+                updateImagesCallback: updateImages,
+                removeImageHandlerCallback: removeImageHandler
               })
             }}
           />
