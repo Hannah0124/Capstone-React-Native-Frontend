@@ -360,6 +360,12 @@ const PhotoTranslator = (props) => {
     )
   }
 
+  const reset = () => {
+    setState(initialStateForm);
+    setApiPhoto(null);
+    setGetText(null);
+    setTranslatedText(null);
+  }
 
 
   return (
@@ -385,8 +391,6 @@ const PhotoTranslator = (props) => {
           {errorMessage && errorMessage}
         </Text> */}
 
-
-        
         <View style={styles.favoriteButton}>
           <Button 
             title="My Favorites" 
@@ -394,6 +398,14 @@ const PhotoTranslator = (props) => {
             onPress={() => {
               navigation.navigate('List', {currentUid: uid, myImages: myImages})
             }}
+          />
+        </View>
+
+        <View >
+          <Button 
+            title="Reset" 
+            color={Colors.primary} 
+            onPress={reset}
           />
         </View>
 
