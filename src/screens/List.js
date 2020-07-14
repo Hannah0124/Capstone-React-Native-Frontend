@@ -12,7 +12,7 @@ import URLS from '../constants/Urls';
 
 const List = props => {
   // const myImages = props.route.params.myImages;
-  console.log('???props in List.js: ', props)
+  console.log('???props in List.js: ', props.route.params)
   // const [myImages, setMyImages] = useState([]);
   // const [errorMessage, setErrorMessage] = useState(null);
   
@@ -22,63 +22,26 @@ const List = props => {
   // const myCurrentImages = useSelector(state => props.route.params.myImages);
   // setMyImages(myCurrentImages);
 
-  const myImages = useSelector(state => props.route.params.myImages);
+  // const myImages = useSelector(state => props.route.params.myImages);
   // const [newImages, setNewImages] = useState([myImages]);
 
-  console.log('myImages from list.js~: ', myImages)
+  const myImages = props.route.params.myImages;
+  const images = props.route.params.images;
+
+
+  // console.log('myImages from list.js~: ', myImages)
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(imagesActions.loadImages());
-  }), [dispatch];
+  // useEffect(() => {
+  //   dispatch(imagesActions.loadImages());
+  // }), [dispatch];
 
   
   // const newImages = props.route.params.images;
-  console.log('2. myImages in List.js: ', myImages)
+  // console.log('2. myImages in List.js: ', myImages)
 
 
-  const removeImageHandler = (id) => {
-
-    axios.post(`${URLS.BASE_URL}/image/${id}`)
-      .then(response => {
-        console.log('4. internal API - successfully deleted: ', response.data)
-
-        const filterdMyImages = myImages.filter(image => {
-          return image.id !== id
-        });
-
-        props.route.params.updateImagesCallback(filterdMyImages)
-        // setNewImages(filterdMyImages);
-
-        Alert.alert(
-          "Delete the image",
-          "Are you sure?",
-          [
-            { text: "OK", 
-              onPress: () => console.log("OK Pressed") 
-            }
-          ]
-        )
-
-        // props.navigation.navigate('List');
-        // props.navigation.goBack();
-
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-        Alert.alert(
-          "Something went wrong",
-          `Please try again. Error Message: ${err.message}\n`,
-          [
-            { text: "OK", 
-              onPress: () => console.log("OK Pressed") 
-            }
-          ]
-        )
-      })
-  };
-  
   return (
     <View>
       <FlatList
@@ -87,7 +50,7 @@ const List = props => {
         key={item => Date.now() + item.id}
         renderItem={itemData => (
           <ImageItem
-            removeImageHandlerCallback={removeImageHandler}
+            removeImageHandlerCallback={props.route.params.removeImageHandlerCallback}
             imageUri={itemData.item.image_url}
             text={itemData.item.text}
             translatedText={itemData.item.translated_text}

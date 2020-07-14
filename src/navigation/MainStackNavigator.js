@@ -53,7 +53,7 @@ const MainStackNavigator = (props) => {
           name='PhotoTranslator' 
           component={PhotoTranslator} 
           // initialParams={{ images: props.images, updateImagesCallback: props.updateImagesCallback }}
-          initialParams={{ images: props.images }}
+          // initialParams={{ images: props.images }}
           options={{ title: 'Image Translator'}} 
           // screenProps={myProps}
           // custom title
