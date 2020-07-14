@@ -49,10 +49,14 @@ const ImgPicker = props => {
 
     setPickedImage(image.uri); // got image!
     props.onImageTaken(image.uri);
+
+    props.resetCallback();
   };
 
   // choose image from gallery
   const chooseImageHandler = async () => {
+
+    console.log('props in ImagePicker.js? ', props);
     // function to get image from gallery
     const hasPermission = await verifyPermissions();
     if (!hasPermission) {
@@ -68,8 +72,11 @@ const ImgPicker = props => {
     if (!image.uri) {
       return;
     }
+
     setPickedImage(image.uri); // got image from gallery
     props.onImageTaken(image.uri);  
+
+    props.resetCallback();
   };
 
 
