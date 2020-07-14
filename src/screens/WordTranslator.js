@@ -16,10 +16,13 @@ import Colors from '../constants/Colors';
 import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 import LineButton from '../components/LineButton';
+import URLS from '../constants/Urls';
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
+  const uid = props.route.params.currentUid || "123";
+  // const testImages = props.route.params.images;
 
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
@@ -40,7 +43,7 @@ const WordTranslator = (props) => {
     user_id: props.route.params.currentUid || "123"
   }
   const [state, setState] = useState(initialStateForm);
-  
+
   const { route, navigation } = props;
   const dispatch = useDispatch(); // TEST
 
@@ -49,6 +52,30 @@ const WordTranslator = (props) => {
     // You could add validation 
     setTitleValue(text);
   };
+
+
+  useEffect(() => {
+    axios.get(URLS.BASE_URL + '/images')
+      .then(response => {
+
+        const apiData = response.data.images;
+        setImages(apiData);
+
+        console.log('apiData? ', apiData);
+
+        const currImages = apiData.filter(image => {
+          return image.user_id === uid
+        })
+
+        setMyImages(currImages);
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        setErrorMessage(err.message);
+      })
+  }, [])
+
+
 
   // TEST
   const imageTakenHandler = async imagePath => {
@@ -210,16 +237,42 @@ const WordTranslator = (props) => {
       </View>
     )
   }
+
+  const reset = () => {
+    setState(initialStateForm);
+    setApiPhoto(null);
+    setGetText(null);
+    setTranslatedText(null);
+  }
+
   console.log('gettext', getText);
   return (
     <ScrollView>
       <View style={styles.container}>
         {/* <Text style={styles.text}>Word Translator Content</Text> */}
-        <TextInput 
+        {/* <TextInput 
           style={styles.textInput} 
           onChangeText={titleChangeHandler} 
           value={titleValue}
-        />
+        /> */}
+
+<View style={styles.favoriteButton}>
+          <Button 
+            title="My Favorites" 
+            color={Colors.primary} 
+            onPress={() => {
+              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+            }}
+          />
+        </View>
+
+        <View >
+          <Button 
+            title="Reset" 
+            color={Colors.primary} 
+            onPress={reset}
+          />
+        </View>
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
