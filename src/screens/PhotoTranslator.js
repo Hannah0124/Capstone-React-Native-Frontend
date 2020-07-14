@@ -47,7 +47,6 @@ const PhotoTranslator = (props) => {
 
 
   const initialStateForm = {
-    // id: null,
     image_url: null,
     text: null,
     translated_text: null,
@@ -90,9 +89,7 @@ const PhotoTranslator = (props) => {
   }, [myImages]);
 
 
-
-  const updateImages = (newImages, newMyImages) => {
-    setImages(newImages);
+  const updateImages = (newMyImages) => {
     setMyImages(newMyImages);
   }
 
@@ -228,33 +225,20 @@ const PhotoTranslator = (props) => {
         
         console.log('4. internal API - successfully deleted: ', response.data)
         
-        const filteredImages = images.filter(image => {
-          return image.id !== id
-        });
-
         const filteredMyImages = myImages.filter(image => {
           return image.id !== id
         });
 
-        setMyImages(filteredMyImages);
-
-        // // props.route.params.updateImagesCallback(filteredImages, filterdMyImages)
-        // updateImages(filteredImages, filterdMyImages);
+        updateImages(filteredMyImages);
+        // getImages();
       })
       .catch(err => {
         console.log('4. internal API - error (deleted): ', err)
-      //   Alert.alert(
-      //     "Something went wrong",
-      //     `Please try again. Error Message: ${err.message}\n`,
-      //     [
-      //       { text: "OK", 
-      //         onPress: () => console.log("OK Pressed") 
-      //       }
-      //     ]
-      //   )
       })
-
     }
+    // props.render();
+    // this.forceUpdate();
+    // props.navigation.navigate("List");
   };
 
 
@@ -345,12 +329,6 @@ const PhotoTranslator = (props) => {
             }
           ]
         )
-
-        // setFlashMessage('Something went wrong. :(');
-
-        // setTimeout(() => {
-        //   setFlashMessage(null);
-        // }, 3000);
 
         setErrorMessage(err.message);
         console.log('(2) ERROR - Translation API: ', err);
