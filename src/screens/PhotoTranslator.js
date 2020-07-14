@@ -203,29 +203,38 @@ const PhotoTranslator = (props) => {
   };
 
 
-  const removeImageHandler = (id) => {
+  // const removeImageHandler = (id) => {
 
-    const copyState = {...state}
-    copyState["favorite"] = false;
-    setState(copyState);
+  //   const copyState = {...state}
+  //   copyState["favorite"] = false;
+  //   setState(copyState);
 
-    axios.post(`${URLS.BASE_URL}/image/${id}`)
-      .then(response => {
-        console.log('4. internal API - successfully deleted: ', response.data)
-        setState(initialStateForm);
+  //   console.log('id?? ', id)
+  //   console.log('state.id?? ', state.id)
 
-        const filterdMyImages = myImages.filter(image => {
-          return image.id !== id
-        });
+  //   axios.post(`${URLS.BASE_URL}/image/${id}`)
+  //     .then(response => {
+  //       console.log('4. internal API - successfully deleted: ', response.data)
+  //       setState(initialStateForm);
 
-        console.log('filtered? ', filterdMyImages)
-        setMyImages(filterdMyImages);
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-      })
+  //       const filterdMyImages = myImages.filter(image => {
+  //         return image.id !== id
+  //       });
 
-  };
+  //       const filteredImages = images.filter(image => {
+  //         return image.id !== id
+  //       });
+
+  //       console.log('filtered? ', filterdMyImages)
+  //       setMyImages(filterdMyImages);
+
+  //       setImages(filteredImages);
+  //     })
+  //     .catch(err => {
+  //       console.log('4. internal API - error (deleted): ', err)
+  //     })
+
+  // };
 
   const getWords = () => {
     // edge case
@@ -358,6 +367,14 @@ const PhotoTranslator = (props) => {
         </TouchableOpacity>
       </View>
     )
+  };
+
+
+  const reset = () => {
+    setState(initialStateForm);
+    setApiPhoto(null);
+    setGetText(null);
+    setTranslatedText(null);
   }
 
 
@@ -397,21 +414,30 @@ const PhotoTranslator = (props) => {
           />
         </View>
 
+        <View >
+          <Button 
+            title="Reset" 
+            color={Colors.primary} 
+            onPress={reset}
+          />
+        </View>
+
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
+          resetCallback={reset}
         />
 
         <View style={styles.buttonContainer}>
           {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) ? 
-            <AntDesign.Button 
+            <AntDesign 
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
-              onPress={() => removeImageHandler(state.id)}
+              // onPress={() => removeImageHandler(state.id)}
             >
               {/* <Text>Add Favorite</Text> */}
-            </AntDesign.Button>
+            </AntDesign>
               
             :
             
