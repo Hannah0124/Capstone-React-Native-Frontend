@@ -212,44 +212,44 @@ const PhotoTranslator = (props) => {
   };
 
 
-  const areYouSure = () => {
-    Alert.alert(
-      "Delete the image",
-      "Are you sure?",
-      [
-        { text: "OK", 
-          onPress: () => console.log("OK Pressed") 
-        }
-      ]
-    )
+  // const areYouSure = () => {
+  //   Alert.alert(
+  //     "Delete the image",
+  //     "Are you sure?",
+  //     [
+  //       { text: "OK", 
+  //         onPress: () => console.log("OK Pressed") 
+  //       }
+  //     ]
+  //   )
 
-    return true;
-  };
+  //   return true;
+  // };
 
-  const removeImageHandler = (id) => {
+  // const removeImageHandler = (id) => {
 
-    if (areYouSure) {
-      areYouSure();
-      axios.post(`${URLS.BASE_URL}/image/${id}`)
+  //   if (areYouSure) {
+  //     areYouSure();
+  //     axios.post(`${URLS.BASE_URL}/image/${id}`)
     
-      .then(response => {
+  //     .then(response => {
         
-        console.log('4. internal API - successfully deleted: ', response.data)
+  //       console.log('4. internal API - successfully deleted: ', response.data)
         
-        const filteredMyImages = myImages.filter(image => {
-          return image.id !== id
-        });
+  //       const filteredMyImages = myImages.filter(image => {
+  //         return image.id !== id
+  //       });
 
-        // updateImages(filteredMyImages);
-        setMyImages(filteredMyImages);
+  //       // updateImages(filteredMyImages);
+  //       setMyImages(filteredMyImages);
 
-        // getImages();
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-      })
-    }
-  };
+  //       // getImages();
+  //     })
+  //     .catch(err => {
+  //       console.log('4. internal API - error (deleted): ', err)
+  //     })
+  //   }
+  // };
 
 
 
@@ -423,9 +423,9 @@ const PhotoTranslator = (props) => {
                 currentId: id, 
                 images: images,
                 myImages: myImages,
-                updateImagesCallback: updateImages,
-                removeImageHandlerCallback: removeImageHandler,
-                getImagesCallback: getImages
+                // updateImagesCallback: updateImages,
+                // removeImageHandlerCallback: removeImageHandler,
+                // getImagesCallback: getImages
               })
             }}
           />
