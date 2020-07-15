@@ -185,9 +185,9 @@ const WordTranslator = (props) => {
         .then((response) => {
           const TEXT = response.data.responses[0].textAnnotations[0].description;
           const LANG = response.data.responses[0].textAnnotations[0].locale
-          console.log('SUCCESS 4', response.data.responses[0].textAnnotations[0].locale);
+          // console.log('SUCCESS 4', response.data.responses[0].textAnnotations[0].locale);
           setGetText(TEXT);
-          console.log(LANG);
+          // console.log(LANG);
           if (googleDetected(LANG)) {
             setOriginalLang(LANG);
           }
