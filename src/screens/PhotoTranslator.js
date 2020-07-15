@@ -89,6 +89,15 @@ const PhotoTranslator = (props) => {
     getImages();
   }, [myImages]);
 
+  // useEffect(() => {
+  //   if (props.route.params.favorite) {
+  //     // setState({...state, favorite: props.route.params.favorite});
+  //     setState(initialStateForm);
+  //     setTranslatedText(null);
+
+  //   }
+    
+  // }, [state.translatedText, state.favorite]);
 
   const updateImages = (newMyImages) => {
     setMyImages(newMyImages);
@@ -119,6 +128,7 @@ const PhotoTranslator = (props) => {
 
     setCurrLanguage(language);
     getTranslated(getText, language);
+    setState({...state, favorite: false});
 
     return language 
   }; 
