@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Button, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Button, Alert, TouchableHighlight, AsyncStorage } from 'react-native';
 import axios from 'axios';
 import ENV from '../../env'; 
 import * as Google from 'expo-google-app-auth';
@@ -111,6 +111,7 @@ const Home = (props) => {
     }
   };
 
+
   const signIn = async () => {
     try {
       const result = await Google.logInAsync({
@@ -150,6 +151,10 @@ const Home = (props) => {
 
         addUserApiCall(body);
 
+        // TODO: test
+        storeToken(result.accessToken)
+        setAccessToken(result.accessToken)
+
         return result.accessToken; // TODO: ???
       } else {
         console.log('cancelled');
@@ -170,14 +175,68 @@ const Home = (props) => {
     }
   };
 
+
+
+  
+  const [accessToken, setAccessToken] = useState('')
+
+  const storeToken = async (token) => {
+    try {
+        await AsyncStorage.setItem(token, ENV.googleApiKey)
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+  const signOut = async () => {   
+  
+    try {      
+      console.log("token in delete", accessToken);
+
+      await Google.logOutAsync({ 
+        accessToken, 
+        androidClientId: ENV.androidClientId,
+        iosClientId: ENV.iosClientId,
+      })
+
+      console.log("Successfully log out");
+
+      Alert.alert(
+        "Log out",
+        "You have been succefully logged out",
+        [
+          { text: "OK", 
+            onPress: () => console.log("OK Pressed") 
+          }
+        ]
+      )
+
+
+      // how to update state
+      dispatch({
+        type: SIGN_OUT,
+        payload: initialStateForm
+      });
+
+    } catch (err) {
+        throw new Error(err)
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Vizlator</Text>
 
       {state.signedIn ? (
-        <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
+        <View>
+          <View style={styles.signOutBtn}>
+            <Button title="Sign out" color="#fff" onPress={() => signOut()} />
+          </View>
+          <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
+        </View>
       ) :
-        <LoginPage signIn={signIn} />
+          <LoginPage signIn={signIn} />
       }
 
       <TouchableOpacity
@@ -293,7 +352,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 20,
   },
-
+  signOutBtn: {
+    position: 'absolute',
+    top: -280,
+    right: -100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    backgroundColor: '#505ae0',
+    borderRadius: 5,
+    marginVertical: 20,
+  }
 })
 
 export default Home;
