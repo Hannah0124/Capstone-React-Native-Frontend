@@ -140,7 +140,7 @@ const Home = (props) => {
         });
 
         const body = {
-          uid: parseInt(result.user.id), 
+          uid: result.user.id, 
           provider: "Google", 
           username: result.user.name, 
           email: result.user.email,
