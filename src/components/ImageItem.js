@@ -29,13 +29,17 @@ const ImageItem = props => {
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
         <Text style={styles.sub}>user id: {props.user_id}</Text>
         <Text style={styles.sub}>image id: {props.id}</Text>
-        <FontAwesome.Button 
-          name="remove" 
-          size={24} 
-          color="red" 
-          backgroundColor="transparent" 
-          onPress={() => props.removeImageHandlerCallback(props.id)}
-        />
+        <TouchableOpacity 
+          style={styles.removeBtn}
+        >
+          <FontAwesome.Button 
+            name="remove" 
+            size={24} 
+            color="red" 
+            backgroundColor="transparent" 
+            onPress={() => props.removeImageHandlerCallback(props.id)}
+          />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -73,6 +77,12 @@ const styles = StyleSheet.create({
   sub: {
     color: '#666',
     fontSize: 13
+  },
+  removeBtn: {
+    position: "absolute",
+    right: 0,
+    marginRight: 0,
+    paddingRight: 0,
   }
 });
 
