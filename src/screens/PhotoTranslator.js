@@ -87,7 +87,8 @@ const PhotoTranslator = (props) => {
 
   useEffect(() => {
     getImages();
-  }, [myImages]);
+  // }, [myImages]);
+  }, []);
 
   // useEffect(() => {
   //   if (props.route.params.favorite) {
