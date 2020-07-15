@@ -325,28 +325,28 @@ const WordTranslator = (props) => {
     )
   }
 
-  const removeImageHandler = (id) => {
+  // const removeImageHandler = (id) => {
 
-    const copyState = {...state}
-    copyState["favorite"] = false;
-    setState(copyState);
+  //   const copyState = {...state}
+  //   copyState["favorite"] = false;
+  //   setState(copyState);
 
-    axios.post(`${URLS.BASE_URL}/image/${id}`)
-      .then(response => {
-        console.log('4. internal API - successfully deleted: ', response.data)
-        setState(initialStateForm);
+  //   axios.post(`${URLS.BASE_URL}/image/${id}`)
+  //     .then(response => {
+  //       console.log('4. internal API - successfully deleted: ', response.data)
+  //       setState(initialStateForm);
 
-        const filterdMyImages = myImages.filter(image => {
-          return image.id !== id
-        });
+  //       const filterdMyImages = myImages.filter(image => {
+  //         return image.id !== id
+  //       });
 
-        console.log('filtered? ', filterdMyImages)
-        setMyImages(filterdMyImages);
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-      })
-  };
+  //       console.log('filtered? ', filterdMyImages)
+  //       setMyImages(filterdMyImages);
+  //     })
+  //     .catch(err => {
+  //       console.log('4. internal API - error (deleted): ', err)
+  //     })
+  // };
 
   const reset = () => {
     setState(initialStateForm);
@@ -394,6 +394,7 @@ const WordTranslator = (props) => {
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
+          resetCallback={reset}
         />
 
         <View style={styles.buttonContainer}>
@@ -523,7 +524,7 @@ const WordTranslator = (props) => {
           onPress={saveImageHandler}
         /> */}
         {
-          apiPhoto && getText && languageButtons(5)  
+          apiPhoto && getText && languageButtons(60)  
         }
       </View>
     </ScrollView>
