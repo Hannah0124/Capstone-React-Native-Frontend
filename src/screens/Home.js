@@ -56,27 +56,68 @@ const Home = (props) => {
   // dispatch calls the reducer and pass the action(action should be an object)
   const [state, dispatch] = useReducer(reducer, initialStateForm);
   const [userUids, setUserUids] = useState([]);
+  const [currId, setCurrId] = useState(null);
 
   console.log('userUids: ', userUids);
 
   // get ids! (TEST)
-  useEffect(() => {
-    axios.get(`${URLS.BASE_URL}/users`)
-      .then(response => {
-        console.log('SUCCESS 1: ', response.data);
-        const uids = response.data.users.map(user =>{
-          return user.uid
-        })
+  // useEffect(() => {
+  //   axios.get(`${URLS.BASE_URL}/users`)
+  //     .then(response => {
+  //       console.log('SUCCESS 1: ', response.data);
+  //       const uids = response.data.users.map(user =>{
+  //         return user.uid
+  //       })
 
-        setUserUids(uids);
-      })
-      .catch(err => {
-        console.log('ERROR 1: ', err);
+  //       setUserUids(uids);
+  //     })
+  //     .catch(err => {
+  //       console.log('ERROR 1: ', err);
 
-      })
+  //     })
 
-  }, []);
+  // }, []);
   
+  const findId = (uid) => {
+    // get ids! (TEST)
+    // useEffect(() => {
+      axios.get(`${URLS.BASE_URL}/users`)
+        .then(response => {
+          console.log('SUCCESS 1: ', response.data);
+
+          const uids = response.data.users.map(user =>{
+            return user.uid
+          })
+  
+          setUserUids(uids);
+
+
+          if (uid) {
+            const user = response.data.users.find(user =>{
+              return user.uid === uid;
+            })
+  
+            setCurrId(user.id);
+
+            console.log('user.id ??? ', user.id)
+          }
+        })
+        .catch(err => {
+          console.log('ERROR 1 - 1: ', err);
+        })
+    // }, []);
+  }
+
+  useEffect(() => { 
+    if (state.uid) {
+      findId(state.uid)
+      return;
+    } 
+    findId();
+    // 
+
+  }, [state])
+
   const addUserApiCall = (body) => {
     // if user exists, dont call /add_user api
     const hasUser = userUids.find(id => {
@@ -220,6 +261,8 @@ const Home = (props) => {
         payload: initialStateForm
       });
 
+      setCurrId(null);
+
     } catch (err) {
         throw new Error(err)
     }
@@ -255,12 +298,16 @@ const Home = (props) => {
         {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
       </TouchableOpacity>
 
+       <View>
+        <Text>currId: {currId}</Text>
+       </View>
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate(
           'PhotoTranslator',
           {
-            currentId: state.id,
+            // currentId: state.id,
+            currentId: currId,
             signedIn: state.signedIn
           }
         )}
