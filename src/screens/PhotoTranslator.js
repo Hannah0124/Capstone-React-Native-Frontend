@@ -31,7 +31,8 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  const id = props.route.params.currentId || 1;
+  const id = props.route.params.currentId || 1; // dummy data
+
   // const testImages = props.route.params.images;
 
   // console.log("!!!props in PhotoTranslator.js: ", props)
@@ -52,7 +53,7 @@ const PhotoTranslator = (props) => {
     translated_text: null,
     favorite: false,
     language: null,
-    user_id: props.route.params.currentId || "123"
+    user_id: props.route.params.currentId
   }
 
   const [state, setState] = useState(initialStateForm);
@@ -402,7 +403,8 @@ const PhotoTranslator = (props) => {
         </Text> */}
 
         <View style={styles.favoriteButton}>
-          <Button 
+          {myImages.length > 0 && 
+            <Button 
             title="My Favorites" 
             color={Colors.primary} 
             onPress={() => {
@@ -417,15 +419,16 @@ const PhotoTranslator = (props) => {
               })
             }}
           />
+          }
         </View>
 
-        <View >
+        {/* <View >
           <Button 
             title="Reset" 
             color={Colors.primary} 
             onPress={reset}
           />
-        </View>
+        </View> */}
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
@@ -433,7 +436,7 @@ const PhotoTranslator = (props) => {
         />
 
         <View style={styles.buttonContainer}>
-          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) ? 
+          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) && 
             <AntDesign 
               name="star" 
               size={30} 
@@ -441,20 +444,18 @@ const PhotoTranslator = (props) => {
               backgroundColor="#fff"
               // onPress={() => removeImageHandler(state.id)}
             >
-              {/* <Text>Add Favorite</Text> */}
             </AntDesign>
-              
-            :
-            
+          }
+          
+          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
             color="#C99B13" 
             backgroundColor="#fff"
             onPress={saveImageHandler}
-          >
-            {/* <Text>Add Favorite</Text> */}
-          </AntDesign.Button>
+            >
+            </AntDesign.Button>
           }
 
 
