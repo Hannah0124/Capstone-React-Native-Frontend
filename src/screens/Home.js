@@ -260,10 +260,11 @@ const Home = (props) => {
         onPress={() => navigation.navigate(
           'PhotoTranslator',
           {
-            currentId: state.id
+            currentId: state.id,
+            signedIn: state.signedIn
           }
         )}
-      >
+    >
         <Text style={styles.buttonText}>Translate Image</Text>
         <Entypo name="image" size={24} color="#fff" />
       </TouchableOpacity>

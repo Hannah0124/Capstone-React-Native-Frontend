@@ -31,7 +31,8 @@ console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
 
-  const id = props.route.params.currentId || 1; // dummy data
+  const id = props.route.params.currentId; // || 1; // dummy data
+  const signedIn = props.route.params.signedIn;
 
   // const testImages = props.route.params.images;
 
@@ -446,7 +447,7 @@ const PhotoTranslator = (props) => {
         />
 
         <View style={styles.buttonContainer}>
-          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) && 
+          {signedIn && apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) && 
             <AntDesign 
               name="star" 
               size={30} 
@@ -457,7 +458,7 @@ const PhotoTranslator = (props) => {
             </AntDesign>
           }
           
-          {apiPhoto && currLanguage && getText && translatedText && (state.favorite === false) && 
+          {signedIn && apiPhoto && currLanguage && getText && translatedText && (state.favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
