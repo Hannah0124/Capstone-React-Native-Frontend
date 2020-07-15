@@ -104,7 +104,7 @@ const WordTranslator = (props) => {
       text: getText,
       translated_text: translatedText,
       favorite: true,
-      language: targetLang,
+      language: displayLanguage(targetLang),
       user_id: id
     };
 
