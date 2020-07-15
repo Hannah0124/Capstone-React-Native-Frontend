@@ -22,7 +22,7 @@ const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.
 
 const WordTranslator = (props) => {
   console.log(props.route.params)
-  const uid = props.route.params.currentUid || "123";
+  const id = props.route.params.currentId || 1;
   // const testImages = props.route.params.images;
 
   const [titleValue, setTitleValue] = useState('');
@@ -337,12 +337,19 @@ const WordTranslator = (props) => {
           value={titleValue}
         /> */}
 
-<View style={styles.favoriteButton}>
+      <View style={styles.favoriteButton}>
           <Button 
             title="My Favorites" 
             color={Colors.primary} 
             onPress={() => {
-              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+              navigation.navigate('List', 
+              {
+                currentId: id, 
+                images: images,
+                myImages: myImages,
+                updateImagesCallback: updateImages,
+                removeImageHandlerCallback: removeImageHandler
+              })
             }}
           />
         </View>
