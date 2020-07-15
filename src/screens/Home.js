@@ -94,6 +94,7 @@ const Home = (props) => {
         console.log('SUCCESS (new user): ', response.data);
       })
       .catch(err => {
+        console.log(`${URLS.BASE_URL}/add_user`, body)
         console.log('ERROR 2: ', err);
       })
     } else {

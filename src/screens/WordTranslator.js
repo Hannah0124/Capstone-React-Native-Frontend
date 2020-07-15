@@ -58,26 +58,26 @@ const WordTranslator = (props) => {
   };
 
 
-  useEffect(() => {
-    axios.get(URLS.BASE_URL + '/images')
-      .then(response => {
+  // useEffect(() => {
+  //   axios.get(URLS.BASE_URL + '/images')
+  //     .then(response => {
 
-        const apiData = response.data.images;
-        setImages(apiData);
+  //       const apiData = response.data.images;
+  //       setImages(apiData);
 
-        console.log('apiData? ', apiData);
+  //       console.log('apiData? ', apiData);
 
-        const currImages = apiData.filter(image => {
-          return image.user_id === uid
-        })
+  //       const currImages = apiData.filter(image => {
+  //         return image.user_id === uid
+  //       })
 
-        setMyImages(currImages);
-      })
-      .catch(err => {
-        console.log('internal API - error: ', err)
-        setErrorMessage(err.message);
-      })
-  }, [])
+  //       setMyImages(currImages);
+  //     })
+  //     .catch(err => {
+  //       console.log('internal API - error: ', err)
+  //       setErrorMessage(err.message);
+  //     })
+  // }, [])
 
 
 
@@ -106,7 +106,7 @@ const WordTranslator = (props) => {
       translated_text: translatedText,
       favorite: true,
       language: targetLang,
-      user_id: uid
+      user_id: id
     };
 
 
