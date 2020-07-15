@@ -397,28 +397,26 @@ const WordTranslator = (props) => {
         />
 
         <View style={styles.buttonContainer}>
-          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) ? 
-            <AntDesign
+          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
+            <AntDesign 
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
               // onPress={() => removeImageHandler(state.id)}
             >
-              {/* <Text>Add Favorite</Text> */}
             </AntDesign>
-              
-            :
-            
+          }
+          
+          {apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
             color="#C99B13" 
             backgroundColor="#fff"
             onPress={saveImageHandler}
-          >
-            {/* <Text>Add Favorite</Text> */}
-          </AntDesign.Button>
+            >
+            </AntDesign.Button>
           }
 
 
