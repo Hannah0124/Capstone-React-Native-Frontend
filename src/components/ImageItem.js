@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import * as Localization from 'expo-localization';
@@ -18,7 +18,8 @@ const displayLanguage = (target) => {
 };
 
 const ImageItem = props => {
-  console.log('props in ImageItem: ', props)
+
+  // console.log('props in ImageItem: ', props)
   return (
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />

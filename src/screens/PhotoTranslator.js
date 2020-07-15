@@ -229,16 +229,15 @@ const PhotoTranslator = (props) => {
           return image.id !== id
         });
 
-        updateImages(filteredMyImages);
+        // updateImages(filteredMyImages);
+        setMyImages(filteredMyImages);
+
         // getImages();
       })
       .catch(err => {
         console.log('4. internal API - error (deleted): ', err)
       })
     }
-    // props.render();
-    // this.forceUpdate();
-    // props.navigation.navigate("List");
   };
 
 
@@ -413,7 +412,8 @@ const PhotoTranslator = (props) => {
                 images: images,
                 myImages: myImages,
                 updateImagesCallback: updateImages,
-                removeImageHandlerCallback: removeImageHandler
+                removeImageHandlerCallback: removeImageHandler,
+                getImagesCallback: getImages
               })
             }}
           />
