@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 110,
     position: 'absolute',
-    bottom: -455,
+    bottom: -520,
     margin: 0,
     paddingHorizontal: 10
   },
