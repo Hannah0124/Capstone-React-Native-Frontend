@@ -50,7 +50,8 @@ const List = props => {
 
   useEffect(() => {
     getImages();
-  }, [list]);
+  // }, [list]);
+  }, []);
 
   
   // TEST: TODO
@@ -125,7 +126,8 @@ const List = props => {
       <FlatList
         data={list}
         extraData={list}
-        keyExtractor={item => (item.id).toString()}
+        //All keys must now be string values.
+        keyExtractor={item => item.id.toString()}
         key={item => Date.now() + item.id}
         renderItem={itemData => (
           <ImageItem
