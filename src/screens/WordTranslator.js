@@ -22,7 +22,7 @@ const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.
 
 const WordTranslator = (props) => {
   console.log(props.route.params)
-  const uid = props.route.params.currentUid || "123";
+  const id = props.route.params.currentId || 1;
   // const testImages = props.route.params.images;
 
   const [titleValue, setTitleValue] = useState('');
@@ -58,26 +58,26 @@ const WordTranslator = (props) => {
   };
 
 
-  useEffect(() => {
-    axios.get(URLS.BASE_URL + '/images')
-      .then(response => {
+  // useEffect(() => {
+  //   axios.get(URLS.BASE_URL + '/images')
+  //     .then(response => {
 
-        const apiData = response.data.images;
-        setImages(apiData);
+  //       const apiData = response.data.images;
+  //       setImages(apiData);
 
-        console.log('apiData? ', apiData);
+  //       console.log('apiData? ', apiData);
 
-        const currImages = apiData.filter(image => {
-          return image.user_id === uid
-        })
+  //       const currImages = apiData.filter(image => {
+  //         return image.user_id === uid
+  //       })
 
-        setMyImages(currImages);
-      })
-      .catch(err => {
-        console.log('internal API - error: ', err)
-        setErrorMessage(err.message);
-      })
-  }, [])
+  //       setMyImages(currImages);
+  //     })
+  //     .catch(err => {
+  //       console.log('internal API - error: ', err)
+  //       setErrorMessage(err.message);
+  //     })
+  // }, [])
 
 
 
@@ -106,7 +106,7 @@ const WordTranslator = (props) => {
       translated_text: translatedText,
       favorite: true,
       language: targetLang,
-      user_id: uid
+      user_id: id
     };
 
 
@@ -249,7 +249,36 @@ const WordTranslator = (props) => {
     // }
     Speech.speak( words,{language: lang});
   }
-  
+  const getImages = () => {
+    axios.get(URLS.BASE_URL + '/images')
+      .then(response => {
+
+        const apiData = response.data.images;
+        setImages(apiData);
+
+        // console.log('apiData? ', apiData);
+
+        const currImages = apiData.filter(image => {
+          return image.user_id === id
+        })
+
+        // console.log('currImages??' , currImages)
+        setMyImages(currImages);
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        setErrorMessage(err.message);
+      })
+
+  };
+  useEffect(() => {
+    getImages();
+  }, [myImages]);
+
+
+  const updateImages = (newMyImages) => {
+    setMyImages(newMyImages);
+  }
   // TEST
 
   const displayLanguage = (target) => {
@@ -337,12 +366,19 @@ const WordTranslator = (props) => {
           value={titleValue}
         /> */}
 
-<View style={styles.favoriteButton}>
+      <View style={styles.favoriteButton}>
           <Button 
             title="My Favorites" 
             color={Colors.primary} 
             onPress={() => {
-              navigation.navigate('List', {currentUid: uid, myImages: myImages})
+              navigation.navigate('List', 
+              {
+                currentId: id, 
+                images: images,
+                myImages: myImages,
+                updateImagesCallback: updateImages,
+                removeImageHandlerCallback: removeImageHandler
+              })
             }}
           />
         </View>
