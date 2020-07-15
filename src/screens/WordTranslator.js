@@ -25,26 +25,25 @@ const WordTranslator = (props) => {
   const id = props.route.params.currentId || 1;
   // const testImages = props.route.params.images;
 
-  const [titleValue, setTitleValue] = useState('');
+  // const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
   const [apiPhoto, setAPIPhoto] = useState();
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
   const [targetLang, setTargetLang] = useState('en');
-  const [flashMessage, setFlashMessage] = useState(null);
+  // const [flashMessage, setFlashMessage] = useState(null);
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
   const [originalLang, setOriginalLang] = useState('en');
 
   const initialStateForm = {
-    id: null,
     image_url: null,
     text: null,
     translated_text: null,
     favorite: false,
     language: null,
-    user_id: props.route.params.currentUid || "123"
+    user_id: props.route.params.currentId
   }
   const [state, setState] = useState(initialStateForm);
 
@@ -214,7 +213,7 @@ const WordTranslator = (props) => {
     // console.log(item.language);
     const ENCODED = encodeURI(text)
     let target_lang 
-    console.log(route.params.item)
+    // console.log(route.params.item)
     if (route.params.item) {
       const { item } = route.params
       target_lang = item.language
@@ -228,7 +227,7 @@ const WordTranslator = (props) => {
     axios.post(translateUrl)
     .then((response) => {
       const TRANSLATION = response.data.data.translations[0].translatedText;
-      console.log('Translation', TRANSLATION);
+      // console.log('Translation', TRANSLATION);
       setTranslatedText(TRANSLATION);
     })
     .catch((error) => {
@@ -276,9 +275,9 @@ const WordTranslator = (props) => {
   }, [myImages]);
 
 
-  const updateImages = (newMyImages) => {
-    setMyImages(newMyImages);
-  }
+  // const updateImages = (newMyImages) => {
+  //   setMyImages(newMyImages);
+  // }
   // TEST
 
   const displayLanguage = (target) => {
@@ -300,6 +299,7 @@ const WordTranslator = (props) => {
       )
     } else {
       getTranslated(getText);
+      setState({...state, favorite: false});
     }
   }
 
@@ -325,28 +325,28 @@ const WordTranslator = (props) => {
     )
   }
 
-  const removeImageHandler = (id) => {
+  // const removeImageHandler = (id) => {
 
-    const copyState = {...state}
-    copyState["favorite"] = false;
-    setState(copyState);
+  //   const copyState = {...state}
+  //   copyState["favorite"] = false;
+  //   setState(copyState);
 
-    axios.post(`${URLS.BASE_URL}/image/${id}`)
-      .then(response => {
-        console.log('4. internal API - successfully deleted: ', response.data)
-        setState(initialStateForm);
+  //   axios.post(`${URLS.BASE_URL}/image/${id}`)
+  //     .then(response => {
+  //       console.log('4. internal API - successfully deleted: ', response.data)
+  //       setState(initialStateForm);
 
-        const filterdMyImages = myImages.filter(image => {
-          return image.id !== id
-        });
+  //       const filterdMyImages = myImages.filter(image => {
+  //         return image.id !== id
+  //       });
 
-        console.log('filtered? ', filterdMyImages)
-        setMyImages(filterdMyImages);
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-      })
-  };
+  //       console.log('filtered? ', filterdMyImages)
+  //       setMyImages(filterdMyImages);
+  //     })
+  //     .catch(err => {
+  //       console.log('4. internal API - error (deleted): ', err)
+  //     })
+  // };
 
   const reset = () => {
     setState(initialStateForm);
@@ -355,7 +355,6 @@ const WordTranslator = (props) => {
     setTranslatedText(null);
   }
 
-  console.log('gettext', getText);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -367,6 +366,7 @@ const WordTranslator = (props) => {
         /> */}
 
       <View style={styles.favoriteButton}>
+      {myImages.length > 0 && 
           <Button 
             title="My Favorites" 
             color={Colors.primary} 
@@ -376,48 +376,48 @@ const WordTranslator = (props) => {
                 currentId: id, 
                 images: images,
                 myImages: myImages,
-                updateImagesCallback: updateImages,
-                removeImageHandlerCallback: removeImageHandler
+                // updateImagesCallback: updateImages,
+                // removeImageHandlerCallback: removeImageHandler
               })
             }}
           />
+        }
         </View>
 
-        <View >
+        {/* <View >
           <Button 
             title="Reset" 
             color={Colors.primary} 
             onPress={reset}
           />
-        </View>
+        </View> */}
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
+          resetCallback={reset}
         />
 
         <View style={styles.buttonContainer}>
-          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) ? 
-            <AntDesign.Button 
+          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
+            <AntDesign 
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
-              onPress={() => removeImageHandler(state.id)}
+              // onPress={() => removeImageHandler(state.id)}
             >
-              {/* <Text>Add Favorite</Text> */}
-            </AntDesign.Button>
-              
-            :
-            
+            </AntDesign>
+          }
+          
+          {apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
             color="#C99B13" 
             backgroundColor="#fff"
             onPress={saveImageHandler}
-          >
-            {/* <Text>Add Favorite</Text> */}
-          </AntDesign.Button>
+            >
+            </AntDesign.Button>
           }
 
 
@@ -524,7 +524,7 @@ const WordTranslator = (props) => {
           onPress={saveImageHandler}
         /> */}
         {
-          apiPhoto && getText && languageButtons(5)  
+          apiPhoto && getText && languageButtons(60)  
         }
       </View>
     </ScrollView>
@@ -591,6 +591,11 @@ const styles = StyleSheet.create({
   },
   cardText: {
     marginRight: 20,
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0
   },
 })
 
