@@ -249,7 +249,36 @@ const WordTranslator = (props) => {
     // }
     Speech.speak( words,{language: lang});
   }
-  
+  const getImages = () => {
+    axios.get(URLS.BASE_URL + '/images')
+      .then(response => {
+
+        const apiData = response.data.images;
+        setImages(apiData);
+
+        // console.log('apiData? ', apiData);
+
+        const currImages = apiData.filter(image => {
+          return image.user_id === id
+        })
+
+        // console.log('currImages??' , currImages)
+        setMyImages(currImages);
+      })
+      .catch(err => {
+        console.log('internal API - error: ', err)
+        setErrorMessage(err.message);
+      })
+
+  };
+  useEffect(() => {
+    getImages();
+  }, [myImages]);
+
+
+  const updateImages = (newMyImages) => {
+    setMyImages(newMyImages);
+  }
   // TEST
 
   const displayLanguage = (target) => {
