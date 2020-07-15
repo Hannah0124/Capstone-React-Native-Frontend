@@ -281,7 +281,7 @@ const WordTranslator = (props) => {
   };
   useEffect(() => {
     getImages();
-  }, [myImages]);
+  }, []);
 
 
   // const updateImages = (newMyImages) => {
