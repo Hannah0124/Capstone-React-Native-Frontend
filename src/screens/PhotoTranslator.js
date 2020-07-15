@@ -87,7 +87,6 @@ const PhotoTranslator = (props) => {
 
   useEffect(() => {
     getImages();
-  // }, [myImages]);
   }, []);
 
   // useEffect(() => {

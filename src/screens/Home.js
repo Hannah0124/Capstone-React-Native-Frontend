@@ -55,20 +55,20 @@ const Home = (props) => {
 
   // dispatch calls the reducer and pass the action(action should be an object)
   const [state, dispatch] = useReducer(reducer, initialStateForm);
-  const [userIds, setUserIds] = useState([]);
+  const [userUids, setUserUids] = useState([]);
 
-  console.log('userIds: ', userIds);
+  console.log('userUids: ', userUids);
 
   // get ids! (TEST)
   useEffect(() => {
     axios.get(`${URLS.BASE_URL}/users`)
       .then(response => {
         console.log('SUCCESS 1: ', response.data);
-        const ids = response.data.users.map(user =>{
-          return user.id
+        const uids = response.data.users.map(user =>{
+          return user.uid
         })
 
-        setUserIds(ids);
+        setUserUids(uids);
       })
       .catch(err => {
         console.log('ERROR 1: ', err);
@@ -79,8 +79,8 @@ const Home = (props) => {
   
   const addUserApiCall = (body) => {
     // if user exists, dont call /add_user api
-    const hasUser = userIds.find(id => {
-      return id == body.id;
+    const hasUser = userUids.find(id => {
+      return id == body.uid;
     });
 
     if (!hasUser) {
@@ -97,18 +97,20 @@ const Home = (props) => {
         console.log(`${URLS.BASE_URL}/add_user`, body)
         console.log('ERROR 2: ', err);
       })
-    } else {
-      // // TEST (TODO)
-      axios.post(`${URLS.BASE_URL}/login`, {
-        "username": body.username,
-        "password": body.password || null
-      }).then(response => {
-        console.log('SUCCESS (returning user): ', response.data);
+    } 
+    
+    // else {
+    //   // // TEST (TODO)
+    //   axios.post(`${URLS.BASE_URL}/login`, {
+    //     "username": body.username,
+    //     "password": body.password ? body.password : "random"
+    //   }).then(response => {
+    //     console.log('SUCCESS (returning user): ', response.data);
 
-      }).catch(err => {
-        console.log('ERROR 3: ', err); // [Error: Request failed with status code 401] TODO!
-      })
-    }
+    //   }).catch(err => {
+    //     console.log('ERROR 3: ', err); // [Error: Request failed with status code 401] TODO!
+    //   })
+    // }
   };
 
 
@@ -145,7 +147,7 @@ const Home = (props) => {
           provider: "Google", 
           username: result.user.name, 
           email: result.user.email,
-          password: result.accessToken
+          password: result.user.password || null
         }
 
 
