@@ -355,7 +355,6 @@ const WordTranslator = (props) => {
     setTranslatedText(null);
   }
 
-  console.log('gettext', getText);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -367,6 +366,7 @@ const WordTranslator = (props) => {
         /> */}
 
       <View style={styles.favoriteButton}>
+      {myImages.length > 0 && 
           <Button 
             title="My Favorites" 
             color={Colors.primary} 
@@ -376,20 +376,21 @@ const WordTranslator = (props) => {
                 currentId: id, 
                 images: images,
                 myImages: myImages,
-                updateImagesCallback: updateImages,
-                removeImageHandlerCallback: removeImageHandler
+                // updateImagesCallback: updateImages,
+                // removeImageHandlerCallback: removeImageHandler
               })
             }}
           />
+        }
         </View>
 
-        <View >
+        {/* <View >
           <Button 
             title="Reset" 
             color={Colors.primary} 
             onPress={reset}
           />
-        </View>
+        </View> */}
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
@@ -397,15 +398,15 @@ const WordTranslator = (props) => {
 
         <View style={styles.buttonContainer}>
           {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) ? 
-            <AntDesign.Button 
+            <AntDesign
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
-              onPress={() => removeImageHandler(state.id)}
+              // onPress={() => removeImageHandler(state.id)}
             >
               {/* <Text>Add Favorite</Text> */}
-            </AntDesign.Button>
+            </AntDesign>
               
             :
             
@@ -591,6 +592,11 @@ const styles = StyleSheet.create({
   },
   cardText: {
     marginRight: 20,
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0
   },
 })
 
