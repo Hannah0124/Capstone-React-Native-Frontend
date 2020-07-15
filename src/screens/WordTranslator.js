@@ -21,7 +21,7 @@ import URLS from '../constants/Urls';
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
 const WordTranslator = (props) => {
-  console.log(props.route.params)
+  // console.log(props.route.params)
   const id = props.route.params.currentId || 1;
   // const testImages = props.route.params.images;
 
@@ -185,9 +185,12 @@ const WordTranslator = (props) => {
         .then((response) => {
           const TEXT = response.data.responses[0].textAnnotations[0].description;
           const LANG = response.data.responses[0].textAnnotations[0].locale
-          console.log('SUCCESS 4', response.data.responses[0].textAnnotations[0].locale);
+          // console.log('SUCCESS 4', response.data.responses[0].textAnnotations[0].locale);
           setGetText(TEXT);
-          setOriginalLang(LANG);
+          // console.log(LANG);
+          if (googleDetected(LANG)) {
+            setOriginalLang(LANG);
+          }
           // getTranslated(encodeURI(TEXT));
           getTranslated(TEXT);
         })
@@ -207,6 +210,12 @@ const WordTranslator = (props) => {
         })
     }
   };
+  const googleDetected = (detectLang) => {
+    return Object.keys(LANGUAGES).find(label => {
+      return LANGUAGES[label] == detectLang;
+    })
+  };
+
 
   const getTranslated = (text) => {
     //TODO : finish up the API call
