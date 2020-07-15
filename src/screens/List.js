@@ -79,6 +79,11 @@ const List = props => {
             removeImageHandler(id)
             console.log("OK Pressed") 
           }
+        },
+        { text: "Cancel", 
+          onPress: () => {
+            console.log("Cancel Pressed") 
+          }
         }
       ]
     )
