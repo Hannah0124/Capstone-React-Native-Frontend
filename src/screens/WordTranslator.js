@@ -25,26 +25,25 @@ const WordTranslator = (props) => {
   const id = props.route.params.currentId || 1;
   // const testImages = props.route.params.images;
 
-  const [titleValue, setTitleValue] = useState('');
+  // const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
   const [apiPhoto, setAPIPhoto] = useState();
   const [getText, setGetText] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [translatedText, setTranslatedText] = useState();
   const [targetLang, setTargetLang] = useState('en');
-  const [flashMessage, setFlashMessage] = useState(null);
+  // const [flashMessage, setFlashMessage] = useState(null);
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
   const [originalLang, setOriginalLang] = useState('en');
 
   const initialStateForm = {
-    id: null,
     image_url: null,
     text: null,
     translated_text: null,
     favorite: false,
     language: null,
-    user_id: props.route.params.currentUid || "123"
+    user_id: props.route.params.currentId
   }
   const [state, setState] = useState(initialStateForm);
 
@@ -214,7 +213,7 @@ const WordTranslator = (props) => {
     // console.log(item.language);
     const ENCODED = encodeURI(text)
     let target_lang 
-    console.log(route.params.item)
+    // console.log(route.params.item)
     if (route.params.item) {
       const { item } = route.params
       target_lang = item.language
@@ -228,7 +227,7 @@ const WordTranslator = (props) => {
     axios.post(translateUrl)
     .then((response) => {
       const TRANSLATION = response.data.data.translations[0].translatedText;
-      console.log('Translation', TRANSLATION);
+      // console.log('Translation', TRANSLATION);
       setTranslatedText(TRANSLATION);
     })
     .catch((error) => {
@@ -276,9 +275,9 @@ const WordTranslator = (props) => {
   }, [myImages]);
 
 
-  const updateImages = (newMyImages) => {
-    setMyImages(newMyImages);
-  }
+  // const updateImages = (newMyImages) => {
+  //   setMyImages(newMyImages);
+  // }
   // TEST
 
   const displayLanguage = (target) => {
@@ -300,6 +299,7 @@ const WordTranslator = (props) => {
       )
     } else {
       getTranslated(getText);
+      setState({...state, favorite: false});
     }
   }
 
