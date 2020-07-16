@@ -14,44 +14,28 @@ import URLS from '../constants/Urls';
 
 
 const List = props => {
-  // console.log('???props in List.js: ', props.route.params)
-  // const [errorMessage, setErrorMessage] = useState(null);
-
-  
-
   const id = props.route.params.currentId;
-
-  const myImages = props.route.params.myImages;
-
   const [list, setList] = useState([]);
+  
+  useEffect(() => {
+    getImages();
+  }, []);
 
   const getImages = () => {
     axios.get(URLS.BASE_URL + '/images')
       .then(response => {
-
         const apiData = response.data.images;
-        // setImages(apiData);
-
-        // console.log('apiData? ', apiData);
-
         const currImages = apiData.filter(image => {
           return image.user_id === id
-        })
-
-        // console.log('currImages??' , currImages)
+        });
         setList(currImages);
       })
       .catch(err => {
-        console.log('internal API - error: ', err)
+        console.log('internal API - error: ', err);
         setErrorMessage(err.message);
-      })
-
+      });
   };
 
-  useEffect(() => {
-    getImages();
-  // }, [list]);
-  }, []);
 
   
   // TEST: TODO
@@ -62,9 +46,7 @@ const List = props => {
 
 
   const updateList = (image_id) => {
-    const updatedList = myImages.filter(image => {
-      return image.id !== image_id
-    });
+    const updatedList = list.filter(image => image.id !== image_id);
 
     setList(updatedList);
   };
@@ -88,38 +70,20 @@ const List = props => {
         }
       ]
     )
-
+    // What is the point of always returning true
     return true;
   };
 
   const removeImageHandler = (id) => {
-
-
-      axios.post(`${URLS.BASE_URL}/image/${id}`)
-    
-      .then(response => {
-        
-        console.log('4. internal API - successfully deleted: ', response.data)
-        
-        // const filteredMyImages = myImages.filter(image => {
-        //   return image.id !== id
-        // });
-        updateList(id);
-
-
-      })
-      .catch(err => {
-        console.log('4. internal API - error (deleted): ', err)
-      })
-
+    axios.post(`${URLS.BASE_URL}/image/${id}`)
+    .then(response => {
+      console.log('4. internal API - successfully deleted: ', response.data);
+      updateList(id);
+    })
+    .catch(err => {
+      console.log('4. internal API - error (deleted): ', err);
+    });
   };
-
-
-
-  // useEffect(() => {
-  //   dispatch(imagesActions.loadImages());
-  // }), [dispatch];
-
 
   return (
     <View>
