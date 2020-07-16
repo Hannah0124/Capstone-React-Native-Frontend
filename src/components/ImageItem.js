@@ -24,8 +24,11 @@ const ImageItem = props => {
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
-        <Text style={styles.originalLanguage}><Text style={styles.gray}>{props.original_lang}:</Text> {props.text}</Text>
-        <Text style={styles.translatedLanguage}><Text style={styles.gray}>{props.language}:</Text> {props.translatedText}</Text>
+        <Text style={styles.gray}>{props.original_lang}:</Text> 
+        <Text style={styles.originalLanguage}>{props.text}</Text>
+
+        <Text style={styles.gray}>{props.language}:</Text>
+        <Text style={styles.translatedLanguage}>{props.translatedText}</Text>
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
         {/* <Text style={styles.sub}>user id: {props.user_id}</Text>
         <Text style={styles.sub}>image id: {props.id}</Text> */}
@@ -53,7 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 180
+    height: 250
   },
   image: {
     width: 70,
@@ -84,7 +87,8 @@ const styles = StyleSheet.create({
   },
   removeBtn: {
     position: "absolute",
-    right: -30,
+    top: -35,
+    right: -45,
     marginRight: 0,
     paddingRight: 0,
   },
