@@ -106,7 +106,8 @@ const WordTranslator = (props) => {
       translated_text: translatedText,
       favorite: true,
       language: displayLanguage(targetLang),
-      user_id: id
+      user_id: id,
+      original_lang: displayLanguage(originalLang),
     };
 
 
@@ -120,7 +121,7 @@ const WordTranslator = (props) => {
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
-
+        console.log(body)
         copyMyImages.push(body);
         setMyImages(copyMyImages);
 
