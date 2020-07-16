@@ -6,10 +6,10 @@ import ImageItem from '../components/ImageItem';
 import URLS from '../constants/Urls';
 import Colors from '../constants/Colors';
 
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector, useDispatch } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native';
-import * as imagesActions from '../store/images-actions';
+// import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { useIsFocused } from '@react-navigation/native';
+// import * as imagesActions from '../store/images-actions';
 // import HeaderButton from '../components/HeaderButton';
 
 
