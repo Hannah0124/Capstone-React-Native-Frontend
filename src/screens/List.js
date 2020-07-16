@@ -4,13 +4,13 @@ import axios from 'axios';
 
 import ImageItem from '../components/ImageItem';
 import URLS from '../constants/Urls';
+import Colors from '../constants/Colors';
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import * as imagesActions from '../store/images-actions';
 // import HeaderButton from '../components/HeaderButton';
-
 
 
 const List = props => {
@@ -94,6 +94,9 @@ const List = props => {
 
   return (
     <View>
+      {list.length === 0 &&
+        <View style={styles.noImage}><Text style={styles.test}>Add Your Favorites :D</Text></View>
+      }
       <FlatList
         data={list}
         extraData={list}
@@ -124,6 +127,19 @@ const List = props => {
 };
 
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  noImage: {
+    fontSize: 50,
+    color: "red"
+  },
+  test: {
+    fontSize: 25,
+    color: Colors.primary,
+    textAlign: 'center',
+    marginTop: 280,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
 
 export default List;

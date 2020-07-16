@@ -11,14 +11,14 @@ import { AntDesign } from '@expo/vector-icons';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 
-
 import Colors from '../constants/Colors';
 import LANGUAGES from '../constants/Languages';
 import URLS from '../constants/Urls';
-import * as imagesActions from '../store/images-actions';
-import ImagePicker from '../components/ImagePicker';
-import LineButton from '../components/LineButton';
 
+import ImagePicker from '../components/ImagePicker';
+
+import * as imagesActions from '../store/images-actions';
+import LineButton from '../components/LineButton';
 import * as FileSystem from 'expo-file-system';
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
@@ -90,16 +90,6 @@ const PhotoTranslator = (props) => {
   useEffect(() => {
     getImages();
   }, []);
-
-  // useEffect(() => {
-  //   if (props.route.params.favorite) {
-  //     // setState({...state, favorite: props.route.params.favorite});
-  //     setState(initialStateForm);
-  //     setTranslatedText(null);
-
-  //   }
-    
-  // }, [state.translatedText, state.favorite]);
 
 
   const getLanguage = () => {
@@ -203,24 +193,10 @@ const PhotoTranslator = (props) => {
 
     // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
 
-    // // navigation.goBack();
+    // navigation.goBack();
     
   };
 
-
-  // const areYouSure = () => {
-  //   Alert.alert(
-  //     "Delete the image",
-  //     "Are you sure?",
-  //     [
-  //       { text: "OK", 
-  //         onPress: () => console.log("OK Pressed") 
-  //       }
-  //     ]
-  //   )
-
-  //   return true;
-  // };
 
   const getWords = () => {
     // edge case
@@ -237,14 +213,12 @@ const PhotoTranslator = (props) => {
       )
     }
     
-    
-    
     const body = {
       requests: [
         {
           features: [
             {
-              maxResults: 1,  //TODO: 1 for now due to API charge
+              maxResults: 5,  // TODO: 1 for now due to API charge
               type: "LABEL_DETECTION"
             },
           ],
@@ -371,7 +345,6 @@ const PhotoTranslator = (props) => {
                 currentId: id, 
                 images: images,
                 myImages: myImages,
-                // updateImagesCallback: updateImages,
               })
             }}
           />

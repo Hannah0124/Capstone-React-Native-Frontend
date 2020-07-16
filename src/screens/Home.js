@@ -374,6 +374,7 @@ const styles = StyleSheet.create({
 
 export default Home;
 
+
 // reference: https://heartbeat.fritz.ai/getting-started-with-stack-navigator-using-react-navigation-5-in-react-native-and-expo-apps-4c516becaee1
 
 // google login front-end: https://www.youtube.com/watch?v=ELXvcyiTTHM
