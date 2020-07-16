@@ -289,7 +289,8 @@ const Home = (props) => {
         onPress={() => navigation.navigate(
           'WordTranslator',
           {
-            currentId: state.signedIn
+            currentId: currId,
+            signedIn: state.signedIn
           }
         )}
       >
