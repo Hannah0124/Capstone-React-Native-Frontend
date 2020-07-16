@@ -100,7 +100,7 @@ const WordTranslator = (props) => {
   const saveImageHandler = () => {
     
     const body = {
-      id: images.length + 1,
+      // id: images.length + 1,
       image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
