@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView, Alert } from 'react-native'; 
-import { useDispatch } from 'react-redux'; // TEST
+
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
-import axios from 'axios'; // npm i react-native-axios
-import ENV from '../../env'; // npm i expo-env
+import axios from 'axios'; 
 import * as Speech from 'expo-speech';
 import { AntDesign } from '@expo/vector-icons';
-
-// TODO: TEST
-import * as Localization from 'expo-localization';
+import * as Localization from 'expo-localization'; // TODO: TEST
 import i18n from 'i18n-js';
 
 import Colors from '../constants/Colors';
@@ -17,27 +14,27 @@ import URLS from '../constants/Urls';
 
 import ImagePicker from '../components/ImagePicker';
 
+// import ENV from '../../env'; // npm i expo-env
+// import { useDispatch } from 'react-redux'; // TEST
 // import * as imagesActions from '../store/images-actions';
 // import LineButton from '../components/LineButton';
 // import * as FileSystem from 'expo-file-system';
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
-// Set the locale once at the beginning of your app.
-i18n.locale = defaultLanguage;
+i18n.locale = defaultLanguage; // Set the locale once at the beginning of your app.
 
-// console.log('defaultLanguage: ', defaultLanguage);
-console.log('i18n.locale: ', i18n.locale)
+// console.log('i18n.locale: ', i18n.locale)
 
 const PhotoTranslator = (props) => {
+
+  // console.log("props in PhotoTranslator.js: ", props)
 
   const id = props.route.params.currentId; // || 1; // dummy data
   console.log('id??? ', id);
   const signedIn = props.route.params.signedIn;
 
-  // const testImages = props.route.params.images;
-
-  // console.log("!!!props in PhotoTranslator.js: ", props)
+  
 
   const [apiPhoto, setApiPhoto] = useState(null);
 
@@ -81,7 +78,6 @@ const PhotoTranslator = (props) => {
 
     const { item } = route.params;
     const { language } = item;
-    // console.log('language: ', language);
 
     setCurrLanguage(language);
     getTranslated(getText, language);
@@ -119,7 +115,7 @@ const PhotoTranslator = (props) => {
     const body = {
       image_url: selectedImage, // apiPhoto, 
       favorite: true,
-      original_lang: displayLanguage(originalLanguage),
+      original_lang: displayLanguage(i18n.locale),
       language: displayLanguage(currLanguage),
       text: getText,
       translated_text: translatedText,
@@ -298,9 +294,6 @@ const PhotoTranslator = (props) => {
     setGetText(null);
     setTranslatedText(null);
   }
-
-
-  // console.log('my images??????', myImages)
 
   return (
     <ScrollView>
