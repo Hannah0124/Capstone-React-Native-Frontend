@@ -141,6 +141,7 @@ const List = props => {
             language={itemData.item.language}
             user_id={itemData.item.user_id}
             id={itemData.item.id}
+            original_lang={itemData.item.original_lang}
             // onSelect={() => {
             //   // props.navigation.navigate('ImageDetail', {
             //   //   imageTitle: itemData.item.title,
