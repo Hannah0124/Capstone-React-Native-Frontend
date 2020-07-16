@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform, FlatList, Alert } from 'react-native';
+import axios from 'axios';
+
+import ImageItem from '../components/ImageItem';
+import URLS from '../constants/Urls';
+
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
-
-// import HeaderButton from '../components/HeaderButton';
-import ImageItem from '../components/ImageItem';
 import * as imagesActions from '../store/images-actions';
-
-import URLS from '../constants/Urls';
+// import HeaderButton from '../components/HeaderButton';
 
 
 
@@ -70,7 +70,6 @@ const List = props => {
         }
       ]
     )
-    // What is the point of always returning true
     return true;
   };
 
@@ -90,13 +89,10 @@ const List = props => {
       <FlatList
         data={list}
         extraData={list}
-        //All keys must now be string values.
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.id.toString()} //All keys must now be string values.
         key={item => Date.now() + item.id}
         renderItem={itemData => (
           <ImageItem
-            // removeImageHandlerCallback={props.route.params.removeImageHandlerCallback}
-            // removeImageHandlerCallback={removeImageHandler}
             removeImageHandlerCallback={areYouSure}
             imageUri={itemData.item.image_url}
             text={itemData.item.text}
@@ -118,26 +114,6 @@ const List = props => {
     </View>
   );
 };
-
-// List.navigationOptions = navData => {
-//   return {
-//     headerTitle: 'All Places',
-//     headerRight: () => (
-//       // <HeaderButtons HeaderButtonComponent={HeaderButton}>
-//       <Buttons>
-//         <Item
-//           title="Add Place"
-//           color="#fff"
-//           iconName={Platform.OS === 'android' ? 'md-add' : 'ios-add'}
-//           onPress={() => {
-//             // navData.navigation.navigate('NewPlace');
-//           }}
-//         />
-//       {/* </HeaderButtons> */}
-//       </Buttons>
-//     )
-//   };
-// };
 
 
 const styles = StyleSheet.create({});
