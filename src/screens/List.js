@@ -25,9 +25,13 @@ const List = props => {
     axios.get(URLS.BASE_URL + '/images')
       .then(response => {
         const apiData = response.data.images;
+        // console.log('apiData? ', apiData);
+
         const currImages = apiData.filter(image => {
           return image.user_id === id
         });
+
+         // console.log('currImages??' , currImages)
         setList(currImages);
       })
       .catch(err => {
@@ -84,12 +88,16 @@ const List = props => {
     });
   };
 
+  // useEffect(() => {
+  //   dispatch(imagesActions.loadImages());
+  // }), [dispatch];
+
   return (
     <View>
       <FlatList
         data={list}
         extraData={list}
-        keyExtractor={item => item.id.toString()} //All keys must now be string values.
+        keyExtractor={item => item.id.toString()} // All keys must now be string values.
         key={item => Date.now() + item.id}
         renderItem={itemData => (
           <ImageItem
