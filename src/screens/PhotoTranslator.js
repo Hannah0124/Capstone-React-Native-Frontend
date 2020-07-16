@@ -17,7 +17,7 @@ import ImagePicker from '../components/ImagePicker';
 // import ENV from '../../env'; // npm i expo-env
 // import { useDispatch } from 'react-redux'; // TEST
 // import * as imagesActions from '../store/images-actions';
-// import LineButton from '../components/LineButton';
+import LineButton from '../components/LineButton';
 // import * as FileSystem from 'expo-file-system';
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
@@ -243,7 +243,7 @@ const PhotoTranslator = (props) => {
     return (
       <View style={styles.buttonContainer} marginTop={marginTop}>
         <TouchableOpacity
-          style={styles.cornerButton}
+          style={styles.languageBtn}
           onPress={() => {
             navigation.navigate('Settings', { item: 'photo' })
           }}
@@ -252,7 +252,7 @@ const PhotoTranslator = (props) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.cornerButton}
+          style={styles.languageBtn}
           onPress={getLanguage} // onPress={() => {getTranslated(getText, currLanguage)}}   
         >
           <Text style={styles.buttonText}> Let's translate! </Text>
@@ -318,7 +318,7 @@ const PhotoTranslator = (props) => {
 
 
           {apiPhoto &&
-            <Button 
+            <LineButton 
               title="Get Words"
               color={Colors.primary}
               onPress={getWords}
@@ -385,13 +385,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cornerButton: {
+  languageBtn: {
     right: 0,
     backgroundColor: Colors.primary,
     color: "#fff",
-    borderRadius: 5,
+    borderRadius: 30,
     padding: 10,
-    margin: 20
+    margin: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 15
   },
   buttonText: {
     fontSize: 20,
