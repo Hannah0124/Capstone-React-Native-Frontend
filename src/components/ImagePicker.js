@@ -10,9 +10,13 @@ import Colors from '../constants/Colors';
 const SCREEN = Dimensions.get('screen');
 
 const ImgPicker = props => {
+  // console.log('root??', props.root)
+
+
   const [pickedImage, setPickedImage] = useState();
 
   // Ask permission for IOS (Android doesnt need this!)
+  
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
 
@@ -33,12 +37,28 @@ const ImgPicker = props => {
       return; // cannot continue
     }
 
-    // can continue
-    const image = await ImagePicker.launchCameraAsync({
-      // allowsEditing: true, // crop
-      aspect: [16, 9],
-      quality: 0.5
-    }); // it's async because we dont know when a user will open a camera!
+    // // can continue
+    // let image = await ImagePicker.launchCameraAsync({
+    //   // allowsEditing: true, // crop
+    //   aspect: [16, 9],
+    //   quality: 0.5
+    // }); // it's async because we dont know when a user will open a camera!
+
+    let image = null;
+
+    if (props.root === 'word') {
+      image = await ImagePicker.launchCameraAsync({
+        // allowsEditing: true, // crop // TODO
+        aspect: [4, 3],
+        quality: 1
+      });
+    } else {
+      // can continue
+      image = await ImagePicker.launchCameraAsync({
+        aspect: [16, 9],
+        quality: 0.5
+      }); // it's async because we dont know when a user will open a camera!
+    }
 
     // console.log(image);
 
