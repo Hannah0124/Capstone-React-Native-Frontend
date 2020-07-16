@@ -10,11 +10,11 @@ const LineButton = props => {
   return (
     <TouchableOpacity style={styles.buttonContainer}>
       <Button 
-      {...props} 
-      IconComponent={Ionicons} 
-      iconSize={23}
-      color={Platform.OS === 'android' ? '#fff' : Colors.primary}
-    />
+        {...props} 
+        IconComponent={Ionicons} 
+        iconSize={23}
+        color={Platform.OS === 'android' ? '#fff' : Colors.primary}
+      />
     </TouchableOpacity>
   );
 };
