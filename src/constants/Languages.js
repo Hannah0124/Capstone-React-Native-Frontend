@@ -7,5 +7,5 @@ export default {
     French: 'fr',
     German: 'de', 
     Vietnamese: 'vi',
-    Chinese2: 'zh',
+    // Chinese: 'zh',
 };
