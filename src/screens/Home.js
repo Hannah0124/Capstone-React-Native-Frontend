@@ -58,7 +58,7 @@ const Home = (props) => {
   const [userUids, setUserUids] = useState([]);
   const [currId, setCurrId] = useState(null);
 
-  console.log('userUids: ', userUids);
+  // console.log('userUids: ', userUids);
 
   // get ids! (TEST)
   // useEffect(() => {
@@ -298,9 +298,9 @@ const Home = (props) => {
         {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
       </TouchableOpacity>
 
-       <View>
+      {/* <View>
         <Text>currId: {currId}</Text>
-       </View>
+       </View> */}
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate(
