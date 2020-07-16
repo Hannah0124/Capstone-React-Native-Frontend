@@ -13,8 +13,6 @@ import URLS from '../constants/Urls';
 const SIGN_IN = 'SIGNED_IN';
 const SIGN_OUT = 'SIGNED_OUT';
 
-// const BASE_URL = 'http://192.168.0.38:5000';
-
 const initialStateForm = {
   signedIn: false,
   photoUrl: "",
@@ -22,7 +20,6 @@ const initialStateForm = {
   provider: null, 
   username: null, 
   email: null,
-  accessToken: null
 };
 
 // Reducer: Take old state and genearate the new state
@@ -45,9 +42,15 @@ const reducer = (state, action) => {
       throw new Error("Don't understand action");
   };
 };
+
+
+
   //accessToken to authenticate & authorize users?? not sure if we should pass accessToken around!
   //  <-- should be JWT to make it security!!!!!
   ///////////// send them JWT to set loggin after closing the app ///////////////////
+
+
+
 
 const Home = (props) => {
 
@@ -58,54 +61,33 @@ const Home = (props) => {
   const [userUids, setUserUids] = useState([]);
   const [currId, setCurrId] = useState(null);
 
-  // console.log('userUids: ', userUids);
 
-  // get ids! (TEST)
-  // useEffect(() => {
-  //   axios.get(`${URLS.BASE_URL}/users`)
-  //     .then(response => {
-  //       console.log('SUCCESS 1: ', response.data);
-  //       const uids = response.data.users.map(user =>{
-  //         return user.uid
-  //       })
-
-  //       setUserUids(uids);
-  //     })
-  //     .catch(err => {
-  //       console.log('ERROR 1: ', err);
-
-  //     })
-
-  // }, []);
-  
   const findId = (uid) => {
     // get ids! (TEST)
-    // useEffect(() => {
-      axios.get(`${URLS.BASE_URL}/users`)
-        .then(response => {
-          console.log('SUCCESS 1: ', response.data);
+    axios.get(`${URLS.BASE_URL}/users`)
+      .then(response => {
+        console.log('SUCCESS 1: ', response.data);
 
-          const uids = response.data.users.map(user =>{
-            return user.uid
+        const uids = response.data.users.map(user =>{
+          return user.uid
+        })
+
+        setUserUids(uids);
+
+
+        if (uid) {
+          const user = response.data.users.find(user =>{
+            return user.uid === uid;
           })
-  
-          setUserUids(uids);
 
+          setCurrId(user.id);
 
-          if (uid) {
-            const user = response.data.users.find(user =>{
-              return user.uid === uid;
-            })
-  
-            setCurrId(user.id);
-
-            console.log('user.id ??? ', user.id)
-          }
-        })
-        .catch(err => {
-          console.log('ERROR 1 - 1: ', err);
-        })
-    // }, []);
+          console.log('user.id ??? ', user.id)
+        }
+      })
+      .catch(err => {
+        console.log('ERROR 1 - 1: ', err);
+      })
   }
 
   useEffect(() => { 
@@ -113,10 +95,10 @@ const Home = (props) => {
       findId(state.uid)
       return;
     } 
-    findId();
-    // 
 
+    findId();
   }, [state])
+
 
   const addUserApiCall = (body) => {
     // if user exists, dont call /add_user api
@@ -129,7 +111,6 @@ const Home = (props) => {
     
       // console.log('body in addUserApiCall: ', body);
     
-     ///////////// TODO: TO DO API CALL TO BACKEND TO SEE IF USER EXIST/ CREATE USER//////////
       axios.post(`${URLS.BASE_URL}/add_user`, body)
       .then(response => {
         console.log('SUCCESS (new user): ', response.data);
@@ -139,19 +120,6 @@ const Home = (props) => {
         console.log('ERROR 2: ', err);
       })
     } 
-    
-    // else {
-    //   // // TEST (TODO)
-    //   axios.post(`${URLS.BASE_URL}/login`, {
-    //     "username": body.username,
-    //     "password": body.password ? body.password : "random"
-    //   }).then(response => {
-    //     console.log('SUCCESS (returning user): ', response.data);
-
-    //   }).catch(err => {
-    //     console.log('ERROR 3: ', err); // [Error: Request failed with status code 401] TODO!
-    //   })
-    // }
   };
 
 
@@ -162,11 +130,6 @@ const Home = (props) => {
         iosClientId: ENV.iosClientId,
         scopes: ['profile', 'email'],
       });
-
-      // console.log('login result: ', result);
-      // "accessToken": "3",
-      // "idToken": "2",
-      // "refreshToken": "1",
 
   
       if (result.type === 'success') {
@@ -179,7 +142,6 @@ const Home = (props) => {
             provider: "Google", 
             username: result.user.name, //google called it differently
             email: result.user.email,
-            accessToken: result.accessToken //accessToken to authenticate & authorize users??
           }
         });
 
@@ -194,14 +156,13 @@ const Home = (props) => {
 
         addUserApiCall(body);
 
-        // TODO: test
         storeToken(result.accessToken)
         setAccessToken(result.accessToken)
 
         return result.accessToken; // TODO: ???
       } else {
         console.log('cancelled');
-        // return { cancelled: true };
+        return { cancelled: true };
       }
     } catch (err) {
       Alert.alert(
@@ -214,13 +175,10 @@ const Home = (props) => {
         ]
       )
       console.log('error', err)
-      // return { error: true };
+      return { error: true };
     }
   };
 
-
-
-  
   const [accessToken, setAccessToken] = useState('')
 
   const storeToken = async (token) => {
@@ -296,18 +254,13 @@ const Home = (props) => {
       >
         <Text style={styles.buttonText}>Translate Text</Text>
         <MaterialCommunityIcons name="format-text" size={24} color="#fff" />
-        {/* <Text style={styles.buttonText}>Who is {character.name}?</Text> */}
       </TouchableOpacity>
 
-      {/* <View>
-        <Text>currId: {currId}</Text>
-       </View> */}
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate(
           'PhotoTranslator',
           {
-            // currentId: state.id,
             currentId: currId,
             signedIn: state.signedIn
           }
@@ -359,7 +312,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#fff',
-    // backgroundColor: Colors.primary,
     borderWidth: 3,
     borderRadius: 15,
     padding: 10,
