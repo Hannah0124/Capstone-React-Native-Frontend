@@ -13,11 +13,10 @@ const Settings = (props) => {
     setSelectedLanguage(lang);
   };
 
-  const displayLanguage = Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == selectedLanguage;
-  });
+  // const displayLanguage = Object.keys(LANGUAGES).find(label => {
+  //   return LANGUAGES[label] == selectedLanguage;
+  // });
   
-
   const languageComponents = Object.keys(LANGUAGES).map((label, i) => {
     return (
       <Picker.Item key={i} label={label} value={LANGUAGES[label]} />
@@ -43,7 +42,7 @@ const Settings = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Language Settings</Text>
+      {/* <Text style={styles.text}>Language Settings</Text> */}
 
       <View>
         <Picker
@@ -55,25 +54,26 @@ const Settings = (props) => {
           <Picker.Item label="Options"/> 
           {languageComponents}
         </Picker>
-        <Text>Language selectd: {displayLanguage}</Text>
+        {/* <Text>Language selected: {displayLanguage}</Text> */}
       </View>
 
-
-      {/* TEST */}
+      <View style={styles.buttonContainer}>
       <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={goBack}
-      >
-        <Text style={styles.buttonText}>Confirm</Text>
-      </TouchableOpacity>
+          style={styles.button}
+          onPress={goBack}
+        >
+          <Text style={styles.buttonText}>Confirm</Text>
+        </TouchableOpacity>
 
 
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => navigation.popToTop()}
-      >
-        <Text style={styles.buttonText}>Go to Home</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.popToTop()}
+        >
+          <Text style={styles.buttonText}>Go to Home</Text>
+        </TouchableOpacity>
+      </View>
+      
     </View>
   )
 };
@@ -85,16 +85,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff'
   },
-  text: {
-    color: '#747EFD',
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
+  // text: {
+  //   color: '#747EFD',
+  //   fontSize: 24,
+  //   fontWeight: 'bold'
+  // },
   buttonContainer: {
+    marginTop: 10,
+  },
+  button: {
     backgroundColor: '#747EFD',
     borderRadius: 5,
     padding: 10,
-    margin: 20
+    margin: 20,
+    alignItems: 'center'
   },
   buttonText: {
     fontSize: 20,
