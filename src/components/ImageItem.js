@@ -24,8 +24,8 @@ const ImageItem = props => {
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{props.original_lang ? props.original_lang : displayLanguage(i18n.locale)}: {props.text}</Text>
-        <Text style={styles.title}>{props.language}: {props.translatedText}</Text>
+        <Text style={styles.originalLanguage}><Text style={styles.gray}>{props.original_lang}:</Text> {props.text}</Text>
+        <Text style={styles.translatedLanguage}><Text style={styles.gray}>{props.language}:</Text> {props.translatedText}</Text>
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
         {/* <Text style={styles.sub}>user id: {props.user_id}</Text>
         <Text style={styles.sub}>image id: {props.id}</Text> */}
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 180
   },
   image: {
     width: 70,
@@ -68,10 +69,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start'
   },
-  title: {
+  originalLanguage: {
     color: '#000',
     fontSize: 18,
-    marginBottom: 5
+    marginBottom: 35
+  },
+  translatedLanguage: {
+    color: '#000',
+    fontSize: 18,
   },
   sub: {
     color: '#666',
@@ -79,9 +84,13 @@ const styles = StyleSheet.create({
   },
   removeBtn: {
     position: "absolute",
-    right: -20,
+    right: -30,
     marginRight: 0,
     paddingRight: 0,
+  },
+  gray: {
+    color: '#666',
+    fontSize: 13
   }
 });
 
