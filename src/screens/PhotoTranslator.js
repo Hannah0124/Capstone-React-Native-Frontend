@@ -31,22 +31,16 @@ const PhotoTranslator = (props) => {
   // console.log("props in PhotoTranslator.js: ", props)
 
   const id = props.route.params.currentId; // || 1; // dummy data
-  console.log('id??? ', id);
+  // console.log('id??? ', id);
   const signedIn = props.route.params.signedIn;
 
-  
-
   const [apiPhoto, setApiPhoto] = useState(null);
-
   const [selectedImage, setSelectedImage] = useState(null);
-  
-  
   const [getText, setGetText] = useState(null);
   const [translatedText, setTranslatedText] = useState(null);
-
   const [currLanguage, setCurrLanguage] = useState('ko');
+  const [favorite, setFavorite] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState(null);
   
   const initialStateForm = {
     image_url: null,
@@ -58,7 +52,7 @@ const PhotoTranslator = (props) => {
     user_id: props.route.params.currentId
   }
 
-  const [state, setState] = useState(initialStateForm);
+  
 
   const { route, navigation } = props;
   
@@ -81,7 +75,7 @@ const PhotoTranslator = (props) => {
 
     setCurrLanguage(language);
     getTranslated(getText, language);
-    setState({...state, favorite: false});
+    setFavorite(false);
 
     return language 
   }; 
@@ -124,12 +118,7 @@ const PhotoTranslator = (props) => {
 
 
     console.log('body!! ', body)
-
-
-    const copyState = {...state}
-    copyState["favorite"] = true
-    setState(copyState);
-
+    setFavorite(true);
 
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
@@ -198,7 +187,6 @@ const PhotoTranslator = (props) => {
 
         console.log('SUCCESS 4', descriptions);
         setGetText(descriptions.join(', '));
-        setErrorMessage('');
         setTranslatedText(null);
 
         // // TODO (TEST)
@@ -206,7 +194,6 @@ const PhotoTranslator = (props) => {
         getTranslated(descriptions.join(', '), currLanguage);
       })
       .catch(err => {
-        setErrorMessage(err.message);
         console.log('(1) ERROR - Vision API: ', err);
       })
   };
@@ -225,8 +212,6 @@ const PhotoTranslator = (props) => {
         // console.log('response.data: ', response.data.data.translations[0].translatedText);
 
         setTranslatedText(response.data.data.translations[0].translatedText);
-        setErrorMessage('');
-
       })
       .catch(err => {
         Alert.alert(
@@ -239,7 +224,6 @@ const PhotoTranslator = (props) => {
           ]
         )
 
-        setErrorMessage(err.message);
         console.log('(2) ERROR - Translation API: ', err);
       })
   };
@@ -279,7 +263,7 @@ const PhotoTranslator = (props) => {
 
 
   const reset = () => {
-    setState(initialStateForm);
+    setFavorite(false);
     setApiPhoto(null);
     setGetText(null);
     setTranslatedText(null);
@@ -311,7 +295,7 @@ const PhotoTranslator = (props) => {
         />
 
         <View style={styles.buttonContainer}>
-          {signedIn && apiPhoto && currLanguage && getText && translatedText && (state.favorite === true) && 
+          {signedIn && apiPhoto && currLanguage && getText && translatedText && (favorite === true) && 
             <AntDesign 
               name="star" 
               size={30} 
@@ -321,7 +305,7 @@ const PhotoTranslator = (props) => {
             </AntDesign>
           }
           
-          {signedIn && apiPhoto && currLanguage && getText && translatedText && (state.favorite === false) && 
+          {signedIn && apiPhoto && currLanguage && getText && translatedText && (favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
