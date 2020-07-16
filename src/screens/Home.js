@@ -330,16 +330,17 @@ const styles = StyleSheet.create({
     marginVertical: 50
   },
   header: {
-    fontSize: 25
+    fontSize: 23,
+    color: "yellow"
   },
   image: {
     marginTop: 15,
     marginBottom: 0,
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderColor: "rgba(0,0,0,0.2)",
     borderWidth: 3,
-    borderRadius: 100
+    borderRadius: 80
   },
   googleBtn: {
     position: 'absolute',
