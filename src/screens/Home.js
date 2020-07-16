@@ -311,18 +311,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
     borderColor: '#fff',
     borderWidth: 3,
-    borderRadius: 15,
+    borderRadius: 30,
+    backgroundColor: "#fff",
     padding: 10,
     margin: 20,
     marginTop: 0,
-    width: 200
+    width: 200,
   },
   buttonText: {
     fontSize: 20,
-    color: '#fff',
-    marginRight: 10
+    // color: '#fff',
+    color: Colors.primary,
+    marginLeft: 20,
   },
   userContainer: {
     justifyContent: 'center',
