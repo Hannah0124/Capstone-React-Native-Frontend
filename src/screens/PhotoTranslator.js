@@ -168,7 +168,8 @@ const PhotoTranslator = (props) => {
       translated_text: translatedText,
       favorite: true,
       language: displayLanguage(currLanguage),
-      user_id: id
+      user_id: id,
+      original_lang: null,
     };
 
     console.log('body!! ', body)
@@ -417,7 +418,7 @@ const PhotoTranslator = (props) => {
         </Text> */}
 
         <View style={styles.favoriteButton}>
-          {signedIn && myImages.length > 0 && 
+          {signedIn &&// myImages.length > 0 && 
             <Button 
             title="My Favorites" 
             color={Colors.primary} 

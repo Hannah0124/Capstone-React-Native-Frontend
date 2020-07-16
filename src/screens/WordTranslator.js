@@ -22,8 +22,9 @@ const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.
 
 const WordTranslator = (props) => {
   // console.log(props.route.params)
-  const id = props.route.params.currentId || 1;
+  const id = props.route.params.currentId; // || 1; dummy a/c
   // const testImages = props.route.params.images;
+  const signedIn = props.route.params.signedIn;
 
   // const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
@@ -99,13 +100,14 @@ const WordTranslator = (props) => {
   const saveImageHandler = () => {
     
     const body = {
-      id: images.length + 1,
+      // id: images.length + 1,
       image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
       favorite: true,
       language: displayLanguage(targetLang),
-      user_id: id
+      user_id: id,
+      original_lang: displayLanguage(originalLang),
     };
 
 
@@ -119,7 +121,7 @@ const WordTranslator = (props) => {
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
-
+        console.log(body)
         copyMyImages.push(body);
         setMyImages(copyMyImages);
 
@@ -376,7 +378,7 @@ const WordTranslator = (props) => {
         /> */}
 
       <View style={styles.favoriteButton}>
-      {myImages.length > 0 && 
+      {signedIn && //myImages.length > 0 && 
           <Button 
             title="My Favorites" 
             color={Colors.primary} 
@@ -408,7 +410,7 @@ const WordTranslator = (props) => {
         />
 
         <View style={styles.buttonContainer}>
-          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
+          {signedIn && apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
             <AntDesign 
               name="star" 
               size={30} 
@@ -419,7 +421,7 @@ const WordTranslator = (props) => {
             </AntDesign>
           }
           
-          {apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
+          {signedIn && apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
