@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-
-import * as Localization from 'expo-localization';
-import i18n from 'i18n-js';
 import { FontAwesome } from '@expo/vector-icons';
-
 import Colors from '../constants/Colors';
-import LANGUAGES from '../constants/Languages';
 
-// displayLanguage(i18n.locale)
-
-
-const displayLanguage = (target) => {
-  return Object.keys(LANGUAGES).find(label => {
-    return LANGUAGES[label] == target;
-  })
-};
 
 const ImageItem = props => {
 
