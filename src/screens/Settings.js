@@ -8,7 +8,6 @@ const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
     const { navigation } = props;
-  // const { item } = route.params;
 
   const changeOption = (lang) => {
     setSelectedLanguage(lang);
@@ -58,25 +57,6 @@ const Settings = (props) => {
         </Picker>
         <Text>Language selectd: {displayLanguage}</Text>
       </View>
-
-      {/* <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => navigation.navigate('WordTranslator', {
-          item: {language: selectedLanguage}})
-        }
-      >
-        <Text style={styles.buttonText}>Translating Words</Text>
-      </TouchableOpacity> */}
-
-      {/* <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => navigation.navigate('PhotoTranslator', 
-          {item: {language: selectedLanguage}})
-        }
-      >
-        <Text style={styles.buttonText}>Translating Photo</Text>
-      </TouchableOpacity> */}
-
 
 
       {/* TEST */}
