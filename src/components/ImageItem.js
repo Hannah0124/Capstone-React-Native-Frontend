@@ -24,7 +24,7 @@ const ImageItem = props => {
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{displayLanguage(i18n.locale)}: {props.text}</Text>
+        <Text style={styles.title}>{props.original_lang ? props.original_lang : displayLanguage(i18n.locale)}: {props.text}</Text>
         <Text style={styles.title}>{props.language}: {props.translatedText}</Text>
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
         <Text style={styles.sub}>user id: {props.user_id}</Text>
