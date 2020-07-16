@@ -101,10 +101,6 @@ const PhotoTranslator = (props) => {
     
   // }, [state.translatedText, state.favorite]);
 
-  const updateImages = (newMyImages) => {
-    setMyImages(newMyImages);
-  }
-
 
   const getLanguage = () => {
     
@@ -162,7 +158,6 @@ const PhotoTranslator = (props) => {
     // console.log('state in PhotoTranslator.js: ', props.route.params);
 
     const body = {
-      // id: recentId + 1,
       image_url: selectedImage, // apiPhoto,
       text: getText,
       translated_text: translatedText,
@@ -174,15 +169,12 @@ const PhotoTranslator = (props) => {
 
     console.log('body!! ', body)
 
-    // setRecentId(recentId + 1);
-
 
     const copyState = {...state}
-    // copyState["id"] = images.length + 1
     copyState["favorite"] = true
     setState(copyState);
 
-    const copyMyImages = [...myImages];
+    // const copyMyImages = [...myImages];
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
@@ -207,7 +199,6 @@ const PhotoTranslator = (props) => {
             }
           ]
         )
-    
       })
 
     // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
@@ -230,33 +221,6 @@ const PhotoTranslator = (props) => {
 
   //   return true;
   // };
-
-  // const removeImageHandler = (id) => {
-
-  //   if (areYouSure) {
-  //     areYouSure();
-  //     axios.post(`${URLS.BASE_URL}/image/${id}`)
-    
-  //     .then(response => {
-        
-  //       console.log('4. internal API - successfully deleted: ', response.data)
-        
-  //       const filteredMyImages = myImages.filter(image => {
-  //         return image.id !== id
-  //       });
-
-  //       // updateImages(filteredMyImages);
-  //       setMyImages(filteredMyImages);
-
-  //       // getImages();
-  //     })
-  //     .catch(err => {
-  //       console.log('4. internal API - error (deleted): ', err)
-  //     })
-  //   }
-  // };
-
-
 
   const getWords = () => {
     // edge case
@@ -358,8 +322,6 @@ const PhotoTranslator = (props) => {
   };
 
   const speak = (targetText, selectedLanguage) => {
-    // let targetText = translatedText || getText;
-
     Speech.speak(targetText, {language: selectedLanguage});
   };
   
@@ -398,25 +360,6 @@ const PhotoTranslator = (props) => {
     <ScrollView>
       <View style={styles.container}>
 
-        {/* TEST */}
-        {/* <TextInput 
-          style={styles.textInput} 
-          onChangeText={titleChangeHandler} 
-          value={titleValue}
-        /> */}
-
-      
-        {/* { flashMessage && 
-          <View style={styles.flash}>
-            <Text>{flashMessage}</Text> 
-          </View> 
-        } */}
-
-        {/* 
-        <Text>
-          {errorMessage && errorMessage}
-        </Text> */}
-
         <View style={styles.favoriteButton}>
           {signedIn &&// myImages.length > 0 && 
             <Button 
@@ -429,21 +372,11 @@ const PhotoTranslator = (props) => {
                 images: images,
                 myImages: myImages,
                 // updateImagesCallback: updateImages,
-                // removeImageHandlerCallback: removeImageHandler,
-                // getImagesCallback: getImages
               })
             }}
           />
           } 
         </View>
-
-        {/* <View >
-          <Button 
-            title="Reset" 
-            color={Colors.primary} 
-            onPress={reset}
-          />
-        </View> */}
 
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
@@ -457,7 +390,6 @@ const PhotoTranslator = (props) => {
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
-              // onPress={() => removeImageHandler(state.id)}
             >
             </AntDesign>
           }
@@ -537,11 +469,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: '100%',
   },
-  // text: {
-  //   color: '#747EFD',
-  //   fontSize: 24,
-  //   fontWeight: 'bold'
-  // },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
