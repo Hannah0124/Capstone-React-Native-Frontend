@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import Colors from '../constants/Colors';
+import * as Speech from 'expo-speech';
+import { AntDesign } from '@expo/vector-icons';
 
+import Colors from '../constants/Colors';
+import LANGUAGES from '../constants/Languages';
+
+const speak = (targetText, selectedLanguage) => {
+  Speech.speak(targetText, {language: selectedLanguage});
+};
 
 const ImageItem = props => {
 
@@ -11,10 +18,31 @@ const ImageItem = props => {
     <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
-        <Text style={styles.gray}>{props.original_lang}:</Text> 
+        
+
+        <View style={styles.languageContainer}>
+          <Text style={styles.gray}>{props.original_lang}:</Text> 
+          <AntDesign.Button 
+            name="sound" 
+            size={20} 
+            color={Colors.primary} 
+            backgroundColor='transparent'
+            onPress={() => speak(props.text, LANGUAGES[props.original_lang])}
+          />
+        </View>
         <Text style={styles.originalLanguage}>{props.text}</Text>
 
-        <Text style={styles.gray}>{props.language}:</Text>
+        <View style={styles.languageContainer}>
+          <Text style={styles.gray}>{props.language}:</Text>
+          <AntDesign.Button 
+            name="sound" 
+            size={20} 
+            color={Colors.primary} 
+            backgroundColor='transparent'
+            onPress={() => speak(props.translatedText, LANGUAGES[props.language])}
+          />
+        </View>
+        
         <Text style={styles.translatedLanguage}>{props.translatedText}</Text>
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
         {/* <Text style={styles.sub}>user id: {props.user_id}</Text>
@@ -58,6 +86,11 @@ const styles = StyleSheet.create({
     color: 'black',
     justifyContent: 'center',
     alignItems: 'flex-start'
+  },
+  languageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   originalLanguage: {
     color: '#000',
