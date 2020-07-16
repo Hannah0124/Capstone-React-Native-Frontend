@@ -58,12 +58,13 @@ const MainStackNavigator = (props) => {
         <Stack.Screen 
           name='List' 
           component={List} 
+          options={{ title: 'My Favorites' }}
         />
 
         <Stack.Screen 
           name='Settings'
           component={Settings}
-          options={{ title: 'Settings' }}
+          options={{ title: 'Language Settings' }}
         />
 
       </Stack.Navigator>
