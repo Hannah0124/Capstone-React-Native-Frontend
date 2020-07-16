@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
   },
   removeBtn: {
     position: "absolute",
+    marginTop: 10,
     top: -35,
     right: -45,
     marginRight: 0,
