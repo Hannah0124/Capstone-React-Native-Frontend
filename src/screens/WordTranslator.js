@@ -22,8 +22,9 @@ const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.
 
 const WordTranslator = (props) => {
   // console.log(props.route.params)
-  const id = props.route.params.currentId || 1;
+  const id = props.route.params.currentId; // || 1; dummy a/c
   // const testImages = props.route.params.images;
+  const signedIn = props.route.params.signedIn;
 
   // const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
@@ -376,7 +377,7 @@ const WordTranslator = (props) => {
         /> */}
 
       <View style={styles.favoriteButton}>
-      {myImages.length > 0 && 
+      {signedIn && myImages.length > 0 && 
           <Button 
             title="My Favorites" 
             color={Colors.primary} 
@@ -408,7 +409,7 @@ const WordTranslator = (props) => {
         />
 
         <View style={styles.buttonContainer}>
-          {apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
+          {signedIn && apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
             <AntDesign 
               name="star" 
               size={30} 
@@ -419,7 +420,7 @@ const WordTranslator = (props) => {
             </AntDesign>
           }
           
-          {apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
+          {signedIn && apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
             <AntDesign.Button 
             name="staro" 
             size={30} 
