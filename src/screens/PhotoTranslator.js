@@ -14,7 +14,6 @@ import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import LANGUAGES from '../constants/Languages';
 import URLS from '../constants/Urls';
-import { getImages } from '../helpers/api';
 
 import ImagePicker from '../components/ImagePicker';
 
@@ -52,16 +51,12 @@ const PhotoTranslator = (props) => {
 
   const [errorMessage, setErrorMessage] = useState(null);
   
-  
-  // const [images, setImages] = useState([]);
-  const [myImages, setMyImages] = useState([]);
-
-
   const initialStateForm = {
     image_url: null,
     text: null,
     translated_text: null,
     favorite: false,
+    original_lang: i18n.locale,
     language: null,
     user_id: props.route.params.currentId
   }
@@ -70,16 +65,7 @@ const PhotoTranslator = (props) => {
 
   const { route, navigation } = props;
   
-  // console.log('images??', props.route.params.images);
-
-  useEffect(() => {
-    setMyImages(getImages());
-  }, []);
-
-
   const getLanguage = () => {
-    
-    // console.log('route? ', route);
     
     if (!route.params.item) {
       Alert.alert(
@@ -91,8 +77,6 @@ const PhotoTranslator = (props) => {
           }
         ]
       )
-
-      return;
     }
 
     const { item } = route.params;
@@ -106,7 +90,7 @@ const PhotoTranslator = (props) => {
     return language 
   }; 
 
-  const dispatch = useDispatch(); // TEST
+  // const dispatch = useDispatch(); // TEST
 
 
   // TODO: TEST
@@ -135,12 +119,13 @@ const PhotoTranslator = (props) => {
     const body = {
       image_url: selectedImage, // apiPhoto, 
       favorite: true,
-      original_lang: displayLanguage(i18n.locale),
+      original_lang: displayLanguage(originalLanguage),
       language: displayLanguage(currLanguage),
       text: getText,
       translated_text: translatedText,
       user_id: id,
     };
+
 
     console.log('body!! ', body)
 
@@ -315,12 +300,14 @@ const PhotoTranslator = (props) => {
   }
 
 
+  // console.log('my images??????', myImages)
+
   return (
     <ScrollView>
       <View style={styles.container}>
 
         <View style={styles.favoriteButton}>
-          {signedIn &&// myImages.length > 0 && 
+          {signedIn &&
             <Button 
             title="My Favorites" 
             color={Colors.primary} 
@@ -328,8 +315,6 @@ const PhotoTranslator = (props) => {
               navigation.navigate('List', 
               {
                 currentId: id, 
-                // images: images,
-                myImages: myImages,
               })
             }}
           />

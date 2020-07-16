@@ -16,10 +16,13 @@ import Colors from '../constants/Colors';
 const List = props => {
   const id = props.route.params.currentId;
   const [list, setList] = useState([]);
-  
-  useEffect(() => {
-    getImages();
-  }, []);
+
+  // TEST: TODO
+  // const myCurrentImages = useSelector(state => props.route.params.myImages);
+  // setMyImages(myCurrentImages);
+
+  // const myImages = useSelector(state => props.route.params.myImages);
+
 
   const getImages = () => {
     axios.get(URLS.BASE_URL + '/images')
@@ -40,14 +43,9 @@ const List = props => {
       });
   };
 
-
-  
-  // TEST: TODO
-  // const myCurrentImages = useSelector(state => props.route.params.myImages);
-  // setMyImages(myCurrentImages);
-
-  // const myImages = useSelector(state => props.route.params.myImages);
-
+  useEffect(() => {
+    getImages();
+  }, []);
 
   const updateList = (image_id) => {
     const updatedList = list.filter(image => image.id !== image_id);
@@ -92,9 +90,11 @@ const List = props => {
   //   dispatch(imagesActions.loadImages());
   // }), [dispatch];
 
+  console.log('list?? ', list)
+
   return (
     <View>
-      {list.length === 0 &&
+      {list && list.length === 0 &&
         <View style={styles.noImage}><Text style={styles.test}>Add Your Favorites :D</Text></View>
       }
       <FlatList
