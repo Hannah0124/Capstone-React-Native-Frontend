@@ -381,6 +381,9 @@ export default Home;
 // google login documentation: https://docs.expo.io/versions/latest/sdk/google/?redirected
 // login button style: https://codepen.io/slukas23/pen/qwMevr
 
+// logout reference:
+// https://docs.expo.io/versions/latest/sdk/google/
+// https://forums.expo.io/t/expo-google-app-auth-doenst-logout/31951
 // useState or useReducer: https://www.youtube.com/watch?v=NnwkRvElx9E
 // useReducer: https://www.youtube.com/watch?v=cKzrgB6MqqM
 // payload: https://www.youtube.com/watch?v=AQLNv2nasU0
