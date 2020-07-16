@@ -14,12 +14,13 @@ import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import LANGUAGES from '../constants/Languages';
 import URLS from '../constants/Urls';
+import { getImages } from '../helpers/api';
 
 import ImagePicker from '../components/ImagePicker';
 
-import * as imagesActions from '../store/images-actions';
-import LineButton from '../components/LineButton';
-import * as FileSystem from 'expo-file-system';
+// import * as imagesActions from '../store/images-actions';
+// import LineButton from '../components/LineButton';
+// import * as FileSystem from 'expo-file-system';
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
@@ -39,13 +40,20 @@ const PhotoTranslator = (props) => {
 
   // console.log("!!!props in PhotoTranslator.js: ", props)
 
-  const [selectedImage, setSelectedImage] = useState(null);
   const [apiPhoto, setApiPhoto] = useState(null);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  
+  
   const [getText, setGetText] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [currLanguage, setCurrLanguage] = useState('ko');
   const [translatedText, setTranslatedText] = useState(null);
-  const [images, setImages] = useState([]);
+
+  const [currLanguage, setCurrLanguage] = useState('ko');
+
+  const [errorMessage, setErrorMessage] = useState(null);
+  
+  
+  // const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
 
 
@@ -64,31 +72,8 @@ const PhotoTranslator = (props) => {
   
   // console.log('images??', props.route.params.images);
 
-  const getImages = () => {
-    axios.get(URLS.BASE_URL + '/images')
-      .then(response => {
-
-        const apiData = response.data.images;
-        setImages(apiData);
-
-        // console.log('apiData? ', apiData);
-
-        const currImages = apiData.filter(image => {
-          return image.user_id === id
-        })
-
-        // console.log('currImages??' , currImages)
-        setMyImages(currImages);
-      })
-      .catch(err => {
-        console.log('internal API - error: ', err)
-        setErrorMessage(err.message);
-      })
-
-  };
-
   useEffect(() => {
-    getImages();
+    setMyImages(getImages());
   }, []);
 
 
@@ -148,13 +133,13 @@ const PhotoTranslator = (props) => {
     // console.log('state in PhotoTranslator.js: ', props.route.params);
 
     const body = {
-      image_url: selectedImage, // apiPhoto,
+      image_url: selectedImage, // apiPhoto, 
+      favorite: true,
+      original_lang: displayLanguage(i18n.locale),
+      language: displayLanguage(currLanguage),
       text: getText,
       translated_text: translatedText,
-      favorite: true,
-      language: displayLanguage(currLanguage),
       user_id: id,
-      original_lang: null,
     };
 
     console.log('body!! ', body)
@@ -343,7 +328,7 @@ const PhotoTranslator = (props) => {
               navigation.navigate('List', 
               {
                 currentId: id, 
-                images: images,
+                // images: images,
                 myImages: myImages,
               })
             }}
