@@ -130,17 +130,10 @@ const PhotoTranslator = (props) => {
     copyState["favorite"] = true
     setState(copyState);
 
-    // const copyMyImages = [...myImages];
+
     axios.post(`${URLS.BASE_URL}/add_image`, body)
       .then(response => {
         console.log('internal API - success: ', response.data)
-
-        // copyMyImages.push(body);
-        // setMyImages(copyMyImages);
-
-        // console.log('copyMyImages in Photo', copyMyImages);
-
-        // navigation.navigate('List', { currentUid: uid, myImages: copyMyImages, images: images })
       })
       .catch(err => {
         console.log('3. internal API - error: ', err)
@@ -158,9 +151,6 @@ const PhotoTranslator = (props) => {
       })
 
     // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
-
-    // navigation.goBack();
-    
   };
 
 
