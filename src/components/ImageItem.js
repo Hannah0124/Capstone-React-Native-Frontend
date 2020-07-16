@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     backgroundColor: '#ccc',
     borderColor: Colors.primary,
-    borderWidth: 1
   },
   infoContainer: {
     marginLeft: 25,
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
   },
   removeBtn: {
     position: "absolute",
-    right: 0,
+    right: -20,
     marginRight: 0,
     paddingRight: 0,
   }
