@@ -407,6 +407,7 @@ const WordTranslator = (props) => {
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
           resetCallback={reset}
+          root="word"
         />
 
         <View style={styles.buttonContainer}>

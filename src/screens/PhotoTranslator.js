@@ -317,6 +317,7 @@ const PhotoTranslator = (props) => {
         <ImagePicker 
           onImageTaken={imageTakenHandler} 
           resetCallback={reset}
+          root="photo"
         />
 
         <View style={styles.buttonContainer}>
