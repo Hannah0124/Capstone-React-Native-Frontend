@@ -27,8 +27,8 @@ const ImageItem = props => {
         <Text style={styles.title}>{props.original_lang ? props.original_lang : displayLanguage(i18n.locale)}: {props.text}</Text>
         <Text style={styles.title}>{props.language}: {props.translatedText}</Text>
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
-        <Text style={styles.sub}>user id: {props.user_id}</Text>
-        <Text style={styles.sub}>image id: {props.id}</Text>
+        {/* <Text style={styles.sub}>user id: {props.user_id}</Text>
+        <Text style={styles.sub}>image id: {props.id}</Text> */}
         <TouchableOpacity 
           style={styles.removeBtn}
         >
