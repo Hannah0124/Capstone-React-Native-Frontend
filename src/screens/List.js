@@ -6,23 +6,9 @@ import ImageItem from '../components/ImageItem';
 import URLS from '../constants/Urls';
 import Colors from '../constants/Colors';
 
-// import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { useIsFocused } from '@react-navigation/native';
-// import * as imagesActions from '../store/images-actions';
-// import HeaderButton from '../components/HeaderButton';
-
-
 const List = props => {
   const id = props.route.params.currentId;
   const [list, setList] = useState([]);
-
-  // TEST: TODO
-  // const myCurrentImages = useSelector(state => props.route.params.myImages);
-  // setMyImages(myCurrentImages);
-
-  // const myImages = useSelector(state => props.route.params.myImages);
-
 
   const getImages = () => {
     axios.get(URLS.BASE_URL + '/images')
@@ -98,6 +84,7 @@ const List = props => {
         <View style={styles.noImage}><Text style={styles.test}>Add Your Favorites :D</Text></View>
       }
       <FlatList
+        style={styles.flatList}
         data={list}
         extraData={list}
         keyExtractor={item => item.id.toString()} // All keys must now be string values.
@@ -128,6 +115,10 @@ const List = props => {
 
 
 const styles = StyleSheet.create({
+  flatList: {
+    width: '100%',
+    marginRight: 0
+  },
   noImage: {
     fontSize: 50,
     color: "red"

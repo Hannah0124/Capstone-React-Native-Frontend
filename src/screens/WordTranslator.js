@@ -13,7 +13,7 @@ import i18n from 'i18n-js';
 
 import LANGUAGES from '../constants/Languages';
 import Colors from '../constants/Colors';
-import * as imagesActions from '../store/images-actions';
+// import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
 import LineButton from '../components/LineButton';
 import URLS from '../constants/Urls';
