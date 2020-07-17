@@ -319,7 +319,7 @@ const WordTranslator = (props) => {
     return (
       <View style={styles.buttonContainer} marginTop={marginTop}>
         <TouchableOpacity
-          style={styles.cornerButton}
+          style={styles.languageBtn}
           onPress={() => {
             navigation.navigate('Settings', { item: 'text' })
           }}
@@ -328,7 +328,7 @@ const WordTranslator = (props) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.cornerButton}
+          style={styles.languageBtn}
           onPress={getTranslation}  
         >
           <Text style={styles.buttonText}> Let's translate! </Text>
@@ -553,12 +553,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: '100%',
   },
-  // text: {
-  //   // color: '#fff',
-  //   color: '#747EFD',
-  //   fontSize: 24,
-  //   fontWeight: 'bold'
-  // },
   card: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -569,6 +563,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 0,
     width: 270
+  },
+  languageBtn: {
+    right: 0,
+    backgroundColor: Colors.primary,
+    color: "#fff",
+    borderRadius: 30,
+    padding: 10,
+    margin: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 15
   },
   // textbox: {
   //   // borderWidth: 1,
