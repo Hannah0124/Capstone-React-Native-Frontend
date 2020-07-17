@@ -116,7 +116,8 @@ const List = props => {
 
 const styles = StyleSheet.create({
   flatList: {
-    width: '100%'
+    width: '100%',
+    marginRight: 0
   },
   noImage: {
     fontSize: 50,

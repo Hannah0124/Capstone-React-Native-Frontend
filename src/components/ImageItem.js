@@ -15,11 +15,10 @@ const ImageItem = props => {
 
   // console.log('props in ImageItem: ', props)
   return (
-    <TouchableOpacity onPress={props.onSelect} style={styles.imageItem}>
+    <View style={styles.imageItem}>
       <Image style={styles.image} source={{ uri: props.imageUri }} />
       <View style={styles.infoContainer}>
         
-
         <View style={styles.languageContainer}>
           <Text style={styles.gray}>{props.original_lang}:</Text> 
           <AntDesign.Button 
@@ -47,7 +46,7 @@ const ImageItem = props => {
         {/* <Text style={styles.title}>favorite: {props.favorite ? "YES" : "NO"}</Text> */}
         {/* <Text style={styles.sub}>user id: {props.user_id}</Text>
         <Text style={styles.sub}>image id: {props.id}</Text> */}
-        <TouchableOpacity 
+        <View 
           style={styles.removeBtn}
         >
           <FontAwesome.Button 
@@ -57,9 +56,9 @@ const ImageItem = props => {
             backgroundColor="transparent" 
             onPress={() => props.removeImageHandlerCallback(props.id)}
           />
-        </TouchableOpacity>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -109,9 +108,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     marginTop: 10,
     top: -35,
-    right: -45,
+    right: -30,
     marginRight: 0,
     paddingRight: 0,
+    backgroundColor: 'transparent'
   },
   gray: {
     color: '#666',
