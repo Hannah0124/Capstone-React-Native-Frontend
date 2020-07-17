@@ -82,7 +82,7 @@ const Home = (props) => {
 
           setCurrId(user.id);
 
-          console.log('user.id ??? ', user.id)
+          // console.log('user.id ??? ', user.id)
         }
       })
       .catch(err => {
@@ -91,12 +91,7 @@ const Home = (props) => {
   }
 
   useEffect(() => { 
-    if (state.uid) {
-      findId(state.uid)
-      return;
-    } 
-
-    findId();
+    findId(state.uid)
   }, [state])
 
 
@@ -212,7 +207,6 @@ const Home = (props) => {
         ]
       )
 
-
       // how to update state
       dispatch({
         type: SIGN_OUT,
@@ -224,6 +218,37 @@ const Home = (props) => {
     } catch (err) {
         throw new Error(err)
     }
+  };
+
+
+  // TEST
+  const saveImageHandler = (body) => {
+
+    // console.log('state in PhotoTranslator.js: ', props.route.params);
+
+    console.log('body!! ', body)
+    // setFavorite(true);
+
+    axios.post(`${URLS.BASE_URL}/add_image`, body)
+      .then(response => {
+        console.log('internal API - success: ', response.data)
+      })
+      .catch(err => {
+        console.log('3. internal API - error: ', err)
+
+        Alert.alert(
+          "Unique value needed",
+          "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
+          [
+            { 
+              text: "OK",
+              onPress: () => console.log("OK pressed")
+            }
+          ]
+        )
+      })
+
+    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
   };
 
 
@@ -262,7 +287,8 @@ const Home = (props) => {
           'PhotoTranslator',
           {
             currentId: currId,
-            signedIn: state.signedIn
+            signedIn: state.signedIn,
+            saveImageHandlerCallback: saveImageHandler,
           }
         )}
     >
