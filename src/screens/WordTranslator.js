@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Alert , TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { useDispatch } from 'react-redux'; // TEST
+// import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
 import ENV from '../../env';
@@ -49,7 +49,7 @@ const WordTranslator = (props) => {
   const [state, setState] = useState(initialStateForm);
 
   const { route, navigation } = props;
-  const dispatch = useDispatch(); // TEST
+  // const dispatch = useDispatch(); // TEST
 
   // TEST
   const titleChangeHandler = text => {
