@@ -33,6 +33,7 @@ const PhotoTranslator = (props) => {
   const id = props.route.params.currentId; // || 1; // dummy data
   // console.log('id??? ', id);
   const signedIn = props.route.params.signedIn;
+  const saveImageHandler = props.route.params.saveImageHandlerCallback;
 
   const [apiPhoto, setApiPhoto] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -41,18 +42,7 @@ const PhotoTranslator = (props) => {
   const [currLanguage, setCurrLanguage] = useState('ko');
   const [favorite, setFavorite] = useState(false);
 
-  
-  const initialStateForm = {
-    image_url: null,
-    text: null,
-    translated_text: null,
-    favorite: false,
-    original_lang: i18n.locale,
-    language: null,
-    user_id: props.route.params.currentId
-  }
 
-  
 
   const { route, navigation } = props;
   
@@ -100,12 +90,7 @@ const PhotoTranslator = (props) => {
   };
 
 
-
-  // TEST
-  const saveImageHandler = () => {
-
-    // console.log('state in PhotoTranslator.js: ', props.route.params);
-
+  const addFavoriteHandler = () => {
     const body = {
       image_url: selectedImage, // apiPhoto, 
       favorite: true,
@@ -116,31 +101,51 @@ const PhotoTranslator = (props) => {
       user_id: id,
     };
 
-
-    console.log('body!! ', body)
+    saveImageHandler(body)
     setFavorite(true);
-
-    axios.post(`${URLS.BASE_URL}/add_image`, body)
-      .then(response => {
-        console.log('internal API - success: ', response.data)
-      })
-      .catch(err => {
-        console.log('3. internal API - error: ', err)
-
-        Alert.alert(
-          "Unique value needed",
-          "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
-          [
-            { 
-              text: "OK",
-              onPress: () => console.log("OK pressed")
-            }
-          ]
-        )
-      })
-
-    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
   };
+  
+
+  // // TEST
+  // const saveImageHandler = () => {
+
+  //   // console.log('state in PhotoTranslator.js: ', props.route.params);
+
+  //   const body = {
+  //     image_url: selectedImage, // apiPhoto, 
+  //     favorite: true,
+  //     original_lang: displayLanguage(i18n.locale),
+  //     language: displayLanguage(currLanguage),
+  //     text: getText,
+  //     translated_text: translatedText,
+  //     user_id: id,
+  //   };
+
+
+  //   console.log('body!! ', body)
+  //   setFavorite(true);
+
+  //   axios.post(`${URLS.BASE_URL}/add_image`, body)
+  //     .then(response => {
+  //       console.log('internal API - success: ', response.data)
+  //     })
+  //     .catch(err => {
+  //       console.log('3. internal API - error: ', err)
+
+  //       Alert.alert(
+  //         "Unique value needed",
+  //         "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
+  //         [
+  //           { 
+  //             text: "OK",
+  //             onPress: () => console.log("OK pressed")
+  //           }
+  //         ]
+  //       )
+  //     })
+
+  //   // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
+  // };
 
 
   const getWords = () => {
@@ -311,7 +316,7 @@ const PhotoTranslator = (props) => {
             size={30} 
             color="#C99B13" 
             backgroundColor="#fff"
-            onPress={saveImageHandler}
+            onPress={addFavoriteHandler}
             >
             </AntDesign.Button>
           }
