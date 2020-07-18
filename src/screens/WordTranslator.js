@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginVertical: 0,
-    width: 270
+    width: 220
   },
   languageBtn: {
     right: 0,
