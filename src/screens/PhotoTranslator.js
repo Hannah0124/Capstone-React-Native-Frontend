@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView, Alert } from 'react-native'; 
+import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, ScrollView, Alert, Image } from 'react-native'; 
 
 import * as ImageManipulator from "expo-image-manipulator"; // npm i expo-image-manipulator
 import axios from 'axios'; 
@@ -14,11 +14,8 @@ import URLS from '../constants/Urls';
 
 import ImagePicker from '../components/ImagePicker';
 
-// import ENV from '../../env'; // npm i expo-env
-// import { useDispatch } from 'react-redux'; // TEST
-// import * as imagesActions from '../store/images-actions';
 import LineButton from '../components/LineButton';
-// import * as FileSystem from 'expo-file-system';
+import getWordsBtn from '../../assets/get-words-btn.png'; 
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
@@ -172,7 +169,6 @@ const PhotoTranslator = (props) => {
               type: "LABEL_DETECTION"
             },
           ],
-          //
           image: {
             content: apiPhoto
           },
@@ -182,7 +178,7 @@ const PhotoTranslator = (props) => {
 
     axios.post(URLS.GOOGOLE_VISION_URL, body)
       .then(response => {
-        console.log('response.data: ', response.data.responses[0].labelAnnotations)
+        // console.log('response.data: ', response.data.responses[0].labelAnnotations)
 
         const apiData = response.data.responses[0].labelAnnotations;
 
@@ -246,7 +242,7 @@ const PhotoTranslator = (props) => {
   
   const languageButtons = (marginTop) => {
     return (
-      <View style={styles.buttonContainer} marginTop={marginTop}>
+      <View style={styles.languageBtnContainer} marginTop={marginTop}>
         <TouchableOpacity
           style={styles.languageBtn}
           onPress={() => {
@@ -255,12 +251,14 @@ const PhotoTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language</Text>
         </TouchableOpacity>
+        {/* <View style={styles.space}>{}</View> */}
+        <AntDesign style={styles.space} name="arrowright" size={24} color="black" />
 
         <TouchableOpacity
           style={styles.languageBtn}
           onPress={getLanguage} // onPress={() => {getTranslated(getText, currLanguage)}}   
         >
-          <Text style={styles.buttonText}> Let's translate! </Text>
+          <Text style={styles.buttonText}> Translate! </Text>
         </TouchableOpacity>
       </View>
     )
@@ -301,33 +299,48 @@ const PhotoTranslator = (props) => {
 
         <View style={styles.buttonContainer}>
           {signedIn && apiPhoto && currLanguage && getText && translatedText && (favorite === true) && 
-            <AntDesign 
+            <AntDesign.Button 
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
             >
-            </AntDesign>
+            </AntDesign.Button>
           }
           
           {signedIn && apiPhoto && currLanguage && getText && translatedText && (favorite === false) && 
             <AntDesign.Button 
-            name="staro" 
-            size={30} 
-            color="#C99B13" 
-            backgroundColor="#fff"
-            onPress={addFavoriteHandler}
+              name="staro" 
+              size={30} 
+              color="#C99B13" 
+              backgroundColor="#fff"
+              onPress={addFavoriteHandler}
             >
             </AntDesign.Button>
           }
 
 
-          {apiPhoto &&
-            <LineButton 
-              title="Get Words"
-              color={Colors.primary}
-              onPress={getWords}
-            />
+          {apiPhoto && getText && translatedText &&
+            // <LineButton 
+            //   title="Get Words"
+            //   color={Colors.primary}
+            //   onPress={getWords}
+            //   style={styles.getWordsBtnHigh}
+            // />
+            <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+
+          {apiPhoto && !getText && !translatedText &&
+            // <LineButton 
+            //   title="Get Words"
+            //   color={Colors.primary}
+            //   onPress={getWords}
+            // />
+            <TouchableOpacity style={styles.getWordsBtnLow} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
           }
         </View>
 
@@ -367,7 +380,7 @@ const PhotoTranslator = (props) => {
 
 
         {
-          apiPhoto && getText && languageButtons(60)  
+          apiPhoto && getText && languageButtons(50)  
         }
         
       </View>
@@ -386,14 +399,35 @@ const styles = StyleSheet.create({
     paddingBottom: '100%',
   },
   buttonContainer: {
+    position: 'absolute',
+    top: 290,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  languageBtnContainer: {
+    position: 'absolute',
+    bottom: 70,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopColor: Colors.primary,
+    borderTopWidth: 1,
+    width: "100%",
+  },
+  space: {
+    marginHorizontal: 20
+  },
+  getWordsBtnLow: {
+    position: 'absolute',
+    bottom: -450,
+  },
+  getWordsBtnHigh: {
+    position: 'absolute',
+    bottom: -400,
+  },
   languageBtn: {
     right: 0,
-    backgroundColor: Colors.primary,
-    color: "#fff",
     borderRadius: 30,
     padding: 10,
     margin: 20,
@@ -402,7 +436,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-    color: '#fff',
+    color: Colors.primary,
   },
   favoriteButton: {
     position: 'absolute',
@@ -410,37 +444,33 @@ const styles = StyleSheet.create({
     right: 0
   },
   cardsContainer: {
-    marginTop: 20
+    // marginTop: 10
+    position: 'absolute',
+    top: 320,
   },
   cardContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    marginTop: 20,
   },
   cardText: {
     marginRight: 20,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   card: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // textAlign: 'center',
     borderRadius: 5,
     backgroundColor: '#FAFAFA',
-    paddingVertical: 10,
+    paddingVertical: 30,
     paddingHorizontal: 15,
     marginVertical: 5,
-    width: 220
+    width: 220,
   },
-  flash: {
-    backgroundColor: '#fff3cd',
-    color: '#856404',
-    borderColor: '#ffeeba',
-    padding: 10,
-    marginBottom: 2,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+  
 })
 
 export default PhotoTranslator;
