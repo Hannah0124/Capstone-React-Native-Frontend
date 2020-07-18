@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Alert , TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { useDispatch } from 'react-redux'; // TEST
+// import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
 import ENV from '../../env';
@@ -49,7 +49,7 @@ const WordTranslator = (props) => {
   const [state, setState] = useState(initialStateForm);
 
   const { route, navigation } = props;
-  const dispatch = useDispatch(); // TEST
+  // const dispatch = useDispatch(); // TEST
 
   // TEST
   const titleChangeHandler = text => {
@@ -319,7 +319,7 @@ const WordTranslator = (props) => {
     return (
       <View style={styles.buttonContainer} marginTop={marginTop}>
         <TouchableOpacity
-          style={styles.cornerButton}
+          style={styles.languageBtn}
           onPress={() => {
             navigation.navigate('Settings', { item: 'text' })
           }}
@@ -328,7 +328,7 @@ const WordTranslator = (props) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.cornerButton}
+          style={styles.languageBtn}
           onPress={getTranslation}  
         >
           <Text style={styles.buttonText}> Let's translate! </Text>
@@ -553,12 +553,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: '100%',
   },
-  // text: {
-  //   // color: '#fff',
-  //   color: '#747EFD',
-  //   fontSize: 24,
-  //   fontWeight: 'bold'
-  // },
   card: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -568,7 +562,17 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginVertical: 0,
-    width: 270
+    width: 220
+  },
+  languageBtn: {
+    right: 0,
+    backgroundColor: Colors.primary,
+    color: "#fff",
+    borderRadius: 30,
+    padding: 10,
+    margin: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 15
   },
   // textbox: {
   //   // borderWidth: 1,
