@@ -25,7 +25,7 @@ const List = props => {
       })
       .catch(err => {
         console.log('internal API - error: ', err);
-        setErrorMessage(err.message);
+        // setErrorMessage(err.message);
       });
   };
 

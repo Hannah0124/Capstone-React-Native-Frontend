@@ -6,6 +6,11 @@ import * as Google from 'expo-google-app-auth';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
+import { YellowBox } from 'react-native';
+
+YellowBox.ignoreWarnings([
+  'Non-serializable values were found in the navigation state',
+]);
 
 import Colors from '../constants/Colors';
 import URLS from '../constants/Urls';
@@ -91,7 +96,11 @@ const Home = (props) => {
   }
 
   useEffect(() => { 
-    findId(state.uid)
+    if (state.uid) {
+      findId(state.uid)
+      return;
+    } 
+
   }, [state])
 
 
@@ -220,37 +229,35 @@ const Home = (props) => {
     }
   };
 
+      // TEST
+      const saveImageHandler = (body) => {
 
-  // TEST
-  const saveImageHandler = (body) => {
-
-    // console.log('state in PhotoTranslator.js: ', props.route.params);
-
-    console.log('body!! ', body)
-    // setFavorite(true);
-
-    axios.post(`${URLS.BASE_URL}/add_image`, body)
-      .then(response => {
-        console.log('internal API - success: ', response.data)
-      })
-      .catch(err => {
-        console.log('3. internal API - error: ', err)
-
-        Alert.alert(
-          "Unique value needed",
-          "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
-          [
-            { 
-              text: "OK",
-              onPress: () => console.log("OK pressed")
-            }
-          ]
-        )
-      })
-
-    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
-  };
-
+        // console.log('state in PhotoTranslator.js: ', props.route.params);
+    
+        console.log('body!! ', body)
+        // setFavorite(true);
+    
+        axios.post(`${URLS.BASE_URL}/add_image`, body)
+          .then(response => {
+            console.log('internal API - success: ', response.data)
+          })
+          .catch(err => {
+            console.log('3. internal API - error: ', err)
+    
+            Alert.alert(
+              "Unique value needed",
+              "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
+              [
+                { 
+                  text: "OK",
+                  onPress: () => console.log("OK pressed")
+                }
+              ]
+            )
+          })
+    
+        // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
+      };
 
   return (
     <View style={styles.container}>
@@ -281,6 +288,7 @@ const Home = (props) => {
         <MaterialCommunityIcons name="format-text" size={24} color="#fff" />
       </TouchableOpacity>
 
+      {/* <View><Text>currId: {currId}</Text></View> */}
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate(
@@ -291,7 +299,7 @@ const Home = (props) => {
             saveImageHandlerCallback: saveImageHandler,
           }
         )}
-    >
+      >
         <Text style={styles.buttonText}>Translate Image</Text>
         <Entypo name="image" size={24} color="#fff" />
       </TouchableOpacity>
