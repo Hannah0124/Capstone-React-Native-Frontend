@@ -252,7 +252,7 @@ const PhotoTranslator = (props) => {
           <Text style={styles.buttonText}>Language</Text>
         </TouchableOpacity>
         {/* <View style={styles.space}>{}</View> */}
-        <AntDesign style={styles.space} name="arrowright" size={24} color="black" />
+        <AntDesign style={styles.space} name="arrowright" size={24} color={Colors.primary} />
 
         <TouchableOpacity
           style={styles.languageBtn}
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
   },
   languageBtnContainer: {
     position: 'absolute',
-    bottom: 70,
+    bottom: 65,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -424,6 +424,7 @@ const styles = StyleSheet.create({
   },
   getWordsBtnHigh: {
     position: 'absolute',
+    zIndex: 10,
     bottom: -400,
   },
   languageBtn: {
