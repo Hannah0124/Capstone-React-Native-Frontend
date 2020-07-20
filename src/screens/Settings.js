@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Picker, Image } from 'react-native';
 
 import LANGUAGES from '../constants/Languages';
+import languageLogo from '../../assets/language-settings.png'; 
 
 const Settings = (props) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
@@ -45,6 +46,7 @@ const Settings = (props) => {
       {/* <Text style={styles.text}>Language Settings</Text> */}
 
       <View>
+        <Image source={languageLogo} />
         <Picker
           selectedValue={selectedLanguage}
           onValueChange={changeOption}
