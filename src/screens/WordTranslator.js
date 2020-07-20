@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Alert , TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Alert , TextInput, Button, TouchableOpacity, ScrollView, Image } from 'react-native';
 // import { useDispatch } from 'react-redux'; // TEST
 import * as ImageManipulator from "expo-image-manipulator";
 import axios from 'axios';
@@ -15,8 +15,9 @@ import LANGUAGES from '../constants/Languages';
 import Colors from '../constants/Colors';
 // import * as imagesActions from '../store/images-actions';
 import ImagePicker from '../components/ImagePicker';
-import LineButton from '../components/LineButton';
+// import LineButton from '../components/LineButton';
 import URLS from '../constants/Urls';
+import getWordsBtn from '../../assets/get-words-btn.png'; 
 
 const defaultLanguage = Localization.locale.includes("-") ? Localization.locale.split("-")[0] : Localization.locale
 
@@ -386,8 +387,8 @@ const WordTranslator = (props) => {
               navigation.navigate('List', 
               {
                 currentId: id, 
-                images: images,
-                myImages: myImages,
+                // images: images,
+                // myImages: myImages,
                 // updateImagesCallback: updateImages,
                 // removeImageHandlerCallback: removeImageHandler
               })
@@ -441,16 +442,29 @@ const WordTranslator = (props) => {
           {translatedText}
         </Text>
          */}
-
+{/* 
           { apiPhoto &&
             <LineButton 
               title="Get Words"
               color={Colors.primary}
               onPress={getWords}
             />
+          } */}
+          {/* TEST */}
+          {(apiPhoto && getText && translatedText) &&
+            <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
           }
 
+          {!signedIn && apiPhoto && !getText && !translatedText &&
 
+            <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+
+          {/* TEST */}
         </View>
         
         { (translatedText || getText)  && 
@@ -613,6 +627,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0
+  },
+  getWordsBtnLow: {
+    position: 'absolute',
+    bottom: -450,
+  },
+  getWordsBtnHigh: {
+    position: 'absolute',
+    zIndex: 10,
+    bottom: -400,
   },
 })
 
