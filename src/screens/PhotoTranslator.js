@@ -279,15 +279,21 @@ const PhotoTranslator = (props) => {
         <View style={styles.favoriteButton}>
           {signedIn &&
             <Button 
-            title="My Favorites" 
-            color={Colors.primary} 
-            onPress={() => {
-              navigation.navigate('List', 
-              {
-                currentId: id, 
-              })
+              title="My Favorites" 
+              color={Colors.primary} 
+              onPress={() => {
+                navigation.navigate('List', 
+                {
+                  currentId: id, 
+                })
             }}
           />
+          } 
+
+          {!signedIn &&
+            <View
+              title="My Favorites" 
+            />
           } 
         </View>
 
@@ -315,6 +321,16 @@ const PhotoTranslator = (props) => {
               color="#C99B13" 
               backgroundColor="#fff"
               onPress={addFavoriteHandler}
+            >
+            </AntDesign.Button>
+          }
+
+          {!signedIn && 
+            <AntDesign.Button 
+              name="staro" 
+              size={30} 
+              color="#fff"
+              backgroundColor="#fff" 
             >
             </AntDesign.Button>
           }
