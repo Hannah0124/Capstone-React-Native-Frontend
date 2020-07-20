@@ -349,12 +349,14 @@ const PhotoTranslator = (props) => {
             </TouchableOpacity>
           }
 
+          {(!signedIn && apiPhoto && getText && translatedText) &&
+            <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+
           {!signedIn && apiPhoto && !getText && !translatedText &&
-            // <LineButton 
-            //   title="Get Words"
-            //   color={Colors.primary}
-            //   onPress={getWords}
-            // />
+
             <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
               <Image source={getWordsBtn} />
             </TouchableOpacity>
