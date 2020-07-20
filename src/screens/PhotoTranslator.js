@@ -286,13 +286,14 @@ const PhotoTranslator = (props) => {
                 {
                   currentId: id, 
                 })
-            }}
-          />
+              }}
+            />
           } 
 
           {!signedIn &&
-            <View
+            <Button 
               title="My Favorites" 
+              color="#fff" 
             />
           } 
         </View>
@@ -336,7 +337,7 @@ const PhotoTranslator = (props) => {
           }
 
 
-          {apiPhoto && getText && translatedText &&
+          {(signedIn && apiPhoto && getText && translatedText) &&
             // <LineButton 
             //   title="Get Words"
             //   color={Colors.primary}
@@ -348,7 +349,18 @@ const PhotoTranslator = (props) => {
             </TouchableOpacity>
           }
 
-          {apiPhoto && !getText && !translatedText &&
+          {!signedIn && apiPhoto && !getText && !translatedText &&
+            // <LineButton 
+            //   title="Get Words"
+            //   color={Colors.primary}
+            //   onPress={getWords}
+            // />
+            <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+
+          {signedIn && apiPhoto && !getText && !translatedText &&
             // <LineButton 
             //   title="Get Words"
             //   color={Colors.primary}
