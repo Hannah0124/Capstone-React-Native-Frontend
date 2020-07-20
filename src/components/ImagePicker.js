@@ -159,8 +159,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: Colors.primary
+    // borderWidth: 2,
+    // borderColor: Colors.primary,
+    borderRadius: 20,
+    backgroundColor: "#f5f5f5",
   },
   previewText: {
     color: 'gray',
@@ -169,6 +171,7 @@ const styles = StyleSheet.create({
   image: {
     width: SCREEN.width * 0.75,
     height: 300,
+    
   },
   buttonContainer: {
     position: 'absolute',
