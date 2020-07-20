@@ -453,12 +453,42 @@ const WordTranslator = (props) => {
             />
           } */}
           {/* TEST */}
-          {apiPhoto &&
+          {(signedIn && apiPhoto && getText && translatedText) &&
+            // <LineButton 
+            //   title="Get Words"
+            //   color={Colors.primary}
+            //   onPress={getWords}
+            //   style={styles.getWordsBtnHigh}
+            // />
             <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
               <Image source={getWordsBtn} />
             </TouchableOpacity>
           }
-{/* 
+
+          {(!signedIn && apiPhoto && getText && translatedText) &&
+            <TouchableOpacity style={styles.getWordsBtnLow} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+
+          {!signedIn && apiPhoto && !getText && !translatedText &&
+
+            <TouchableOpacity style={styles.getWordsBtnLow} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+
+          {signedIn && apiPhoto && !getText && !translatedText &&
+            // <LineButton 
+            //   title="Get Words"
+            //   color={Colors.primary}
+            //   onPress={getWords}
+            // />
+            <TouchableOpacity style={styles.getWordsBtnLow} onPress={getWords}>
+              <Image source={getWordsBtn} />
+            </TouchableOpacity>
+          }
+          {/* 
           {!signedIn && apiPhoto && !getText && !translatedText &&
 
             <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
@@ -570,9 +600,9 @@ const styles = StyleSheet.create({
     paddingBottom: '100%',
   },
   card: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // textAlign: 'center',
     borderRadius: 5,
     backgroundColor: '#FAFAFA',
     paddingVertical: 10,
@@ -608,6 +638,8 @@ const styles = StyleSheet.create({
   //   // borderColor: Colors.primary
   // },
   buttonContainer: {
+    position: 'absolute',
+    top: 290,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
