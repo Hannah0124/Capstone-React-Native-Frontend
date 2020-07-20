@@ -379,9 +379,11 @@ const PhotoTranslator = (props) => {
           <View style={styles.cardsContainer}> 
             <View style={styles.cardContainer}>
               <Text style={styles.cardText}>{displayLanguage(i18n.locale)}</Text>
-              <Text style={styles.card}>
+              <View style={styles.card}>
+                <Text>
                 {getText && getText}
-              </Text>
+                </Text>    
+              </View>
 
               <AntDesign.Button 
                 name="sound" 
@@ -394,9 +396,11 @@ const PhotoTranslator = (props) => {
 
             <View style={styles.cardContainer}>
               <Text style={styles.cardText}>{displayLanguage(currLanguage)}</Text>
-              <Text style={styles.card}>
+              <View style={styles.card}>
+                <Text>
                 {translatedText}
-              </Text>
+                </Text>
+              </View>
               <AntDesign.Button 
                 name="sound" 
                 size={24} 
@@ -484,6 +488,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginTop: 20,
+    borderRadius: 30,
   },
   cardText: {
     marginRight: 20,
@@ -494,7 +499,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center',
     // textAlign: 'center',
-    borderRadius: 5,
+    borderRadius: 15,
     backgroundColor: '#FAFAFA',
     paddingVertical: 30,
     paddingHorizontal: 15,
