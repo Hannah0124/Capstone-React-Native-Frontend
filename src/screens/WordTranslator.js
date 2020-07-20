@@ -580,15 +580,25 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     width: 220
   },
-  languageBtn: {
-    right: 0,
-    backgroundColor: Colors.primary,
-    color: "#fff",
-    borderRadius: 30,
-    padding: 10,
-    margin: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 15
+  // languageBtn: {
+  //   right: 0,
+  //   backgroundColor: Colors.primary,
+  //   color: "#fff",
+  //   borderRadius: 30,
+  //   padding: 10,
+  //   margin: 20,
+  //   paddingVertical: 12,
+  //   paddingHorizontal: 15
+  // },
+  languageBtnContainer: {
+    position: 'absolute',
+    bottom: 65,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopColor: Colors.primary,
+    borderTopWidth: 1,
+    width: "100%",
   },
   // textbox: {
   //   // borderWidth: 1,
@@ -604,7 +614,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 20,
-    color: '#fff',
+    color: Colors.primary,
   },
   cornerButton: {
     right: 0,
