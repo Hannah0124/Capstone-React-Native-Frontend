@@ -117,7 +117,7 @@ const ImgPicker = props => {
       <View style={styles.buttonContainer}>
         <Entypo.Button 
           name="camera" 
-          size={30} 
+          size={35} 
           title="Take Image"
           color='#fff'
           backgroundColor={Colors.primary}
@@ -127,7 +127,7 @@ const ImgPicker = props => {
 
         <FontAwesome.Button 
           name="photo" 
-          size={30} 
+          size={35} 
           title="Choose Photo"
           color='#fff'
           backgroundColor={Colors.primary}
@@ -143,23 +143,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 0,
     // flex: 1
+    height: 300
   },
   imagePreview: {
     // width: 250,
     // height: 200,
 
+    position: 'absolute',
+    top: 10,
     width: 280,
     height: 230,
     marginTop: 0,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1,
     paddingHorizontal: 15,
     overflow: 'hidden',
-    borderWidth: 15,
-    borderColor: Colors.primary
+    // borderWidth: 2,
+    // borderColor: Colors.primary,
+    borderRadius: 20,
+    backgroundColor: "#f5f5f5",
   },
   previewText: {
     color: 'gray',
@@ -168,6 +171,7 @@ const styles = StyleSheet.create({
   image: {
     width: SCREEN.width * 0.75,
     height: 300,
+    
   },
   buttonContainer: {
     position: 'absolute',
@@ -178,12 +182,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 110,
     position: 'absolute',
-    bottom: -520,
+    bottom: -460,
     margin: 0,
     paddingHorizontal: 10
   },
   space: {
-    width: 50
+    width: 150
   }
 });
 

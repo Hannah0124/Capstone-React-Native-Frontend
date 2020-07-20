@@ -8,6 +8,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 import { YellowBox } from 'react-native';
 
+import logo from '../../assets/logo.png'; 
+import google from '../../assets/google.jpg'; 
+
+import { useFonts, Raleway_600SemiBold, Raleway_700Bold } from '@expo-google-fonts/raleway';
+import { AppLoading } from 'expo';
+
+
 YellowBox.ignoreWarnings([
   'Non-serializable values were found in the navigation state',
 ]);
@@ -229,91 +236,106 @@ const Home = (props) => {
     }
   };
 
-      // TEST
-      const saveImageHandler = (body) => {
+  // TEST
+  const saveImageHandler = (body) => {
 
-        // console.log('state in PhotoTranslator.js: ', props.route.params);
-    
-        console.log('body!! ', body)
-        // setFavorite(true);
-    
-        axios.post(`${URLS.BASE_URL}/add_image`, body)
-          .then(response => {
-            console.log('internal API - success: ', response.data)
-          })
-          .catch(err => {
-            console.log('3. internal API - error: ', err)
-    
-            Alert.alert(
-              "Unique value needed",
-              "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
-              [
-                { 
-                  text: "OK",
-                  onPress: () => console.log("OK pressed")
-                }
-              ]
-            )
-          })
-    
-        // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
-      };
+    // console.log('state in PhotoTranslator.js: ', props.route.params);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Vizlator</Text>
+    console.log('body!! ', body)
+    // setFavorite(true);
 
-      {state.signedIn ? (
-        <View>
-          <View style={styles.signOutBtn}>
-            <Button title="Sign out" color="#fff" onPress={() => signOut()} />
+    axios.post(`${URLS.BASE_URL}/add_image`, body)
+      .then(response => {
+        console.log('internal API - success: ', response.data)
+      })
+      .catch(err => {
+        console.log('3. internal API - error: ', err)
+
+        Alert.alert(
+          "Unique value needed",
+          "Oops. The same picture or text exists in your favorite list. Please update a unique value.",
+          [
+            { 
+              text: "OK",
+              onPress: () => console.log("OK pressed")
+            }
+          ]
+        )
+      })
+
+    // dispatch(imagesActions.addImage(selectedImage, getText, translatedText, true, 'Korean'));
+  };
+
+
+  let [fontsLoaded] = useFonts({
+    Raleway_600SemiBold,
+    Raleway_700Bold
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <View style={styles.container}>
+      
+        <Image style={styles.logo} source={logo} />
+
+        <Text style={styles.title}>Vizlator</Text>
+  
+        
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => navigation.navigate(
+            'WordTranslator',
+            {
+              currentId: currId,
+              signedIn: state.signedIn
+            }
+          )}
+        >
+          <Text style={styles.buttonText}>Translate Text</Text>
+          <MaterialCommunityIcons name="format-text" size={24} color="#fff" />
+        </TouchableOpacity>
+  
+        {/* <View><Text>currId: {currId}</Text></View> */}
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => navigation.navigate(
+            'PhotoTranslator',
+            {
+              currentId: currId,
+              signedIn: state.signedIn,
+              saveImageHandlerCallback: saveImageHandler,
+            }
+          )}
+        >
+          <Text style={styles.buttonText}>Translate Image</Text>
+          <Entypo name="image" size={24} color="#fff" />
+        </TouchableOpacity>
+
+        {state.signedIn ? (
+          <View>
+            <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
+            <View style={styles.signOutBtn}>
+              <Button title="Sign out" color="#fff" onPress={() => signOut()} />
+            </View>
           </View>
-          <LoggedInPage username={state.username} photoUrl={state.photoUrl} />
-        </View>
-      ) :
+          
+        ) :
           <LoginPage signIn={signIn} />
-      }
-
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => navigation.navigate(
-          'WordTranslator',
-          {
-            currentId: currId,
-            signedIn: state.signedIn
-          }
-        )}
-      >
-        <Text style={styles.buttonText}>Translate Text</Text>
-        <MaterialCommunityIcons name="format-text" size={24} color="#fff" />
-      </TouchableOpacity>
-
-      {/* <View><Text>currId: {currId}</Text></View> */}
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => navigation.navigate(
-          'PhotoTranslator',
-          {
-            currentId: currId,
-            signedIn: state.signedIn,
-            saveImageHandlerCallback: saveImageHandler,
-          }
-        )}
-      >
-        <Text style={styles.buttonText}>Translate Image</Text>
-        <Entypo name="image" size={24} color="#fff" />
-      </TouchableOpacity>
-    </View>
-  )
+        }
+      </View>
+    )
+  }
 }
 
 
 const LoginPage = props => {
   return (
     <View style={styles.googleBtn}>
-      <AntDesign name="google" size={24} color="red" />
-      <Button title="Sign in with Google" onPress={() => props.signIn()} />
-
+      {/* <AntDesign name="google" size={24} color="red" /> */} 
+      <Image style={{width: 20, height: 20}} source={google} />
+      <Button color={Colors.bg} title="Sign in with Google" onPress={() => props.signIn()} />
     </View>
   )
 }
@@ -322,7 +344,7 @@ const LoggedInPage = props => {
   return (
     <View style={styles.userContainer}>
       <Text style={styles.header}>Welcome {props.username}!</Text>
-      <Image style={styles.image} source={{ uri: props.photoUrl }} />
+      {/* <Image style={styles.image} source={{ uri: props.photoUrl }} /> */}
     </View>
   )
 }
@@ -331,15 +353,28 @@ const LoggedInPage = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: Colors.primary,
+    // backgroundColor: Colors.primary,
+    backgroundColor: Colors.bg,
   },
-  text: {
+  logo: {
+    // width: 65, 
+    // height: 115,
+    // width: 75, 
+    // height: 140,
+    width: 100, 
+    height: 180,
+    marginTop: 100,
+    marginBottom: 40,
+
+  },
+  title: {
     color: '#fff',
-    fontSize: 50,
+    fontSize: 60,
     fontWeight: 'bold',
-    marginBottom: 50
+    marginBottom: 50,
+    fontFamily: 'Raleway_700Bold'
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -360,21 +395,26 @@ const styles = StyleSheet.create({
     // color: '#fff',
     color: Colors.primary,
     marginLeft: 20,
+    fontFamily: 'Raleway_700Bold',
   },
   userContainer: {
+    position: 'absolute',
+    top: -570,
+    right: -70,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 50
+    // marginVertical: 50
   },
   header: {
-    fontSize: 23,
-    color: "yellow"
+    fontSize: 18,
+    color: "#fff",
+    fontFamily: 'Raleway_700Bold',
   },
   image: {
     marginTop: 15,
     marginBottom: 0,
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderColor: "rgba(0,0,0,0.2)",
     borderWidth: 3,
     borderRadius: 80
@@ -394,18 +434,19 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   signOutBtn: {
-    position: 'absolute',
-    top: -280,
-    right: -100,
+    backgroundColor: '#505ae0',
+    width: 250,
+    marginTop: 110,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    fontSize: 20,
+    paddingHorizontal: 24,
+    fontSize: 14,
     fontWeight: 'bold',
     fontFamily: 'Roboto',
-    backgroundColor: '#505ae0',
     borderRadius: 5,
     marginVertical: 20,
+    fontFamily: 'Raleway_700Bold',
   }
 })
 

@@ -22,7 +22,7 @@ const MainStackNavigator = (props) => {
         screenOptions={{
           gestrueEnabled: true, // for Android (swipe gesture)
           headerStyle: {
-            backgroundColor: '#747EFD'
+            backgroundColor: '#373946'
           },
           headerTitleStyle: {
             fontWeight: 'bold'
@@ -35,6 +35,7 @@ const MainStackNavigator = (props) => {
         <Stack.Screen 
           name='Home' 
           component={Home} 
+          // style={{"backgroundColor": "#373946"}}
           options={{ title: 'Home Screen' }} 
         />
 

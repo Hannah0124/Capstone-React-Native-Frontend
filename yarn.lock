@@ -958,6 +958,21 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@expo-google-fonts/inter@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/inter/-/inter-0.1.0.tgz#399f068437824fcbf6aa3da5fcf490dba2af85a3"
+  integrity sha512-Y6GCqsUX6JwexQ2wmBkMiJBY6M2GpNQRTczzIGbBGhXWQxqGmP5awRcf0ZJV+OlLeJcKAzas/TW45ZLdpG3yzA==
+
+"@expo-google-fonts/raleway-dots@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/raleway-dots/-/raleway-dots-0.1.0.tgz#8a845e2cf801b1826a7def734cb765c78c9786fe"
+  integrity sha512-rknhhAA3pjFOBiQ2V5moPLgxbNichxa7WFUkdMNek9CquvxChPKVt+ygVqtY8vHqaRI1cSGc1KSQDYdTnB6TGA==
+
+"@expo-google-fonts/raleway@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/raleway/-/raleway-0.1.0.tgz#c4828702327a269126acacb1017ee51adb3e851e"
+  integrity sha512-cBQmoq+Rw64dwni79kQaMLZaYaOEhDMZkdX7P9fBcv89aB7pVRot8qGUCJ75ly1hPmVTrLoV+XfxnTTIJ20+bg==
+
 "@expo/configure-splash-screen@~0.1.0":
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@expo/configure-splash-screen/-/configure-splash-screen-0.1.12.tgz#8d8889fc98e87cececdb48af45bc8d6447ce699d"
