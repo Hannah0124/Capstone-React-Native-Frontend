@@ -327,12 +327,14 @@ const WordTranslator = (props) => {
         >
           <Text style={styles.buttonText}>Language</Text>
         </TouchableOpacity>
+        {/* adding arrow */}
+        <AntDesign style={styles.space} name="arrowright" size={24} color={Colors.primary} />
 
         <TouchableOpacity
           style={styles.languageBtn}
           onPress={getTranslation}  
         >
-          <Text style={styles.buttonText}> Let's translate! </Text>
+          <Text style={styles.buttonText}> Translate! </Text>
         </TouchableOpacity>
       </View>
     )
@@ -451,18 +453,18 @@ const WordTranslator = (props) => {
             />
           } */}
           {/* TEST */}
-          {(apiPhoto && getText && translatedText) &&
+          {apiPhoto &&
             <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
               <Image source={getWordsBtn} />
             </TouchableOpacity>
           }
-
+{/* 
           {!signedIn && apiPhoto && !getText && !translatedText &&
 
             <TouchableOpacity style={styles.getWordsBtnHigh} onPress={getWords}>
               <Image source={getWordsBtn} />
             </TouchableOpacity>
-          }
+          } */}
 
           {/* TEST */}
         </View>
@@ -619,6 +621,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    marginTop: 20,
+    borderRadius: 30,
   },
   cardText: {
     marginRight: 20,
