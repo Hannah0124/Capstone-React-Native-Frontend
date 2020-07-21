@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 250
+    height: "auto"
   },
   image: {
     width: 70,
@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
   removeBtn: {
     position: "absolute",
     marginTop: 10,
-    top: -35,
-    right: -30,
+    top: -25,
+    right: -35,
     marginRight: 0,
     paddingRight: 0,
     backgroundColor: 'transparent'
