@@ -145,8 +145,9 @@ const WordTranslator = (props) => {
       }
       axios.post(baseUrl, body)
         .then((response) => {
-          const TEXT = response.data.responses[0].textAnnotations[0].description;
+          const TEXT = response.data.responses[0].textAnnotations[0].description.replace(/\s+/g, " ");
           const LANG = response.data.responses[0].textAnnotations[0].locale
+          console.log(response.data.responses[0].textAnnotations[0].description.replace(/\s+/g, " "));
           setGetText(TEXT);
           if (googleDetected(LANG)) {
             setOriginalLang(LANG);
@@ -185,8 +186,8 @@ const WordTranslator = (props) => {
     } else {
       target_lang = "zh-TW"
     }
-    console.log('loading')
-    console.log('lang', target_lang);
+    // console.log('loading')
+    // console.log('lang', target_lang);
     setTargetLang(target_lang);
     const translateUrl = `https://translation.googleapis.com/language/translate/v2?target=${target_lang}&key=${ENV.googleApiKey}&q=${ENCODED}`
     axios.post(translateUrl)
@@ -409,6 +410,7 @@ const WordTranslator = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -417,15 +419,15 @@ const styles = StyleSheet.create({
     paddingBottom: '100%',
   },
   card: {
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
     borderRadius: 15,
     backgroundColor: '#FAFAFA',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    marginVertical: 0,
-    width: 250
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    width: 220
   },
   languageBtn: {
     right: 0,
@@ -437,7 +439,7 @@ const styles = StyleSheet.create({
   },
   languageBtnContainer: {
     position: 'absolute',
-    bottom: 240,
+    bottom: '23%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -472,15 +474,16 @@ const styles = StyleSheet.create({
     margin: 20
   },
   cardsContainer: {
-    marginTop: 5,
-    // position: 'absolute',
-    // top: 320,
+    marginTop: 25,
+    position: 'absolute',
+    top: 320,
+    marginBottom: 25,
   },
   cardContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 5,
     borderRadius: 30,
   },
   cardText: {
