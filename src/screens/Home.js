@@ -75,7 +75,6 @@ const Home = (props) => {
 
 
   const findId = (uid) => {
-    // get ids! (TEST)
     axios.get(`${URLS.BASE_URL}/users`)
       .then(response => {
         console.log('SUCCESS 1: ', response.data);
@@ -86,14 +85,12 @@ const Home = (props) => {
 
         setUserUids(uids);
 
-
         if (uid) {
           const user = response.data.users.find(user =>{
             return user.uid === uid;
           })
 
           setCurrId(user.id);
-
           // console.log('user.id ??? ', user.id)
         }
       })
@@ -121,7 +118,6 @@ const Home = (props) => {
       // BACKEND API CALL TRAIL ( using my own Network IP for now)
     
       // console.log('body in addUserApiCall: ', body);
-    
       axios.post(`${URLS.BASE_URL}/add_user`, body)
       .then(response => {
         console.log('SUCCESS (new user): ', response.data);
@@ -170,7 +166,7 @@ const Home = (props) => {
         storeToken(result.accessToken)
         setAccessToken(result.accessToken)
 
-        return result.accessToken; // TODO: ???
+        return result.accessToken; 
       } else {
         console.log('cancelled');
         return { cancelled: true };
