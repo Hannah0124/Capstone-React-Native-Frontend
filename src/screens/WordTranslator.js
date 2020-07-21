@@ -318,7 +318,7 @@ const WordTranslator = (props) => {
 
   const languageButtons = (marginTop) => {
     return (
-      <View style={styles.buttonContainer} marginTop={marginTop}>
+      <View style={styles.languageBtnContainer} marginTop={marginTop}>
         <TouchableOpacity
           style={styles.languageBtn}
           onPress={() => {
@@ -503,9 +503,11 @@ const WordTranslator = (props) => {
           <View style={styles.cardsContainer}> 
             <View style={styles.cardContainer}>
               <Text style={styles.cardText}>{displayLanguage(originalLang)}</Text>
-              <Text style={styles.card}>
+              <View style={styles.card}>
+                <Text>
                   {getText}
-              </Text>
+                </Text>
+              </View>
 
             <AntDesign.Button 
             name="sound" 
@@ -515,15 +517,18 @@ const WordTranslator = (props) => {
             onPress={() => toSpeak(getText, originalLang)}
             />
             </View>
-          </View>
-        }
-        { (translatedText || getText)  && 
-          <View style={styles.cardsContainer}> 
+          {/* </View> */}
+        
+        {/* //  (translatedText || getText)  &&  */}
+          {/* //  */}
+          {/* <View style={styles.cardsContainer}>  */}
             <View style={styles.cardContainer}>
               <Text style={styles.cardText}>{displayLanguage(targetLang)}</Text>
-              <Text style={styles.card}>
+              <View style={styles.card}>
+                <Text>
                   {translatedText}
-              </Text>
+                </Text>
+              </View>
 
             <AntDesign.Button 
             name="sound" 
@@ -603,12 +608,12 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center',
     // textAlign: 'center',
-    borderRadius: 5,
+    borderRadius: 15,
     backgroundColor: '#FAFAFA',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
     marginVertical: 0,
-    width: 220
+    width: 250
   },
   // languageBtn: {
   //   right: 0,
@@ -620,9 +625,17 @@ const styles = StyleSheet.create({
   //   paddingVertical: 12,
   //   paddingHorizontal: 15
   // },
+  languageBtn: {
+    right: 0,
+    borderRadius: 30,
+    padding: 10,
+    margin: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 15
+  },
   languageBtnContainer: {
     position: 'absolute',
-    bottom: 65,
+    bottom: 240,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -657,7 +670,9 @@ const styles = StyleSheet.create({
     margin: 20
   },
   cardsContainer: {
-    marginTop: 10
+    marginTop: 5,
+    // position: 'absolute',
+    // top: 320,
   },
   cardContainer: {
     flexDirection: 'row',
