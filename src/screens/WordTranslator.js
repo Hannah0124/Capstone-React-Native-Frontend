@@ -32,7 +32,7 @@ const WordTranslator = (props) => {
   const [images, setImages] = useState([]);
   const [myImages, setMyImages] = useState([]);
   const [originalLang, setOriginalLang] = useState('en');
-
+  
   const initialStateForm = {
     image_url: null,
     text: null,
@@ -42,8 +42,12 @@ const WordTranslator = (props) => {
     user_id: props.route.params.currentId
   }
   const [state, setState] = useState(initialStateForm);
-
+  
   const { route, navigation } = props;
+  
+  useEffect(() => {
+    getImages();
+  }, []);
 
   const titleChangeHandler = text => {
     // could add validation 
@@ -219,9 +223,6 @@ const WordTranslator = (props) => {
 
   };
   
-  useEffect(() => {
-    getImages();
-  }, []);
 
   const displayLanguage = (target) => {
     return Object.keys(LANGUAGES).find(label => {
@@ -304,13 +305,13 @@ const WordTranslator = (props) => {
 
         <View style={styles.buttonContainer}>
           {signedIn && apiPhoto && targetLang && getText && translatedText && (state.favorite === true) && 
-            <AntDesign 
+            <AntDesign.Button
               name="star" 
               size={30} 
               color="#C99B13" 
               backgroundColor="#fff"
             >
-            </AntDesign>
+            </AntDesign.Button>
           }
           
           {signedIn && apiPhoto && targetLang && getText && translatedText && (state.favorite === false) && 
