@@ -10,7 +10,7 @@ This app is integrated with a Flask API. The user is able to create an account w
 
 ## Demo
 <a style="float:right" href="https://drive.google.com/file/d/1V9Jtk1-W13fCYQs8ofLgf5UDIszEZUSv/view?usp=sharing" target="_blank">
-  <img alt="Demo Video" style="width: 350px" src="https://i.ibb.co/vvFBBy1/vizlator.png" />
+  <img alt="Demo Video" width="800" src="https://i.ibb.co/vvFBBy1/vizlator.png" />
 </a>
 
 
