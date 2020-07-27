@@ -19,4 +19,5 @@ This app is integrated with a Flask API. The user is able to create an account w
 ## Demo
 
 
-Vizlator is developed by [Ada Developers Academy](https://adadevelopersacademy.org/) cohort 13 studnets - Hannah Joo & Sharon Cheung as a capstone project.
+Vizlator is developed by [Ada Developers Academy](https://adadevelopersacademy.org/) cohort 13 studnets - Hannah Joo & Sharon Cheung as a capstone project.<br>
+Designed by Jeongmin Sitzes
